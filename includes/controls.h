@@ -5,6 +5,6 @@
 #include "../includes/main.h"
 
 //Functions
-typeUserAction captureUserAction(typeAppState currentAppState);
+enum_userAction captureUserAction(type_appState currentAppState);
 
 #endif  /*CONTROLS_H*/

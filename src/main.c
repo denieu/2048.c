@@ -1,7 +1,7 @@
 #include "../includes/main.h"
 #include "../includes/appState.h"
 #include "../includes/controls.h"
-#include "../includes/save.h"
+#include "../includes/leaderboard.h"
 #include "../includes/screen.h"
 
 /*------------------------------------------------------------------------------
@@ -9,10 +9,10 @@
  *----------------------------------------------------------------------------*/
 int main(){
   //Definição estrutura principal, gameState
-  typeAppState appState = getDefaultAppState();
+  type_appState appState = getDefaultAppState();
 
-  //Parse do arquivo de save
-  appState.save = readSaveFile();
+  //Parse do arquivo de leaderboard
+  appState.leaderboard = readLeaderboardFile();
 
   //Mantem rodando enquanto o appStatus for STATUS_RUNNING
   do{
