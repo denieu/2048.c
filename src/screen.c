@@ -2,6 +2,9 @@
 #include "windows.h" //SetConsoleCursorInfo
 #include "../includes/conio2.h" //gotoxy, textcolor, textbackground
 
+/*------------------------------------------------------------------------------
+ * Altera o estado do cursor entre visivel e invisivel
+ *----------------------------------------------------------------------------*/
 void setCursor(enum_cursorState cursorState){
   CONSOLE_CURSOR_INFO info;
   info.dwSize = 100;
@@ -9,6 +12,9 @@ void setCursor(enum_cursorState cursorState){
   SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &info);
 }
 
+/*------------------------------------------------------------------------------
+ * Printa a tela dentro de jogo
+ *----------------------------------------------------------------------------*/
 void screen_inGame(type_appState currentAppState){
     
 }
