@@ -3,7 +3,7 @@
 /*------------------------------------------------------------------------------
  * Captura e retorna a ação realizada pelo usuario
  *----------------------------------------------------------------------------*/
-typeUserAction captureUserAction(typeAppState currentAppState){
-  typeUserAction userAction = {0};
+enum_userAction captureUserAction(type_appState currentAppState){
+  enum_userAction userAction = {0};
   return userAction;
 }

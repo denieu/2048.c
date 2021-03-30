@@ -1,16 +1,16 @@
-#include "../includes/save.h"
+#include "../includes/leaderboard.h"
 
 /*------------------------------------------------------------------------------
- * Lê e retorna a estrutura salva no arquivo "save"
+ * Lê e retorna a estrutura salva no arquivo "leaderboard"
  *----------------------------------------------------------------------------*/
-typeSave readSaveFile(){
-  typeSave save = {0};
+type_leaderboard readLeaderboardFile(){
+  type_leaderboard save = { 0 };
   return save;
 }
 
 /*------------------------------------------------------------------------------
- * Escreve a estrutura newSave no arquivo "save"
+ * Escreve a estrutura newLeaderboard no arquivo "leaderboard"
  *----------------------------------------------------------------------------*/
-void writeSaveFile(typeSave newSave){
+void writeLeaderboardFile(type_leaderboard newLeaderboard){
   
 }

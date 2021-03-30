@@ -3,8 +3,8 @@
 /*------------------------------------------------------------------------------
  * Retorna o appState default
  *----------------------------------------------------------------------------*/
-typeAppState getDefaultAppState(){
-  typeAppState defaultAppState = {0};
+type_appState getDefaultAppState(){
+  type_appState defaultAppState = {0};
 
   defaultAppState.appStatus = STATUS_RUNNING;
 
@@ -14,6 +14,6 @@ typeAppState getDefaultAppState(){
 /*------------------------------------------------------------------------------
  * Retorna um novo appState com base na ação realizada no appState atual
  *----------------------------------------------------------------------------*/
-typeAppState handleUserAction(typeAppState currentAppState){
+type_appState handleUserAction(type_appState currentAppState){
   return currentAppState;
 }
