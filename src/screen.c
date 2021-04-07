@@ -1,74 +1,7 @@
 #include "../includes/screen.h"
-#include "windows.h" //SetConsoleCursorInfo
+#include "../includes/logo.h"
 #include "../includes/conio2.h" //gotoxy, textcolor, textbackground
-
-//Constants
-#define DEFAULT_BG_COLOR BLACK
-#define DEFAULT_TEXT_COLOR LIGHTGRAY
-#define CHAR_LOGO_LINES 7       //Numero de linhas das letras do logo
-const char charLogo2[7][9] = {
-  " #####  ",
-  "#     # ",
-  "      # ",
-  " #####  ",
-  "#       ",
-  "#       ",
-  "####### ",
-};
-const char charLogo0[7][9] = {
-  "  ###   ",
-  " #   #  ",
-  "#     # ",
-  "#     # ",
-  "#     # ",
-  " #   #  ",
-  "  ###   ",
-};
-const char charLogo4[7][9] = {
-  "#       ",
-  "#    #  ",
-  "#    #  ",
-  "#    #  ",
-  "####### ",
-  "     #  ",
-  "     #  ",
-};
-const char charLogo8[7][9] = {
-  " #####  ",
-  "#     # ",
-  "#     # ",
-  " #####  ",
-  "#     # ",
-  "#     # ",
-  " #####  ",
-};
-const char charLogoDot[7][9] = {
-  "   ",
-  "   ",
-  "   ",
-  "   ",
-  "   ",
-  "   ",
-  " # ",
-};
-const char charLogoC[7][9] = {
-  "       ",
-  " ####  ",
-  "#    # ",
-  "#      ",
-  "#      ",
-  "#    # ",
-  " ####  ",
-};
-const char charLogoDefault[7][9] = {
-  "####### ",
-  "####### ",
-  "####### ",
-  "####### ",
-  "####### ",
-  "####### ",
-  "####### ",
-};
+#include "windows.h"            //SetConsoleCursorInfo
 
 /*------------------------------------------------------------------------------
  * Altera o estado do cursor entre visivel e invisivel
@@ -128,37 +61,47 @@ void print_logoLetter(enum_logoChar letter, int posX, int posY, COLORS bgColor, 
  * Printa um botão para menu, selected define se o botão está o não selecionado
  *----------------------------------------------------------------------------*/
 void print_menuButton(char * placeholder, int posX, int posY, bool selected){
+  #define buttonWidth 36
+  #define selectorWidth 3
+
+  char selection[buttonWidth] = {0};
+  int placeholderSize = strlen(placeholder);
+  int numberOfSpaces = buttonWidth - placeholderSize - selectorWidth;
+
+  for(int count = 0; count < numberOfSpaces ; count++){
+    selection[count] = ' ';
+  }
+  selection[numberOfSpaces] = '<';
+  selection[numberOfSpaces + 1] = '-';
+  selection[numberOfSpaces + 2] = '-';
+  selection[numberOfSpaces + 3] = '\0';
+
   gotoxy(posX, posY);
 
-  #define buttonWidth 11
+  if(selected == TRUE)
+    textcolor(RED);
 
-  char spaces[buttonWidth] = {0};
-  int placeholdSize = strlen(placeholder);
-  int numberOfSpaces = (buttonWidth - placeholdSize) / 2;
-  for(int count = 0; count < numberOfSpaces ; count++){
-    spaces[count] = ' ';
-    if(count == numberOfSpaces - 1){
-      spaces[count + 1] = '\0';
-    }
-  }
+  printf("%s%s", placeholder, (selected == TRUE) ? selection : ""); 
 
-  printf("+-----------+"); gotoxy(posX, posY + 1);
-  printf("|%s%s%s|", spaces, placeholder, spaces); gotoxy(posX, posY + 2);
-  printf("+-----------+");
+  textbackground(DEFAULT_BG_COLOR);
+  textcolor(DEFAULT_TEXT_COLOR);
 }
 
 /*------------------------------------------------------------------------------
  * Printa a tela do menu principal
  *----------------------------------------------------------------------------*/
 void screen_mainMenu(type_appState currentAppState){
-  print_logoLetter(LOGO_2, 10, 3, DEFAULT_BG_COLOR, BLUE);
-  print_logoLetter(LOGO_0, 18, 3, DEFAULT_BG_COLOR, GREEN);
-  print_logoLetter(LOGO_4, 26, 3, DEFAULT_BG_COLOR, CYAN);
-  print_logoLetter(LOGO_8, 34, 3, DEFAULT_BG_COLOR, RED);
-  print_logoLetter(LOGO_DOT, 41, 3, DEFAULT_BG_COLOR, MAGENTA);
-  print_logoLetter(LOGO_C, 44, 3, DEFAULT_BG_COLOR, BROWN);
+  print_logoLetter(LOGO_2, 10, 3, DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
+  print_logoLetter(LOGO_0, 18, 3, DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
+  print_logoLetter(LOGO_4, 26, 3, DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
+  print_logoLetter(LOGO_8, 34, 3, DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
+  print_logoLetter(LOGO_DOT, 41, 3, DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
+  print_logoLetter(LOGO_C, 44, 3, DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
 
-  print_menuButton("Teste", 24, 11, TRUE);
+  print_menuButton("Continuar", 12, 13, TRUE);
+  print_menuButton("Novo Jogo", 12, 15, FALSE);
+  print_menuButton("Ajuda", 12, 17, FALSE);
+  print_menuButton("Sair", 12, 19, FALSE);
 }
 
 /*------------------------------------------------------------------------------
