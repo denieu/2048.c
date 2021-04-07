@@ -12,30 +12,41 @@
 #define TRUE  1
 
 //App types
-typedef enum{
+typedef unsigned char bool;
+
+typedef enum enum_logoChar {
+  LOGO_2 = 0,
+  LOGO_0,
+  LOGO_4,
+  LOGO_8,
+  LOGO_DOT,
+  LOGO_C,
+} enum_logoChar;
+
+typedef enum enum_appStatus {
   STATUS_OK = 0,
   STATUS_ERROR,
   STATUS_RUNNING,
 } enum_appStatus;
 
-typedef enum{
+typedef enum enum_userAction {
   ACTION_NONE = 0,
 } enum_userAction;
 
-typedef enum {
+typedef enum enum_cursorState {
   CURSOR_HIDDEN = 0,
   CURSOR_VISIBLE,
 } enum_cursorState;
 
-typedef struct{
+typedef struct type_leaderboard {
   int save;
 } type_leaderboard;
 
-typedef struct{
+typedef struct type_gameState {
   int game;
 } type_gameState;
 
-typedef struct {
+typedef struct type_appState {
   enum_appStatus appStatus;
   enum_userAction userAction;
   type_leaderboard leaderboard;
