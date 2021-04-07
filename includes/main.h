@@ -14,15 +14,6 @@
 //App types
 typedef unsigned char bool;
 
-typedef enum enum_logoChar {
-  LOGO_2 = 0,
-  LOGO_0,
-  LOGO_4,
-  LOGO_8,
-  LOGO_DOT,
-  LOGO_C,
-} enum_logoChar;
-
 typedef enum enum_appStatus {
   STATUS_OK = 0,
   STATUS_ERROR,

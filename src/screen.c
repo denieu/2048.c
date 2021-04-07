@@ -14,43 +14,15 @@ void setCursor(enum_cursorState cursorState){
 }
 
 /*------------------------------------------------------------------------------
- * Printa uma das letras do logo na posição (X, Y)
- *----------------------------------------------------------------------------*/
-void print_logoPart(const char letter[][9], int posX, int posY){
-    for(int count = 0; count < CHAR_LOGO_LINES; count++){
-        gotoxy(posX, posY + count);
-        printf("%s", letter[count]);
-      }
-  }
-
-/*------------------------------------------------------------------------------
  * Printa na posição (X, Y) uma letra do logo, com as cores especificadas
  *----------------------------------------------------------------------------*/
-void print_logoLetter(enum_logoChar letter, int posX, int posY, COLORS bgColor, COLORS textColor){
+void print_logoLetter(const char letter[][9], int posX, int posY, COLORS bgColor, COLORS textColor){
   textbackground(bgColor);
   textcolor(textColor);
 
-  switch (letter){
-    case LOGO_2: print_logoPart(charLogo2, posX, posY);
-      break;
-
-    case LOGO_0: print_logoPart(charLogo0, posX, posY);
-      break;
-
-    case LOGO_4: print_logoPart(charLogo4, posX, posY);
-      break;
-
-    case LOGO_8: print_logoPart(charLogo8, posX, posY);
-      break;
-
-    case LOGO_DOT: print_logoPart(charLogoDot, posX, posY);
-      break;
-
-    case LOGO_C: print_logoPart(charLogoC, posX, posY);
-      break;
-
-    default: print_logoPart(charLogoDefault, posX, posY);
-      break;
+  for(int count = 0; count < CHAR_LOGO_LINES; count++){
+    gotoxy(posX, posY + count);
+    printf("%s", letter[count]);
   }
 
   textbackground(DEFAULT_BG_COLOR);
@@ -68,9 +40,8 @@ void print_menuButton(char * placeholder, int posX, int posY, bool selected){
   int placeholderSize = strlen(placeholder);
   int numberOfSpaces = buttonWidth - placeholderSize - selectorWidth;
 
-  for(int count = 0; count < numberOfSpaces ; count++){
+  for(int count = 0; count < numberOfSpaces ; count++)
     selection[count] = ' ';
-  }
   selection[numberOfSpaces] = '<';
   selection[numberOfSpaces + 1] = '-';
   selection[numberOfSpaces + 2] = '-';
@@ -91,12 +62,12 @@ void print_menuButton(char * placeholder, int posX, int posY, bool selected){
  * Printa a tela do menu principal
  *----------------------------------------------------------------------------*/
 void screen_mainMenu(type_appState currentAppState){
-  print_logoLetter(LOGO_2, 10, 3, DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
-  print_logoLetter(LOGO_0, 18, 3, DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
-  print_logoLetter(LOGO_4, 26, 3, DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
-  print_logoLetter(LOGO_8, 34, 3, DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
-  print_logoLetter(LOGO_DOT, 41, 3, DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
-  print_logoLetter(LOGO_C, 44, 3, DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
+  print_logoLetter(charLogo2, 10, 3, DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
+  print_logoLetter(charLogo0, 18, 3, DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
+  print_logoLetter(charLogo4, 26, 3, DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
+  print_logoLetter(charLogo8, 34, 3, DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
+  print_logoLetter(charLogoDot, 41, 3, DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
+  print_logoLetter(charLogoC, 44, 3, DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
 
   print_menuButton("Continuar", 12, 13, TRUE);
   print_menuButton("Novo Jogo", 12, 15, FALSE);
