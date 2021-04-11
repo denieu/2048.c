@@ -159,15 +159,12 @@ void print_gameCard(enum_gameCards * card, int posX, int posY){
     DARKGRAY, LIGHTBLUE, LIGHTGREEN, LIGHTCYAN, LIGHTRED
   };
 
-  gotoxy(posX, posY);
   textbackground(LIGHTGRAY);textcolor(BLACK);
   //Borda superior
   for(int count = 0; count < GAME_CARD_WIDTH; count++){
+    gotoxy(posX + count, posY);
     printf(" ");
-  }
-  //Borda inferior
-  gotoxy(posX, posY + GAME_CARD_HEIGHT - 1);
-  for(int count = 0; count < GAME_CARD_WIDTH; count++){
+    gotoxy(posX + count, posY + GAME_CARD_HEIGHT - 1);
     printf(" ");
   }
   //Bordas laterais
