@@ -35,6 +35,21 @@ typedef enum enum_appStatus {
   STATUS_RUNNING,
 } enum_appStatus;
 
+typedef enum enum_keys{
+  KEY_ENTER = 13,
+  KEY_ESCAPE = 27,
+  KEY_SPACE = 32,
+
+  KEY_N = 78,
+  KEY_S = 83,
+  KEY_U = 85,
+
+  KEY_UP = 72,
+  KEY_LEFT = 75,
+  KEY_RIGHT = 77,
+  KEY_DOWN = 80,
+} enum_keys;
+
 typedef enum enum_userAction {
   ACTION_NONE = 0,
 
@@ -49,7 +64,6 @@ typedef enum enum_userAction {
   ACTION_GAME_NEW,
   ACTION_GAME_SAVE,
   ACTION_GAME_UNDO,
-
 } enum_userAction;
 
 typedef enum enum_cursorState {

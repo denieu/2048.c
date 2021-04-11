@@ -75,6 +75,4 @@ void printAppState(type_appState currentAppState){
       currentAppState.screen.currentScreen = SCREEN_MENU;
       break;
   }
-  
-  getch();
 }
