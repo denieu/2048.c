@@ -93,30 +93,26 @@ void print_inGameMenu(int posX, int posY){
  * Printa o status do jogo, score e movimentos
  *----------------------------------------------------------------------------*/
 void print_gameStatus(type_gameState gameState, int posX, int posY){
-  char number[10] = {'\0'};
+  char number[30] = {'\0'};
 
   gotoxy(posX, posY);
   textbackground(LIGHTGRAY);textcolor(BLACK);
-  printf("  Score   ");
-
-  textbackground(DEFAULT_BG_COLOR);textcolor(DEFAULT_TEXT_COLOR);
-  printf(" ");
-
-  textbackground(LIGHTGRAY);textcolor(BLACK);
-  printf(" Movimentos ");
-
+  printf("         Score         ");
+  
   gotoxy(posX, posY + 1);
   textbackground(DARKGRAY);textcolor(WHITE);
   sprintf(number, "%d", gameState.score);
-  stringCentrilize(number, 10);
+  stringCentrilize(number, 23);
   printf("%s", number);
 
-  textbackground(DEFAULT_BG_COLOR);textcolor(DEFAULT_TEXT_COLOR);
-  printf(" ");
+  gotoxy(posX, posY + 3);
+  textbackground(LIGHTGRAY);textcolor(BLACK);
+  printf("       Movimentos      ");
 
+  gotoxy(posX, posY + 4);
   textbackground(DARKGRAY);textcolor(WHITE);
   sprintf(number, "%d", gameState.moves);
-  stringCentrilize(number, 12);
+  stringCentrilize(number, 23);
   printf("%s", number);
 
   textbackground(DEFAULT_BG_COLOR);textcolor(DEFAULT_TEXT_COLOR);
@@ -134,7 +130,7 @@ void print_inGameRanking(type_leaderboard leaderboard, int posX, int posY){
   printf("        Ranking        ");
 
   textbackground(DARKGRAY);textcolor(WHITE);
-  for(int count = 0;count<10; count++){
+  for(int count = 0;count<11; count++){
     gotoxy(posX, posY+count+1);
 
     if(leaderboard.points[count] != 0)

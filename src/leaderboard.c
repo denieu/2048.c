@@ -4,8 +4,9 @@
  * Lê e retorna a estrutura salva no arquivo "leaderboard"
  *----------------------------------------------------------------------------*/
 type_leaderboard readLeaderboardFile(){
-  type_leaderboard save = { 0 };
-  return save;
+  type_leaderboard leaderboard = { 0 };
+
+  return leaderboard;
 }
 
 /*------------------------------------------------------------------------------

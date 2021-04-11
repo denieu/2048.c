@@ -59,8 +59,8 @@ typedef enum enum_gameCards {
 } enum_gameCards;
 
 typedef struct type_leaderboard {
-  char name[15][10];
-  int points[10];
+  char name[15][11];
+  int points[11];
 } type_leaderboard;
 
 typedef struct type_gameState {
