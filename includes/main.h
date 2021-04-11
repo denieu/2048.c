@@ -37,6 +37,19 @@ typedef enum enum_appStatus {
 
 typedef enum enum_userAction {
   ACTION_NONE = 0,
+
+  ACTION_UP,
+  ACTION_DOWN,
+  ACTION_LEFT,
+  ACTION_RIGTH,
+  ACTION_ENTER,
+  ACTION_ESCAPE,
+
+  ACTION_GAME_CONTINUE,
+  ACTION_GAME_NEW,
+  ACTION_GAME_SAVE,
+  ACTION_GAME_UNDO,
+
 } enum_userAction;
 
 typedef enum enum_cursorState {

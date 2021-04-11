@@ -80,7 +80,7 @@ void print_inGameMenu(int posX, int posY){
   printTwoCollumns("S", "Salvar", 11, 11);
 
   gotoxy(posX, posY + 4);
-  printTwoCollumns("B", "Desfazer", 11, 11);
+  printTwoCollumns("U", "Desfazer", 11, 11);
 
   gotoxy(posX, posY + 5);
   printTwoCollumns("Setas", "Jogar", 11, 11);
