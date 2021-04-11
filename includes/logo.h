@@ -1,63 +1,21 @@
 #ifndef  LOGO_H
 #define  LOGO_H
 
-//Constants
-#define DEFAULT_BG_COLOR BLACK
-#define DEFAULT_TEXT_COLOR LIGHTGRAY
-#define CHAR_LOGO_LINES 7       //Numero de linhas das letras do logo
-const char charLogo2[7][9] = {
-  " #####  ",
-  "#     # ",
-  "      # ",
-  " #####  ",
-  "#       ",
-  "#       ",
-  "####### ",
-};
-const char charLogo0[7][9] = {
-  "  ###   ",
-  " #   #  ",
-  "#     # ",
-  "#     # ",
-  "#     # ",
-  " #   #  ",
-  "  ###   ",
-};
-const char charLogo4[7][9] = {
-  "#       ",
-  "#    #  ",
-  "#    #  ",
-  "#    #  ",
-  "####### ",
-  "     #  ",
-  "     #  ",
-};
-const char charLogo8[7][9] = {
-  " #####  ",
-  "#     # ",
-  "#     # ",
-  " #####  ",
-  "#     # ",
-  "#     # ",
-  " #####  ",
-};
-const char charLogoDot[7][9] = {
-  "   ",
-  "   ",
-  "   ",
-  "   ",
-  "   ",
-  "   ",
-  " # ",
-};
-const char charLogoC[7][9] = {
-  "       ",
-  " ####  ",
-  "#    # ",
-  "#      ",
-  "#      ",
-  "#    # ",
-  " ####  ",
-};
+//Includes
+#include "../includes/main.h"
+#include "../includes/conio2.h" //gotoxy, textcolor, textbackground
 
-#endif
+//Types
+typedef enum enum_logoLetters{
+  LOGO_2 = 0,
+  LOGO_0,
+  LOGO_4,
+  LOGO_8,
+  LOGO_DOT,
+  LOGO_C,
+} enum_logoLetters;
+
+//Functions
+void print_logoLetter(enum_logoLetters selectedLetter, int posX, int posY, COLORS bgColor, COLORS textColor);
+
+#endif  /*LOGO_H*/
