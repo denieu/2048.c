@@ -18,6 +18,7 @@ void setCursor(enum_cursorState cursorState){
  *----------------------------------------------------------------------------*/
 void screen_mainMenu(type_appState currentAppState){
   int menuXStart = 10;
+  enum_menuState menuState = currentAppState.screen.menuState;
 
   print_logoLetter(LOGO_2, menuXStart, 3, DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
   print_logoLetter(LOGO_0, menuXStart + 8, 3, DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
@@ -26,10 +27,10 @@ void screen_mainMenu(type_appState currentAppState){
   print_logoLetter(LOGO_DOT, menuXStart + 31, 3, DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
   print_logoLetter(LOGO_C, menuXStart + 34, 3, DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
 
-  print_menuButton("Continuar", menuXStart + 12, 13, FALSE);
-  print_menuButton("Novo Jogo", menuXStart + 12, 15, FALSE);
-  print_menuButton("Ajuda", menuXStart + 12, 17, FALSE);
-  print_menuButton("Sair", menuXStart + 12, 19, FALSE);
+  print_menuButton("Continuar", menuXStart + 12, 13, (menuState == STATE_MENU_CONTINUE) ? TRUE : FALSE);
+  print_menuButton("Novo Jogo", menuXStart + 12, 15, (menuState == STATE_MENU_NEWGAME) ? TRUE : FALSE);
+  print_menuButton("Ajuda", menuXStart + 12, 17, (menuState == STATE_MENU_HELP) ? TRUE : FALSE);
+  print_menuButton("Sair", menuXStart + 12, 19, (menuState == STATE_MENU_EXIT) ? TRUE : FALSE);
 }
 
 /*------------------------------------------------------------------------------
@@ -49,20 +50,31 @@ void printAppState(type_appState currentAppState){
   //Esconde o cursos da tela
   setCursor(CURSOR_HIDDEN);
 
-  //Printa tela menu - Raissa
-  screen_mainMenu(currentAppState);
-  getch();
+  //Limpa a tela
   clrscr();
 
-  //Printa tela jogo - Daniel
-  screen_inGame(currentAppState);
+  //Mostra a tela correta relativa a currentScreen
+  switch (currentAppState.screen.currentScreen){
+    case SCREEN_MENU:
+      screen_mainMenu(currentAppState);
+      break;
+
+    case SCREEN_GAME:
+      screen_inGame(currentAppState);
+      break;
+
+    case SCREEN_ENDGAME:
+    
+      break;
+
+    case SCREEN_HELP:
+    
+      break;
+    
+    default:
+      currentAppState.screen.currentScreen = SCREEN_MENU;
+      break;
+  }
+  
   getch();
-  clrscr();
-
-  //Printa tela de pausa
-
-  //Printa tela instruções
-
-  //Printa tela fim de partida
-
 }

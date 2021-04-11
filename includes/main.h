@@ -26,9 +26,9 @@
 #define GAME_CARD_WIDTH 12
 #define GAME_CARD_HEIGHT 7
 
-//App types
 typedef unsigned char bool;
 
+//Enums
 typedef enum enum_appStatus {
   STATUS_OK = 0,
   STATUS_ERROR,
@@ -58,6 +58,23 @@ typedef enum enum_gameCards {
   CARD2048,
 } enum_gameCards;
 
+typedef enum enum_screens {
+  SCREEN_MENU = 0,
+  SCREEN_GAME,
+  SCREEN_ENDGAME,
+  SCREEN_HELP,
+} enum_screens;
+
+typedef enum enum_menuState{
+  STATE_MENU_FIRST,
+  STATE_MENU_CONTINUE,
+  STATE_MENU_NEWGAME,
+  STATE_MENU_HELP,
+  STATE_MENU_EXIT,
+  STATE_MENU_LAST,
+} enum_menuState;
+
+//Types
 typedef struct type_leaderboard {
   char name[15][11];
   int points[11];
@@ -70,11 +87,17 @@ typedef struct type_gameState {
   enum_gameCards * gameBoard[4][4];
 } type_gameState;
 
+typedef struct type_screenState{
+  enum_screens currentScreen;
+  enum_menuState menuState;
+} type_screenState;
+
 typedef struct type_appState {
   enum_appStatus appStatus;
   enum_userAction userAction;
   type_leaderboard leaderboard;
   type_gameState gameState;
+  type_screenState screen;
 } type_appState;
 
 #endif  /*MAIN_H*/

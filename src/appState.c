@@ -35,6 +35,10 @@ type_appState getDefaultAppState(){
   //Variaveis de controle do jogo
   defaultAppState.gameState = getDefaultGameState();
 
+  //Variaveis de controle da tela
+  defaultAppState.screen.currentScreen = SCREEN_MENU;
+  defaultAppState.screen.menuState = STATE_MENU_FIRST + 1;
+
   return defaultAppState;
 }
 
