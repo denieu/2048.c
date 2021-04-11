@@ -41,11 +41,13 @@ typedef enum enum_cursorState {
 } enum_cursorState;
 
 typedef struct type_leaderboard {
-  int save;
+  char name[15][10];
+  int points[10];
 } type_leaderboard;
 
 typedef struct type_gameState {
-  int game;
+  int score;
+  int moves;
 } type_gameState;
 
 typedef struct type_appState {

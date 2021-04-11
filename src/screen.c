@@ -26,7 +26,7 @@ void screen_mainMenu(type_appState currentAppState){
   print_logoLetter(LOGO_DOT, menuXStart + 31, 3, DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
   print_logoLetter(LOGO_C, menuXStart + 34, 3, DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
 
-  print_menuButton("Continuar", menuXStart + 12, 13, TRUE);
+  print_menuButton("Continuar", menuXStart + 12, 13, FALSE);
   print_menuButton("Novo Jogo", menuXStart + 12, 15, FALSE);
   print_menuButton("Ajuda", menuXStart + 12, 17, FALSE);
   print_menuButton("Sair", menuXStart + 12, 19, FALSE);
@@ -36,7 +36,10 @@ void screen_mainMenu(type_appState currentAppState){
  * Printa a tela dentro de jogo
  *----------------------------------------------------------------------------*/
 void screen_inGame(type_appState currentAppState){
-  print_inGameButton("Salvar (S)", 0, 0);
+  print_inGameMenu(2, 2);
+  print_gameStatus(currentAppState.gameState, 2, 9);
+  print_inGameRanking(currentAppState.leaderboard, 2, 12);
+  print_gameBoard(currentAppState.gameState, 30, 0);
 }
 
 /*------------------------------------------------------------------------------
