@@ -66,7 +66,6 @@ typedef struct type_leaderboard {
 typedef struct type_gameState {
   int score;
   int moves;
-  //COLORS gameCardColors[11];
   enum_gameCards gameCards[11];
   enum_gameCards * gameBoard[4][4];
 } type_gameState;
