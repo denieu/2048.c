@@ -40,6 +40,20 @@ typedef enum enum_cursorState {
   CURSOR_VISIBLE,
 } enum_cursorState;
 
+typedef enum enum_gameCards {
+  CARD2 = 1,
+  CARD4,
+  CARD8,
+  CARD16,
+  CARD32,
+  CARD64,
+  CARD128,
+  CARD256,
+  CARD512,
+  CARD1024,
+  CARD2048,
+} enum_gameCards;
+
 typedef struct type_leaderboard {
   char name[15][10];
   int points[10];
@@ -48,6 +62,8 @@ typedef struct type_leaderboard {
 typedef struct type_gameState {
   int score;
   int moves;
+  enum_gameCards gameCards[11];
+  enum_gameCards * gameBoard[4][4];
 } type_gameState;
 
 typedef struct type_appState {
