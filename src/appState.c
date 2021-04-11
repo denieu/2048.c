@@ -9,8 +9,8 @@ type_gameState getDefaultGameState(){
   defaultGameState.moves = 0;
 
   //Alocando estrutura das cartas
-  for(int card = 1; card <= 11; card++){
-    defaultGameState.gameCards[card] = card;
+  for(int card = 0; card < 11; card++){
+    defaultGameState.gameCards[card] = card + 1;
   }
 
   //Zerando tabuleiro de jogo

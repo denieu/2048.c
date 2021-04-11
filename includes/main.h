@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include "../includes/conio2.h" //gotoxy, textcolor, textbackground
 
 //Constants
 #define FALSE 0
@@ -21,6 +22,9 @@
 
 #define MENU_LOGO_LINES 7
 #define MENU_LOGO_COLUMNS 9   
+
+#define GAME_CARD_WIDTH 12
+#define GAME_CARD_HEIGHT 7
 
 //App types
 typedef unsigned char bool;
@@ -62,6 +66,7 @@ typedef struct type_leaderboard {
 typedef struct type_gameState {
   int score;
   int moves;
+  //COLORS gameCardColors[11];
   enum_gameCards gameCards[11];
   enum_gameCards * gameBoard[4][4];
 } type_gameState;

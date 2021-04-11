@@ -39,7 +39,7 @@ void screen_inGame(type_appState currentAppState){
   print_inGameMenu(2, 2);
   print_gameStatus(currentAppState.gameState, 2, 9);
   print_inGameRanking(currentAppState.leaderboard, 2, 12);
-  print_gameBoard(currentAppState.gameState, 30, 0);
+  print_gameBoard(currentAppState.gameState, 27, 2);
 }
 
 /*------------------------------------------------------------------------------

@@ -25,10 +25,10 @@ void printTwoCollumns(char * left, char * right, int leftSize, int rightSize){
   char leftString[12] = {'\0'};
   char rightString[12] = {'\0'};
 
-  strcpy(leftString, left); 
+  strcpy(leftString, left);
   strcpy(rightString, right);
 
-  stringCentrilize(leftString, leftSize); 
+  stringCentrilize(leftString, leftSize);
   stringCentrilize(rightString, rightSize);
 
   printf("%s %s", leftString, rightString);
@@ -151,9 +151,47 @@ void print_inGameRanking(type_leaderboard leaderboard, int posX, int posY){
 }
 
 /*------------------------------------------------------------------------------
+ * Printa um casa do tabuleiro
+ *----------------------------------------------------------------------------*/
+void print_gameCard(enum_gameCards * card, int posX, int posY){
+  gotoxy(posX, posY);
+  textbackground(LIGHTGRAY);textcolor(BLACK);
+  //Borda superior
+  for(int count = 0; count < GAME_CARD_WIDTH; count++){
+    printf(" ");
+  }
+  //Borda inferior
+  gotoxy(posX, posY + GAME_CARD_HEIGHT - 1);
+  for(int count = 0; count < GAME_CARD_WIDTH; count++){
+    printf(" ");
+  }
+  //Bordas laterais
+  for(int count = 0; count < GAME_CARD_HEIGHT; count++){
+    gotoxy(posX , posY + count);
+    printf("  ");
+    gotoxy(posX + GAME_CARD_WIDTH - 1, posY + count);
+    printf("  ");
+  }
+
+  gotoxy(posX + GAME_CARD_WIDTH / 2, posY + GAME_CARD_HEIGHT / 2);
+  textbackground(GREEN); textcolor(DEFAULT_TEXT_COLOR);
+  if(card != NULL){
+    int cardValue = pow(2, *card);
+    printf("%d", cardValue);
+  }
+
+  textbackground(DEFAULT_BG_COLOR); textcolor(DEFAULT_TEXT_COLOR);
+}
+
+/*------------------------------------------------------------------------------
  * Printa o tabuleiro do jogo
  *----------------------------------------------------------------------------*/
 void print_gameBoard(type_gameState gameState, int posX, int posY){
+  for(int collumn = 0; collumn < 4; collumn++){
+    for(int line = 0; line < 4; line++){
+      print_gameCard(gameState.gameBoard[line][collumn], posX + collumn * (GAME_CARD_WIDTH - 1), posY + line * (GAME_CARD_HEIGHT - 1));
+    }
+  }
 
   textbackground(DEFAULT_BG_COLOR);
   textcolor(DEFAULT_TEXT_COLOR);
