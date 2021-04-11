@@ -11,6 +11,17 @@
 #define FALSE 0
 #define TRUE  1
 
+//Screen constants
+#define DEFAULT_BG_COLOR BLACK
+#define DEFAULT_TEXT_COLOR LIGHTGRAY
+
+#define WIDTH_BUTTON_INGAME 14
+#define WIDTH_BUTTON_MENU 16
+#define WIDTH_MENU_SELECTOR 3
+
+#define MENU_LOGO_LINES 7
+#define MENU_LOGO_COLUMNS 9   
+
 //App types
 typedef unsigned char bool;
 
