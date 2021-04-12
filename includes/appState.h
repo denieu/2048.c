@@ -6,6 +6,6 @@
 
 //Functions
 type_appState getDefaultAppState();
-type_appState handleUserAction(type_appState currentAppState);
+void handleUserAction(type_appState * appState);
 
 #endif  /*APP_STATE_H*/

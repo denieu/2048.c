@@ -5,7 +5,7 @@
 #include "../includes/screen.h"
 
 /*------------------------------------------------------------------------------
- * Loop principal da aplicação 
+ * Loop principal da aplicação
  *----------------------------------------------------------------------------*/
 int main(){
   //Definição estrutura principal, gameState
@@ -23,8 +23,8 @@ int main(){
     appState.userAction = captureUserAction(appState);
 
     //Retorna um novo appState com base na ação do usuario
-    appState = handleUserAction(appState);
-  } while(appState.appStatus == STATUS_RUNNING); 
+    handleUserAction(&appState);
+  } while(appState.appStatus == STATUS_RUNNING);
 
   //Retorna appStatus
   return appState.appStatus;
