@@ -1,27 +1,5 @@
 #include "../includes/appState.h"
-
-/*------------------------------------------------------------------------------
- * Retorna o gameState default
- *----------------------------------------------------------------------------*/
-type_gameState getDefaultGameState(){
-  type_gameState defaultGameState = {0};
-  defaultGameState.score = 0;
-  defaultGameState.moves = 0;
-
-  //Alocando estrutura das cartas
-  for(int card = 0; card < 11; card++){
-    defaultGameState.gameCards[card] = card + 1;
-  }
-
-  //Zerando tabuleiro de jogo
-  for(int count1 = 0; count1 < 4; count1++){
-     for(int count2 = 0; count2 < 4; count2++){
-      defaultGameState.gameBoard[count1][count2] = NULL;
-    }
-  }
-
-  return defaultGameState;
-}
+#include "../includes/gameState.h"
 
 /*------------------------------------------------------------------------------
  * Retorna o appState default
@@ -43,57 +21,87 @@ type_appState getDefaultAppState(){
 }
 
 /*------------------------------------------------------------------------------
+ * Retorna um novo appState com base na ação realizada na tela de menu
+ *----------------------------------------------------------------------------*/
+void handleMenuAction(type_appState * appState){
+  switch (appState->userAction){
+    case ACTION_UP:
+      appState->screen.menuState--;
+      if(appState->screen.menuState == STATE_MENU_FIRST)
+        appState->screen.menuState = STATE_MENU_LAST - 1;
+      break;
+
+    case ACTION_DOWN:
+      appState->screen.menuState++;
+      if(appState->screen.menuState == STATE_MENU_LAST)
+        appState->screen.menuState = STATE_MENU_FIRST + 1;
+      break;
+
+    case ACTION_ENTER:
+      switch (appState->screen.menuState){
+        case STATE_MENU_CONTINUE:
+          //Busca um arquivo de save e joga ele para o GameState
+
+          appState->screen.currentScreen = SCREEN_GAME;
+          break;
+
+        case STATE_MENU_NEWGAME:
+          //Seta o estado default inicial do jogo
+          appState->gameState = getDefaultGameState();
+
+          //Adiciona as duas cartas inicias ao tabuleiro
+          addCardInBoard(&appState->gameState, 0);
+          addCardInBoard(&appState->gameState, 0);
+
+          //Redireciona para a tela de jogo
+          appState->screen.currentScreen = SCREEN_GAME;
+          break;
+
+        case STATE_MENU_HELP:
+          appState->screen.currentScreen = SCREEN_HELP;
+          break;
+
+        case STATE_MENU_EXIT:
+          appState->appStatus = STATUS_OK;
+          break;
+
+        default:break;
+      }
+      break;
+
+    case ACTION_ESCAPE:
+      appState->appStatus = STATUS_OK;
+      break;
+
+    default:
+      break;
+  }
+}
+
+/*------------------------------------------------------------------------------
  * Retorna um novo appState com base na ação realizada no appState atual
  *----------------------------------------------------------------------------*/
-type_appState handleUserAction(type_appState currentAppState){
-  type_appState newAppState = currentAppState;
-
-  if(newAppState.userAction != ACTION_NONE){
-    switch (newAppState.screen.currentScreen){
+void handleUserAction(type_appState * appState){
+  if(appState->userAction != ACTION_NONE){
+    switch (appState->screen.currentScreen){
       case SCREEN_MENU:
-        //Vai uma opção para cima
-        if(newAppState.userAction == ACTION_UP){
-          newAppState.screen.menuState--;
-          if(newAppState.screen.menuState == STATE_MENU_FIRST)
-            newAppState.screen.menuState = STATE_MENU_LAST - 1;
-        }
-        //Vai uma opção para baixo
-        else if(newAppState.userAction == ACTION_DOWN){
-          newAppState.screen.menuState++;
-          if(newAppState.screen.menuState == STATE_MENU_LAST)
-            newAppState.screen.menuState = STATE_MENU_FIRST + 1;
-        }
-        //Realiza a ação descrita no menu
-        else if(newAppState.userAction == ACTION_ENTER){
-          //Continuar um jogo
-          if(newAppState.screen.menuState == STATE_MENU_CONTINUE){
-
-            //Busca um arquivo de save e joga ele para o GameState
-
-            newAppState.screen.currentScreen = SCREEN_GAME;
-          }
-          //Novo jogo
-          else if(newAppState.screen.menuState == STATE_MENU_NEWGAME){
-            newAppState.screen.currentScreen = SCREEN_GAME;
-          }
-          //Abrir a tela de ajuda
-          else if(newAppState.screen.menuState == STATE_MENU_HELP){
-            newAppState.screen.currentScreen = SCREEN_HELP;
-          }
-          //Sair da aplicação
-          else if(newAppState.screen.menuState == STATE_MENU_EXIT){
-            newAppState.appStatus = STATUS_OK;
-          }
-        }
-        //Fecha a aplicação com status ok
-        else if(newAppState.userAction == ACTION_ESCAPE){
-          newAppState.appStatus = STATUS_OK;
-        }
+        handleMenuAction(appState);
         break;
 
       case SCREEN_GAME:
-        if(newAppState.userAction == ACTION_ESCAPE){
-          newAppState.screen.currentScreen = SCREEN_MENU;
+        switch (appState->userAction){
+          case ACTION_UP:
+          case ACTION_DOWN:
+          case ACTION_LEFT:
+          case ACTION_RIGTH:
+            handleGameAction(appState);
+            break;
+
+          case ACTION_ESCAPE:
+            appState->screen.currentScreen = SCREEN_MENU;
+            break;
+
+          default:break;
         }
         break;
 
@@ -102,16 +110,18 @@ type_appState handleUserAction(type_appState currentAppState){
         break;
 
       case SCREEN_HELP:
-        if(newAppState.userAction == ACTION_ESCAPE){
-          newAppState.screen.currentScreen = SCREEN_MENU;
+        switch (appState->userAction){
+          case ACTION_ESCAPE:
+            appState->screen.currentScreen = SCREEN_MENU;
+            break;
+
+          default:break;
         }
         break;
-      
+
       default:
-        newAppState.screen.currentScreen = SCREEN_MENU;
+        appState->screen.currentScreen = SCREEN_MENU;
         break;
     }
   }
-
-  return newAppState;
 }

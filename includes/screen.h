@@ -5,6 +5,6 @@
 #include "../includes/main.h"
 
 //Functions
-void printAppState(type_appState currentAppState);
+void printAppState(type_appState * currentAppState);
 
 #endif  /*SCREEN_H*/
