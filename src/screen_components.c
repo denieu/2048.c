@@ -187,7 +187,7 @@ void print_gameCard(enum_gameCards * card, int posX, int posY){
     char cardString[GAME_CARD_WIDTH] = {'\0'};
     sprintf(cardString, "%d", cardValue);
 
-    stringCentrilize(cardString, GAME_CARD_WIDTH - 4);
+    stringCentrilize(cardString, GAME_CARD_WIDTH - 3);
     printf("%s", cardString);
   }
 

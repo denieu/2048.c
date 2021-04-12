@@ -36,7 +36,7 @@ void handleMenuAction(type_appState * appState){
       if(appState->screen.menuState == STATE_MENU_LAST)
         appState->screen.menuState = STATE_MENU_FIRST + 1;
       break;
-    
+
     case ACTION_ENTER:
       switch (appState->screen.menuState){
         case STATE_MENU_CONTINUE:
@@ -85,7 +85,7 @@ void handleUserAction(type_appState * appState){
   if(appState->userAction != ACTION_NONE){
     switch (appState->screen.currentScreen){
       case SCREEN_MENU:
-        handleMenuAction(&appState);
+        handleMenuAction(appState);
         break;
 
       case SCREEN_GAME:
