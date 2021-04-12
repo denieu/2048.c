@@ -27,57 +27,66 @@ void handleUserAction(type_appState * appState){
   if(appState->userAction != ACTION_NONE){
     switch (appState->screen.currentScreen){
       case SCREEN_MENU:
-        //Vai uma opção para cima
-        if(appState->userAction == ACTION_UP){
-          appState->screen.menuState--;
-          if(appState->screen.menuState == STATE_MENU_FIRST)
-            appState->screen.menuState = STATE_MENU_LAST - 1;
-        }
-        //Vai uma opção para baixo
-        else if(appState->userAction == ACTION_DOWN){
-          appState->screen.menuState++;
-          if(appState->screen.menuState == STATE_MENU_LAST)
-            appState->screen.menuState = STATE_MENU_FIRST + 1;
-        }
-        //Realiza a ação descrita no menu
-        else if(appState->userAction == ACTION_ENTER){
-          //Continuar um jogo
-          if(appState->screen.menuState == STATE_MENU_CONTINUE){
+        switch (appState->userAction){
+          case ACTION_UP:
+            appState->screen.menuState--;
+            if(appState->screen.menuState == STATE_MENU_FIRST)
+              appState->screen.menuState = STATE_MENU_LAST - 1;
+            break;
 
-            //Busca um arquivo de save e joga ele para o GameState
+          case ACTION_DOWN:
+            appState->screen.menuState++;
+            if(appState->screen.menuState == STATE_MENU_LAST)
+              appState->screen.menuState = STATE_MENU_FIRST + 1;
+            break;
+          
+          case ACTION_ENTER:
+            switch (appState->screen.menuState){
+              case STATE_MENU_CONTINUE:
+                //Busca um arquivo de save e joga ele para o GameState
 
-            appState->screen.currentScreen = SCREEN_GAME;
-          }
-          //Novo jogo
-          else if(appState->screen.menuState == STATE_MENU_NEWGAME){
-            //Seta o estado default inicial do jogo
-            appState->gameState = getDefaultGameState();
+                appState->screen.currentScreen = SCREEN_GAME;
+                break;
 
-            //Adiciona as duas cartas inicias ao tabuleiro
-            addCardInBoard(&appState->gameState, 0);
-            addCardInBoard(&appState->gameState, 0);
+              case STATE_MENU_NEWGAME:
+                //Seta o estado default inicial do jogo
+                appState->gameState = getDefaultGameState();
 
-            //Redireciona para a tela de jogo
-            appState->screen.currentScreen = SCREEN_GAME;
-          }
-          //Abrir a tela de ajuda
-          else if(appState->screen.menuState == STATE_MENU_HELP){
-            appState->screen.currentScreen = SCREEN_HELP;
-          }
-          //Sair da aplicação
-          else if(appState->screen.menuState == STATE_MENU_EXIT){
+                //Adiciona as duas cartas inicias ao tabuleiro
+                addCardInBoard(&appState->gameState, 0);
+                addCardInBoard(&appState->gameState, 0);
+
+                //Redireciona para a tela de jogo
+                appState->screen.currentScreen = SCREEN_GAME;
+                break;
+
+              case STATE_MENU_HELP:
+                appState->screen.currentScreen = SCREEN_HELP;
+                break;
+
+              case STATE_MENU_EXIT:
+                appState->appStatus = STATUS_OK;
+                break;
+
+              default:break;
+            }
+            break;
+
+          case ACTION_ESCAPE:
             appState->appStatus = STATUS_OK;
-          }
-        }
-        //Fecha a aplicação com status ok
-        else if(appState->userAction == ACTION_ESCAPE){
-          appState->appStatus = STATUS_OK;
+            break;
+
+          default:break;
         }
         break;
 
       case SCREEN_GAME:
-        if(appState->userAction == ACTION_ESCAPE){
-          appState->screen.currentScreen = SCREEN_MENU;
+        switch (appState->userAction){
+          case ACTION_ESCAPE:
+            appState->screen.currentScreen = SCREEN_MENU;
+            break;
+
+          default:break;
         }
         break;
 
@@ -86,8 +95,12 @@ void handleUserAction(type_appState * appState){
         break;
 
       case SCREEN_HELP:
-        if(appState->userAction == ACTION_ESCAPE){
-          appState->screen.currentScreen = SCREEN_MENU;
+        switch (appState->userAction){
+          case ACTION_ESCAPE:
+            appState->screen.currentScreen = SCREEN_MENU;
+            break;
+
+          default:break;
         }
         break;
 
