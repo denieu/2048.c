@@ -101,24 +101,65 @@ void toUp(type_appState * appState){
   }
 }
 
+void toDown(type_appState * appState){
+  for(int collumn = 0; collumn < 4; collumn++){
+    for(int line = 0; line < 3; line++){
+      // Caso essa linha não seja vazia
+      if(appState->gameState.gameBoard[line][collumn] != NULL){
+
+        //Joga pra baixo o que der
+        if(appState->gameState.gameBoard[line + 1][collumn] == NULL){
+          appState->gameState.gameBoard[line + 1][collumn] = appState->gameState.gameBoard[line][collumn];
+          appState->gameState.gameBoard[line][collumn] = NULL;
+        }
+      }
+    }
+  }
+}
+
 /*------------------------------------------------------------------------------
  * Altera o appState com base na ação realizada dentro do jogo
  *----------------------------------------------------------------------------*/
 void handleGameAction(type_appState * appState){
   switch (appState->userAction){
     case ACTION_UP:
-
       for(int collumn = 0; collumn < 4; collumn++){
-
         for(int line = 1; line < 4; line++){
           toUp(appState);
-        }
 
+          if(appState->gameState.gameBoard[line][collumn] != NULL){
+            if(*appState->gameState.gameBoard[line - 1][collumn] == *appState->gameState.gameBoard[line][collumn]){
+              int newValue = *appState->gameState.gameBoard[line - 1][collumn];
+              appState->gameState.gameBoard[line - 1][collumn] = &appState->gameState.gameCards[newValue];
+              appState->gameState.gameBoard[line][collumn] = NULL;
+
+              toUp(appState);
+              line--;
+              continue;
+            }
+          }
+        }
       }
       break;
 
     case ACTION_DOWN:
+      for(int collumn = 0; collumn < 4; collumn++){
+        for(int line = 2; line >= 0; line--){
+          toDown(appState);
 
+          if(appState->gameState.gameBoard[line][collumn] != NULL){
+            if(*appState->gameState.gameBoard[line + 1][collumn] == *appState->gameState.gameBoard[line][collumn]){
+              int newValue = *appState->gameState.gameBoard[line + 1][collumn];
+              appState->gameState.gameBoard[line + 1][collumn] = &appState->gameState.gameCards[newValue];
+              appState->gameState.gameBoard[line][collumn] = NULL;
+
+              toDown(appState);
+              line++;
+              continue;
+            }
+          }
+        }
+      }
       break;
 
     case ACTION_LEFT:
