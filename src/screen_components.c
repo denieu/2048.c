@@ -147,6 +147,24 @@ void print_inGameRanking(type_leaderboard leaderboard, int posX, int posY){
 }
 
 /*------------------------------------------------------------------------------
+ * Printa a borda do tabuleiro
+ *----------------------------------------------------------------------------*/
+void print_gameBoardEdges(int posX, int posY){
+  textbackground(LIGHTGRAY);textcolor(BLACK);
+
+  for(int line = 0; line < 5; line++){
+    for(int count = 0; count < (GAME_CARD_WIDTH * 4) - 2; count++){
+      gotoxy(posX + count, posY + (line * (GAME_CARD_HEIGHT - 1)));
+      printf(" ");
+    }
+    for(int count = 0; count < 25; count++){
+      gotoxy(posX + (line * (GAME_CARD_WIDTH - 1)), posY + count);
+      printf("  ");
+    }
+  }
+}
+
+/*------------------------------------------------------------------------------
  * Printa um casa do tabuleiro
  *----------------------------------------------------------------------------*/
 void print_gameCard(enum_gameCards * card, int posX, int posY){
@@ -154,22 +172,6 @@ void print_gameCard(enum_gameCards * card, int posX, int posY){
     BLUE, GREEN, CYAN, RED, MAGENTA, BROWN,
     DARKGRAY, LIGHTBLUE, LIGHTGREEN, LIGHTCYAN, LIGHTRED
   };
-
-  textbackground(LIGHTGRAY);textcolor(BLACK);
-  //Borda superior
-  for(int count = 0; count < GAME_CARD_WIDTH; count++){
-    gotoxy(posX + count, posY);
-    printf(" ");
-    gotoxy(posX + count, posY + GAME_CARD_HEIGHT - 1);
-    printf(" ");
-  }
-  //Bordas laterais
-  for(int count = 0; count < GAME_CARD_HEIGHT; count++){
-    gotoxy(posX , posY + count);
-    printf("  ");
-    gotoxy(posX + GAME_CARD_WIDTH - 1, posY + count);
-    printf("  ");
-  }
 
   if(card != NULL){
     textbackground(gameCardColors[*card - 1]); textcolor(DEFAULT_TEXT_COLOR);
