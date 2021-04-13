@@ -90,6 +90,13 @@ void handleUserAction(type_appState * appState){
 
       case SCREEN_GAME:
         switch (appState->userAction){
+          case ACTION_UP:
+          case ACTION_DOWN:
+          case ACTION_LEFT:
+          case ACTION_RIGTH:
+            handleGameAction(appState);
+            break;
+
           case ACTION_ESCAPE:
             appState->screen.currentScreen = SCREEN_MENU;
             break;

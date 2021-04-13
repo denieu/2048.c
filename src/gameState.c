@@ -58,20 +58,18 @@ bool addCardInBoard(type_gameState * gameState, int chanceToDouble){
 
   //Verifica com base em chanceToDouble se pode dobrar o valor da carta
   srand(time(NULL));
-  if((rand() % 100) <= chanceToDouble){
+  if((rand() % 100) <= chanceToDouble && chanceToDouble != 0){
     newCardIndex = CARD4 - 1;
   }
 
   while(TRUE){
     //Coloca em uma casa aleatoria o valor newCardValue
-    int house = (rand() % 15);
+    int house = (rand() % 16);
     int line = house / 4;
     int collumn = house % 4;
 
     //Verifica se é uma casa livre
     if(gameState->gameBoard[line][collumn] == NULL){
-      gotoxy(1, 15);
-      printf("%d", &gameState->gameCards[CARD2 - 1]);
       gameState->gameBoard[line][collumn] = &gameState->gameCards[newCardIndex];
       return TRUE;
     }
@@ -85,4 +83,55 @@ bool addCardInBoard(type_gameState * gameState, int chanceToDouble){
 
   //Não havia nenhuma casa livre no tabuleiro
   return FALSE;
+}
+
+void toUp(type_appState * appState){
+  for(int collumn = 0; collumn < 4; collumn++){
+    for(int line = 3; line > 0; line--){
+      // Caso essa linha não seja vazia
+      if(appState->gameState.gameBoard[line][collumn] != NULL){
+
+        //Joga pra cima o que der
+        if(appState->gameState.gameBoard[line - 1][collumn] == NULL){
+          appState->gameState.gameBoard[line - 1][collumn] = appState->gameState.gameBoard[line][collumn];
+          appState->gameState.gameBoard[line][collumn] = NULL;
+        }
+      }
+    }
+  }
+}
+
+/*------------------------------------------------------------------------------
+ * Altera o appState com base na ação realizada dentro do jogo
+ *----------------------------------------------------------------------------*/
+void handleGameAction(type_appState * appState){
+  switch (appState->userAction){
+    case ACTION_UP:
+
+      for(int collumn = 0; collumn < 4; collumn++){
+
+        for(int line = 1; line < 4; line++){
+          toUp(appState);
+        }
+
+      }
+      break;
+
+    case ACTION_DOWN:
+
+      break;
+
+    case ACTION_LEFT:
+
+      break;
+
+    case ACTION_RIGTH:
+
+      break;
+
+    default:
+      return;
+      break;
+  }
+  addCardInBoard(&appState->gameState, 10);
 }
