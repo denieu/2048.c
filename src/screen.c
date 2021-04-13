@@ -1,7 +1,7 @@
 #include "../includes/screen.h"
 #include "../includes/screen_components.h"
 #include "../includes/logo.h"
-#include "windows.h"    
+#include "windows.h"
 
 /*------------------------------------------------------------------------------
  * Altera o estado do cursor entre visivel e invisivel
@@ -36,17 +36,17 @@ void screen_mainMenu(type_appState currentAppState){
 /*------------------------------------------------------------------------------
  * Printa a tela dentro de jogo
  *----------------------------------------------------------------------------*/
-void screen_inGame(type_appState currentAppState){
+void screen_inGame(type_appState * currentAppState){
   print_inGameMenu(2, 2);
-  print_gameStatus(currentAppState.gameState, 2, 9);
-  print_inGameRanking(currentAppState.leaderboard, 2, 15);
-  print_gameBoard(currentAppState.gameState, 27, 2);
+  print_gameStatus(currentAppState->gameState, 2, 9);
+  print_inGameRanking(currentAppState->leaderboard, 2, 15);
+  print_gameBoard(&currentAppState->gameState, 27, 2);
 }
 
 /*------------------------------------------------------------------------------
  * Printa a tela atual com base no "currentAppState"
  *----------------------------------------------------------------------------*/
-void printAppState(type_appState currentAppState){
+void printAppState(type_appState * currentAppState){
   //Esconde o cursos da tela
   setCursor(CURSOR_HIDDEN);
 
@@ -54,9 +54,9 @@ void printAppState(type_appState currentAppState){
   clrscr();
 
   //Mostra a tela correta relativa a currentScreen
-  switch (currentAppState.screen.currentScreen){
+  switch (currentAppState->screen.currentScreen){
     case SCREEN_MENU:
-      screen_mainMenu(currentAppState);
+      screen_mainMenu(*currentAppState);
       break;
 
     case SCREEN_GAME:
@@ -64,15 +64,15 @@ void printAppState(type_appState currentAppState){
       break;
 
     case SCREEN_ENDGAME:
-    
+
       break;
 
     case SCREEN_HELP:
-    
+
       break;
-    
+
     default:
-      currentAppState.screen.currentScreen = SCREEN_MENU;
+      currentAppState->screen.currentScreen = SCREEN_MENU;
       break;
   }
 }

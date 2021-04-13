@@ -17,7 +17,7 @@ int main(){
   //Mantem rodando enquanto o appStatus for STATUS_RUNNING
   do{
     //Printa tela com base no appState
-    printAppState(appState);
+    printAppState(&appState);
 
     //Captura ação do usuario e salva em gameState.userAction
     appState.userAction = captureUserAction(appState);
