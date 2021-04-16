@@ -159,6 +159,7 @@ void boardSlideUp(type_appState * appState){
               appState->gameState.gameBoard[line - count][collumn] = appState->gameState.gameBoard[line][collumn];
               appState->gameState.gameBoard[line][collumn] = NULL;
               flag = 1;
+              break;
             }
           }
         }
