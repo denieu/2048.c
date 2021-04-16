@@ -92,32 +92,78 @@ bool addCardInBoard(type_gameState * gameState, int chanceToDouble){
  * Y: 0 = Tabuleiro será rotacionado para a direita
  *    1 = Tabuleiro será rotacionado para a esquerda
  *----------------------------------------------------------------------------*/
-void rotateGameBoard(type_appState * appState, int repeat, enum_direction direction){
-  if(repeat > 0){
-    type_gameState oldGameState = appState->gameState;
-    int position[4] = {3, 2, 1, 0};
+void rotateGameBoard(type_appState * appState, enum_direction direction){
+  type_gameState oldGameState = appState->gameState;
+  int position[4] = {3, 2, 1, 0};
 
-    if(direction == LEFT){
-      for(int count = 0; count < 4; count++){
-          appState->gameState.gameBoard[count][0] = oldGameState.gameBoard[0][position[count]];
-          appState->gameState.gameBoard[count][1] = oldGameState.gameBoard[1][position[count]];
-          appState->gameState.gameBoard[count][2] = oldGameState.gameBoard[2][position[count]];
-          appState->gameState.gameBoard[count][3] = oldGameState.gameBoard[3][position[count]];
+  if(direction == LEFT){
+    for(int count = 0; count < 4; count++){
+        appState->gameState.gameBoard[count][0] = oldGameState.gameBoard[0][position[count]];
+        appState->gameState.gameBoard[count][1] = oldGameState.gameBoard[1][position[count]];
+        appState->gameState.gameBoard[count][2] = oldGameState.gameBoard[2][position[count]];
+        appState->gameState.gameBoard[count][3] = oldGameState.gameBoard[3][position[count]];
+    }
+  }
+  if(direction == RIGHT){
+    for(int count = 0; count < 4; count++){
+        appState->gameState.gameBoard[count][0] = oldGameState.gameBoard[3][count];
+        appState->gameState.gameBoard[count][1] = oldGameState.gameBoard[2][count];
+        appState->gameState.gameBoard[count][2] = oldGameState.gameBoard[1][count];
+        appState->gameState.gameBoard[count][3] = oldGameState.gameBoard[0][count];
+    }
+  }
+  else {
+    return;
+  }
+}
+
+/*------------------------------------------------------------------------------
+ * Faz o movimento pra cima das peças, unindo as necessarias
+ *----------------------------------------------------------------------------*/
+void boardSlideUp(type_appState * appState){
+  int flag = 0;
+
+  //Percorre coluna por coluna
+  for(int collumn = 0; collumn < 4; collumn++){
+    //Percorre da primeira até a penultima linha
+    for(int line = 0; line < 3; line++){
+      //Verifica se a linha atual é nula
+      if(appState->gameState.gameBoard[line][collumn] != NULL){
+        //Verifica as proximas linhas se pode unir com a atual
+        for(int count = 1; count <=3 ; count++){
+          //Se a proxima linha estiver no range valido(<4) e a proxima linha não for nula
+          if(line + count < 4 && appState->gameState.gameBoard[line + count][collumn] != NULL){
+            //Verifica se a proxima linha é igual a linha atual
+            if(*appState->gameState.gameBoard[line][collumn] == *appState->gameState.gameBoard[line + count][collumn]){
+              //Se sim incrementa o valor da linha atual,
+              //tranforma a proxima linha em nula 
+              //e continua para verificar a proxima linha
+              appState->gameState.gameBoard[line][collumn]++;
+              appState->gameState.gameBoard[line + count][collumn] = NULL;
+              break;
+            }
+          }
+        }
       }
     }
-    if(direction == RIGHT){
-      for(int count = 0; count < 4; count++){
-          appState->gameState.gameBoard[count][0] = oldGameState.gameBoard[3][count];
-          appState->gameState.gameBoard[count][1] = oldGameState.gameBoard[2][count];
-          appState->gameState.gameBoard[count][2] = oldGameState.gameBoard[1][count];
-          appState->gameState.gameBoard[count][3] = oldGameState.gameBoard[0][count];
-      }
-    }
-    else {
-      return;
-    }
+  }
 
-    rotateGameBoard(appState, repeat - 1, direction);
+  //Joga as peças para cima, deixando os espaçoes nulos em baixo
+  for(int collumn = 0; collumn < 4; collumn++){
+    do{
+      flag = 0;      
+      for(int line = 3; line > 0 ; line--){
+        if(appState->gameState.gameBoard[line][collumn] != NULL){
+          for(int count = 1; count <=3 ; count++){
+            if(line - count >= 0 && appState->gameState.gameBoard[line - count][collumn] == NULL){
+              appState->gameState.gameBoard[line - count][collumn] = appState->gameState.gameBoard[line][collumn];
+              appState->gameState.gameBoard[line][collumn] = NULL;
+              flag = 1;
+            }
+          }
+        }
+      }
+    } while(flag == 1);
   }
 }
 
@@ -128,28 +174,36 @@ void handleGameAction(type_appState * appState){
   //Rotaciona tabuleiro sempre pra cima para tratar mais facilmente
   switch (appState->userAction){
     case ACTION_UP: break;
-    case ACTION_DOWN: rotateGameBoard(appState, 2, LEFT);
+    case ACTION_DOWN: 
+      rotateGameBoard(appState, LEFT);
+      rotateGameBoard(appState, LEFT);
       break;
-    case ACTION_LEFT: rotateGameBoard(appState, 1, RIGHT);
+    case ACTION_LEFT: 
+      rotateGameBoard(appState, RIGHT);
       break;
-    case ACTION_RIGTH: rotateGameBoard(appState, 1, LEFT);
+    case ACTION_RIGTH: 
+      rotateGameBoard(appState, LEFT);
       break;
-    default: break;
+    default: return; break;
   }
 
   //Une as peças pra cima
-
+  boardSlideUp(appState);
 
   //Retorna o tabuleiro ao estado inicial
   switch (appState->userAction){
     case ACTION_UP: break;
-    case ACTION_DOWN: rotateGameBoard(appState, 2, RIGHT);
+    case ACTION_DOWN: 
+      rotateGameBoard(appState, LEFT);
+      rotateGameBoard(appState, LEFT);
       break;
-    case ACTION_LEFT: rotateGameBoard(appState, 1, LEFT);
+    case ACTION_LEFT: 
+      rotateGameBoard(appState, LEFT);
       break;
-    case ACTION_RIGTH: rotateGameBoard(appState, 1, RIGHT);
+    case ACTION_RIGTH: 
+      rotateGameBoard(appState, RIGHT);
       break;
-    default: break;
+    default: return; break;
   }
 
   //Após a jogada adiciona uma nova carta ao tabuleiro, 10% chance de ser um 4
