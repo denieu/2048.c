@@ -243,6 +243,29 @@ bool boardSlideUp(type_appState * appState){
 }
 
 /*------------------------------------------------------------------------------
+ * Verifica se em alguma das posições existe um movimento disponivel
+ *
+ * Retorna TRUE caso exista movimentos disponiveis
+ * Retorna FALSE caso não exista movimentos disponiveis
+ *----------------------------------------------------------------------------*/
+bool verifyPossibleMoves(type_appState * appState){
+  type_appState newAppState = *appState;
+
+  for(int count = 0; count < 4; count++){
+    //Verifica se fez algum movimento
+    if(boardSlideUp(&newAppState) == TRUE){
+      //Algum movimento ocorreu
+      return TRUE;
+    }
+
+    rotateGameBoard(&newAppState, LEFT);
+  }
+
+  //Nenhum movimento ocorreu em nenhum posição
+  return FALSE;
+}
+
+/*------------------------------------------------------------------------------
  * Altera o appState com base na ação realizada dentro do jogo
  *----------------------------------------------------------------------------*/
 void handleGameAction(type_appState * appState){
@@ -272,17 +295,16 @@ void handleGameAction(type_appState * appState){
     //Adiciona uma nova carta ao tabuleiro para a proxima rodada
     addCardInBoard(&appState->gameState, 10);
   }
-  else {
-    //Não conseguiu jogar verifica se existem casas livres
-    if(verifyFreeHouse(&appState->gameState) == FALSE){
-      //Verifica se tem alguma jogada possivel
-      if(TRUE){
-        //Não existem casas livres e não existe nenhuma jogada possivel,
-        //encerra o jogo com derrota
-        appState->gameState.gameStatus = GAME_LOSE;
-        appState->screen.currentScreen = SCREEN_ENDGAME;
-        return;
-      }
+
+  //Não conseguiu jogar verifica se existem casas livres
+  if(verifyFreeHouse(&appState->gameState) == FALSE){
+    //Verifica se tem alguma jogada possivel
+    if(verifyPossibleMoves(appState) == FALSE){
+      //Não existem casas livres e não existe nenhuma jogada possivel,
+      //encerra o jogo com derrota
+      appState->gameState.gameStatus = GAME_LOSE;
+      appState->screen.currentScreen = SCREEN_ENDGAME;
+      return;
     }
   }
 }
