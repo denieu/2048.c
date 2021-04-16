@@ -119,8 +119,12 @@ void rotateGameBoard(type_appState * appState, enum_direction direction){
 
 /*------------------------------------------------------------------------------
  * Faz o movimento pra cima das peças, unindo as necessarias
+ *
+ * Retorna TRUE caso alguma peça se movimente
+ * Retorna FALSE caso nenhuma peça se movimente
  *----------------------------------------------------------------------------*/
-void boardSlideUp(type_appState * appState){
+bool boardSlideUp(type_appState * appState){
+  bool ret = FALSE;
   int flag = 0;
 
   //Percorre coluna por coluna
@@ -140,6 +144,7 @@ void boardSlideUp(type_appState * appState){
               //e continua para verificar a proxima linha
               appState->gameState.gameBoard[line][collumn]++;
               appState->gameState.gameBoard[line + count][collumn] = NULL;
+              ret = TRUE;
               break;
             }
           }
@@ -159,6 +164,7 @@ void boardSlideUp(type_appState * appState){
               appState->gameState.gameBoard[line - count][collumn] = appState->gameState.gameBoard[line][collumn];
               appState->gameState.gameBoard[line][collumn] = NULL;
               flag = 1;
+              ret = TRUE;
               break;
             }
           }
@@ -166,12 +172,16 @@ void boardSlideUp(type_appState * appState){
       }
     } while(flag == 1);
   }
+
+  return ret;
 }
 
 /*------------------------------------------------------------------------------
  * Altera o appState com base na ação realizada dentro do jogo
  *----------------------------------------------------------------------------*/
 void handleGameAction(type_appState * appState){
+  bool isMoved = FALSE;
+
   //Rotaciona tabuleiro sempre pra cima para tratar mais facilmente
   switch (appState->userAction){
     case ACTION_UP: break;
@@ -189,7 +199,7 @@ void handleGameAction(type_appState * appState){
   }
 
   //Une as peças pra cima
-  boardSlideUp(appState);
+  isMoved = boardSlideUp(appState);
 
   //Retorna o tabuleiro ao estado inicial
   switch (appState->userAction){
@@ -208,5 +218,6 @@ void handleGameAction(type_appState * appState){
   }
 
   //Após a jogada adiciona uma nova carta ao tabuleiro, 10% chance de ser um 4
-  addCardInBoard(&appState->gameState, 10);
+  if(isMoved == TRUE)
+    addCardInBoard(&appState->gameState, 10);
 }
