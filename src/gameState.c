@@ -221,7 +221,9 @@ void handleGameAction(type_appState * appState){
 
   //Após a jogada adiciona uma nova carta ao tabuleiro, 10% chance de ser um 4
   if(isMoved == TRUE) {
-    addCardInBoard(&appState->gameState, 10);
     appState->gameState.moves++;
+    if(addCardInBoard(&appState->gameState, 10) == FALSE){
+      appState->screen.currentScreen = SCREEN_ENDGAME;
+    }
   }
 }

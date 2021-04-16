@@ -66,7 +66,7 @@ void printAppState(type_appState * currentAppState){
       break;
 
     case SCREEN_ENDGAME:
-
+      printf("Esta eh a tela de fim provisoria");
       break;
 
     case SCREEN_HELP:
