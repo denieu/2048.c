@@ -67,6 +67,12 @@ typedef enum enum_userAction {
   ACTION_GAME_UNDO,
 } enum_userAction;
 
+typedef enum enum_gameStatus{
+  GAME_RUNNING = 0,
+  GAME_LOSE,
+  GAME_WIN,
+} enum_gameStatus;
+
 typedef enum enum_cursorState {
   CURSOR_HIDDEN = 0,
   CURSOR_VISIBLE,
@@ -114,6 +120,7 @@ typedef struct type_leaderboard {
 } type_leaderboard;
 
 typedef struct type_gameState {
+  enum_gameStatus gameStatus;
   int score;
   int moves;
   enum_gameCards gameCards[11];

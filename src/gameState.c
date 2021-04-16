@@ -5,6 +5,8 @@
  *----------------------------------------------------------------------------*/
 type_gameState getDefaultGameState(){
   type_gameState defaultGameState = {0};
+
+  defaultGameState.gameStatus = GAME_RUNNING;
   defaultGameState.score = 0;
   defaultGameState.moves = 0;
 
@@ -29,10 +31,10 @@ type_gameState getDefaultGameState(){
  * Retorna TRUE caso tenha pelo menos uma casa livre
  * Retorna FALSE caso não tenha nenhuma casa livre
  *----------------------------------------------------------------------------*/
-bool verifyFreeHouse(type_gameState gameState){
+bool verifyFreeHouse(type_gameState * gameState){
   for(int line = 0; line < 4; line++){
     for(int collumn = 0; collumn < 4; collumn++){
-      if(gameState.gameBoard[line][collumn] == NULL){
+      if(gameState->gameBoard[line][collumn] == NULL){
         //O tabuleiro possui pelo menos uma casa livre
         return TRUE;
       }
@@ -75,8 +77,7 @@ bool addCardInBoard(type_gameState * gameState, int chanceToDouble){
     }
 
     //Verifica se o tabuleiro ainda possui alguma casa livre
-    if(verifyFreeHouse(*gameState) == FALSE){
-      //Não havia nenhuma casa livre no tabuleiro
+    if(verifyFreeHouse(gameState) == FALSE){
       return FALSE;
     }
   }
@@ -86,11 +87,30 @@ bool addCardInBoard(type_gameState * gameState, int chanceToDouble){
 }
 
 /*------------------------------------------------------------------------------
- * Rotaciona o tabuleiro de jogo "repeat" vezes para o lado "direction"
+ * Verifica se o jogador ganhou, fez 2048
  *
- * X: Numero de vezes que o tabuleiro sera rotacionado
- * Y: 0 = Tabuleiro será rotacionado para a direita
- *    1 = Tabuleiro será rotacionado para a esquerda
+ * Retorna TRUE caso o jogador tenha ganhado
+ * Retorna FALSE caso o jogador ainda não tenha ganhado
+ *----------------------------------------------------------------------------*/
+bool verifyPlayerWin(type_appState * appState){
+  for(int line = 0; line < 4; line++){
+    for(int collumn = 0; collumn < 4; collumn++){
+      if(appState->gameState.gameBoard[line][collumn] != NULL){
+        if(*appState->gameState.gameBoard[line][collumn] == appState->gameState.gameCards[10]){
+          return TRUE;
+        }
+      }
+    }
+  }
+
+  return FALSE;
+}
+
+/*------------------------------------------------------------------------------
+ * Rotaciona o tabuleiro de jogo para o lado "direction"
+ *
+ * direction: 0 = Tabuleiro será rotacionado para a direita
+ *            1 = Tabuleiro será rotacionado para a esquerda
  *----------------------------------------------------------------------------*/
 void rotateGameBoard(type_appState * appState, enum_direction direction){
   type_gameState oldGameState = appState->gameState;
@@ -118,6 +138,46 @@ void rotateGameBoard(type_appState * appState, enum_direction direction){
 }
 
 /*------------------------------------------------------------------------------
+ * Rotaciona o tabuleiro pra cima, dependendo da ação do usuario
+ *----------------------------------------------------------------------------*/
+void boardRotateUp(type_appState * appState){
+  switch (appState->userAction){
+    case ACTION_UP: break;
+    case ACTION_DOWN:
+      rotateGameBoard(appState, LEFT);
+      rotateGameBoard(appState, LEFT);
+      break;
+    case ACTION_LEFT:
+      rotateGameBoard(appState, RIGHT);
+      break;
+    case ACTION_RIGTH:
+      rotateGameBoard(appState, LEFT);
+      break;
+    default: return; break;
+  }
+}
+
+/*------------------------------------------------------------------------------
+ * Rotaciona o tabuleiro pra posição original, dependendo da ação do usuario
+ *----------------------------------------------------------------------------*/
+void boardRotateOg(type_appState * appState){
+  switch (appState->userAction){
+    case ACTION_UP: break;
+    case ACTION_DOWN:
+      rotateGameBoard(appState, LEFT);
+      rotateGameBoard(appState, LEFT);
+      break;
+    case ACTION_LEFT:
+      rotateGameBoard(appState, LEFT);
+      break;
+    case ACTION_RIGTH:
+      rotateGameBoard(appState, RIGHT);
+      break;
+    default: return; break;
+  }
+}
+
+/*------------------------------------------------------------------------------
  * Faz o movimento pra cima das peças, unindo as necessarias
  *
  * Retorna TRUE caso alguma peça se movimente
@@ -140,13 +200,17 @@ bool boardSlideUp(type_appState * appState){
             //Verifica se a proxima linha é igual a linha atual
             if(*appState->gameState.gameBoard[line][collumn] == *appState->gameState.gameBoard[line + count][collumn]){
               //Se sim incrementa o valor da linha atual,
-              //tranforma a proxima linha em nula 
+              //tranforma a proxima linha em nula
               //e continua para verificar a proxima linha
               appState->gameState.gameBoard[line][collumn]++;
               appState->gameState.gameBoard[line + count][collumn] = NULL;
+
+              //Incrementa o score do jogador com o valor da nova peça
+              appState->gameState.score += pow(2, *appState->gameState.gameBoard[line][collumn]);
+
               ret = TRUE;
-              break;
             }
+            break;
           }
         }
       }
@@ -156,7 +220,7 @@ bool boardSlideUp(type_appState * appState){
   //Joga as peças para cima, deixando os espaçoes nulos em baixo
   for(int collumn = 0; collumn < 4; collumn++){
     do{
-      flag = 0;      
+      flag = 0;
       for(int line = 3; line > 0 ; line--){
         if(appState->gameState.gameBoard[line][collumn] != NULL){
           for(int count = 1; count <=3 ; count++){
@@ -179,51 +243,68 @@ bool boardSlideUp(type_appState * appState){
 }
 
 /*------------------------------------------------------------------------------
+ * Verifica se em alguma das posições existe um movimento disponivel
+ *
+ * Retorna TRUE caso exista movimentos disponiveis
+ * Retorna FALSE caso não exista movimentos disponiveis
+ *----------------------------------------------------------------------------*/
+bool verifyPossibleMoves(type_appState * appState){
+  type_appState newAppState = *appState;
+
+  for(int count = 0; count < 4; count++){
+    //Verifica se fez algum movimento
+    if(boardSlideUp(&newAppState) == TRUE){
+      //Algum movimento ocorreu
+      return TRUE;
+    }
+
+    rotateGameBoard(&newAppState, LEFT);
+  }
+
+  //Nenhum movimento ocorreu em nenhum posição
+  return FALSE;
+}
+
+/*------------------------------------------------------------------------------
  * Altera o appState com base na ação realizada dentro do jogo
  *----------------------------------------------------------------------------*/
 void handleGameAction(type_appState * appState){
   bool isMoved = FALSE;
 
   //Rotaciona tabuleiro sempre pra cima para tratar mais facilmente
-  switch (appState->userAction){
-    case ACTION_UP: break;
-    case ACTION_DOWN: 
-      rotateGameBoard(appState, LEFT);
-      rotateGameBoard(appState, LEFT);
-      break;
-    case ACTION_LEFT: 
-      rotateGameBoard(appState, RIGHT);
-      break;
-    case ACTION_RIGTH: 
-      rotateGameBoard(appState, LEFT);
-      break;
-    default: return; break;
-  }
+  boardRotateUp(appState);
 
   //Une as peças pra cima
   isMoved = boardSlideUp(appState);
 
   //Retorna o tabuleiro ao estado inicial
-  switch (appState->userAction){
-    case ACTION_UP: break;
-    case ACTION_DOWN: 
-      rotateGameBoard(appState, LEFT);
-      rotateGameBoard(appState, LEFT);
-      break;
-    case ACTION_LEFT: 
-      rotateGameBoard(appState, LEFT);
-      break;
-    case ACTION_RIGTH: 
-      rotateGameBoard(appState, RIGHT);
-      break;
-    default: return; break;
+  boardRotateOg(appState);
+
+  //Se algum movimento foi feito no tabuleiro
+  if(isMoved == TRUE) {
+    //Incrementa o numero de movimentos
+    appState->gameState.moves++;
+
+    //Verifica se o jogador ganhou
+    if(verifyPlayerWin(appState) == TRUE){
+      appState->gameState.gameStatus = GAME_WIN;
+      appState->screen.currentScreen = SCREEN_ENDGAME;
+      return;
+    }
+
+    //Adiciona uma nova carta ao tabuleiro para a proxima rodada
+    addCardInBoard(&appState->gameState, 10);
   }
 
-  //Após a jogada adiciona uma nova carta ao tabuleiro, 10% chance de ser um 4
-  if(isMoved == TRUE) {
-    appState->gameState.moves++;
-    if(addCardInBoard(&appState->gameState, 10) == FALSE){
+  //Não conseguiu jogar verifica se existem casas livres
+  if(verifyFreeHouse(&appState->gameState) == FALSE){
+    //Verifica se tem alguma jogada possivel
+    if(verifyPossibleMoves(appState) == FALSE){
+      //Não existem casas livres e não existe nenhuma jogada possivel,
+      //encerra o jogo com derrota
+      appState->gameState.gameStatus = GAME_LOSE;
       appState->screen.currentScreen = SCREEN_ENDGAME;
+      return;
     }
   }
 }
