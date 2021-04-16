@@ -52,7 +52,9 @@ enum_userAction captureUserAction(type_appState currentAppState){
       break;
 
     case SCREEN_ENDGAME:
-    
+      if(keyPressed == KEY_ESCAPE){
+        userAction = ACTION_ESCAPE;
+      }
       break;
 
     case SCREEN_HELP:

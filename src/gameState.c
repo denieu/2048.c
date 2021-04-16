@@ -85,94 +85,145 @@ bool addCardInBoard(type_gameState * gameState, int chanceToDouble){
   return FALSE;
 }
 
-void toUp(type_appState * appState){
-  for(int collumn = 0; collumn < 4; collumn++){
-    for(int line = 3; line > 0; line--){
-      // Caso essa linha não seja vazia
-      if(appState->gameState.gameBoard[line][collumn] != NULL){
+/*------------------------------------------------------------------------------
+ * Rotaciona o tabuleiro de jogo "repeat" vezes para o lado "direction"
+ *
+ * X: Numero de vezes que o tabuleiro sera rotacionado
+ * Y: 0 = Tabuleiro será rotacionado para a direita
+ *    1 = Tabuleiro será rotacionado para a esquerda
+ *----------------------------------------------------------------------------*/
+void rotateGameBoard(type_appState * appState, enum_direction direction){
+  type_gameState oldGameState = appState->gameState;
+  int position[4] = {3, 2, 1, 0};
 
-        //Joga pra cima o que der
-        if(appState->gameState.gameBoard[line - 1][collumn] == NULL){
-          appState->gameState.gameBoard[line - 1][collumn] = appState->gameState.gameBoard[line][collumn];
-          appState->gameState.gameBoard[line][collumn] = NULL;
-        }
-      }
+  if(direction == LEFT){
+    for(int count = 0; count < 4; count++){
+        appState->gameState.gameBoard[count][0] = oldGameState.gameBoard[0][position[count]];
+        appState->gameState.gameBoard[count][1] = oldGameState.gameBoard[1][position[count]];
+        appState->gameState.gameBoard[count][2] = oldGameState.gameBoard[2][position[count]];
+        appState->gameState.gameBoard[count][3] = oldGameState.gameBoard[3][position[count]];
     }
+  }
+  if(direction == RIGHT){
+    for(int count = 0; count < 4; count++){
+        appState->gameState.gameBoard[count][0] = oldGameState.gameBoard[3][count];
+        appState->gameState.gameBoard[count][1] = oldGameState.gameBoard[2][count];
+        appState->gameState.gameBoard[count][2] = oldGameState.gameBoard[1][count];
+        appState->gameState.gameBoard[count][3] = oldGameState.gameBoard[0][count];
+    }
+  }
+  else {
+    return;
   }
 }
 
-void toDown(type_appState * appState){
-  for(int collumn = 0; collumn < 4; collumn++){
-    for(int line = 0; line < 3; line++){
-      // Caso essa linha não seja vazia
-      if(appState->gameState.gameBoard[line][collumn] != NULL){
+/*------------------------------------------------------------------------------
+ * Faz o movimento pra cima das peças, unindo as necessarias
+ *
+ * Retorna TRUE caso alguma peça se movimente
+ * Retorna FALSE caso nenhuma peça se movimente
+ *----------------------------------------------------------------------------*/
+bool boardSlideUp(type_appState * appState){
+  bool ret = FALSE;
+  int flag = 0;
 
-        //Joga pra baixo o que der
-        if(appState->gameState.gameBoard[line + 1][collumn] == NULL){
-          appState->gameState.gameBoard[line + 1][collumn] = appState->gameState.gameBoard[line][collumn];
-          appState->gameState.gameBoard[line][collumn] = NULL;
+  //Percorre coluna por coluna
+  for(int collumn = 0; collumn < 4; collumn++){
+    //Percorre da primeira até a penultima linha
+    for(int line = 0; line < 3; line++){
+      //Verifica se a linha atual é nula
+      if(appState->gameState.gameBoard[line][collumn] != NULL){
+        //Verifica as proximas linhas se pode unir com a atual
+        for(int count = 1; count <=3 ; count++){
+          //Se a proxima linha estiver no range valido(<4) e a proxima linha não for nula
+          if(line + count < 4 && appState->gameState.gameBoard[line + count][collumn] != NULL){
+            //Verifica se a proxima linha é igual a linha atual
+            if(*appState->gameState.gameBoard[line][collumn] == *appState->gameState.gameBoard[line + count][collumn]){
+              //Se sim incrementa o valor da linha atual,
+              //tranforma a proxima linha em nula 
+              //e continua para verificar a proxima linha
+              appState->gameState.gameBoard[line][collumn]++;
+              appState->gameState.gameBoard[line + count][collumn] = NULL;
+              ret = TRUE;
+              break;
+            }
+          }
         }
       }
     }
   }
+
+  //Joga as peças para cima, deixando os espaçoes nulos em baixo
+  for(int collumn = 0; collumn < 4; collumn++){
+    do{
+      flag = 0;      
+      for(int line = 3; line > 0 ; line--){
+        if(appState->gameState.gameBoard[line][collumn] != NULL){
+          for(int count = 1; count <=3 ; count++){
+            if(line - count >= 0 && appState->gameState.gameBoard[line - count][collumn] == NULL){
+              appState->gameState.gameBoard[line - count][collumn] = appState->gameState.gameBoard[line][collumn];
+              appState->gameState.gameBoard[line][collumn] = NULL;
+              flag = 1;
+              ret = TRUE;
+            }
+            else {
+              break;
+            }
+          }
+        }
+      }
+    } while(flag == 1);
+  }
+
+  return ret;
 }
 
 /*------------------------------------------------------------------------------
  * Altera o appState com base na ação realizada dentro do jogo
  *----------------------------------------------------------------------------*/
 void handleGameAction(type_appState * appState){
+  bool isMoved = FALSE;
+
+  //Rotaciona tabuleiro sempre pra cima para tratar mais facilmente
   switch (appState->userAction){
-    case ACTION_UP:
-      for(int collumn = 0; collumn < 4; collumn++){
-        for(int line = 1; line < 4; line++){
-          toUp(appState);
-
-          if(appState->gameState.gameBoard[line][collumn] != NULL){
-            if(*appState->gameState.gameBoard[line - 1][collumn] == *appState->gameState.gameBoard[line][collumn]){
-              int newValue = *appState->gameState.gameBoard[line - 1][collumn];
-              appState->gameState.gameBoard[line - 1][collumn] = &appState->gameState.gameCards[newValue];
-              appState->gameState.gameBoard[line][collumn] = NULL;
-
-              toUp(appState);
-              line--;
-              continue;
-            }
-          }
-        }
-      }
+    case ACTION_UP: break;
+    case ACTION_DOWN: 
+      rotateGameBoard(appState, LEFT);
+      rotateGameBoard(appState, LEFT);
       break;
-
-    case ACTION_DOWN:
-      for(int collumn = 0; collumn < 4; collumn++){
-        for(int line = 2; line >= 0; line--){
-          toDown(appState);
-
-          if(appState->gameState.gameBoard[line][collumn] != NULL){
-            if(*appState->gameState.gameBoard[line + 1][collumn] == *appState->gameState.gameBoard[line][collumn]){
-              int newValue = *appState->gameState.gameBoard[line + 1][collumn];
-              appState->gameState.gameBoard[line + 1][collumn] = &appState->gameState.gameCards[newValue];
-              appState->gameState.gameBoard[line][collumn] = NULL;
-
-              toDown(appState);
-              line++;
-              continue;
-            }
-          }
-        }
-      }
+    case ACTION_LEFT: 
+      rotateGameBoard(appState, RIGHT);
       break;
-
-    case ACTION_LEFT:
-
+    case ACTION_RIGTH: 
+      rotateGameBoard(appState, LEFT);
       break;
-
-    case ACTION_RIGTH:
-
-      break;
-
-    default:
-      return;
-      break;
+    default: return; break;
   }
-  addCardInBoard(&appState->gameState, 10);
+
+  //Une as peças pra cima
+  isMoved = boardSlideUp(appState);
+
+  //Retorna o tabuleiro ao estado inicial
+  switch (appState->userAction){
+    case ACTION_UP: break;
+    case ACTION_DOWN: 
+      rotateGameBoard(appState, LEFT);
+      rotateGameBoard(appState, LEFT);
+      break;
+    case ACTION_LEFT: 
+      rotateGameBoard(appState, LEFT);
+      break;
+    case ACTION_RIGTH: 
+      rotateGameBoard(appState, RIGHT);
+      break;
+    default: return; break;
+  }
+
+  //Após a jogada adiciona uma nova carta ao tabuleiro, 10% chance de ser um 4
+  if(isMoved == TRUE) {
+    appState->gameState.moves++;
+    if(addCardInBoard(&appState->gameState, 10) == FALSE){
+      appState->screen.currentScreen = SCREEN_ENDGAME;
+    }
+  }
 }

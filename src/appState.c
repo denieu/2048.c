@@ -106,7 +106,13 @@ void handleUserAction(type_appState * appState){
         break;
 
       case SCREEN_ENDGAME:
+        switch (appState->userAction){
+          case ACTION_ESCAPE:
+            appState->screen.currentScreen = SCREEN_MENU;
+            break;
 
+          default:break;
+        }
         break;
 
       case SCREEN_HELP:
