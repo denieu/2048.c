@@ -145,8 +145,8 @@ bool boardSlideUp(type_appState * appState){
               appState->gameState.gameBoard[line][collumn]++;
               appState->gameState.gameBoard[line + count][collumn] = NULL;
               ret = TRUE;
-              break;
             }
+            break;
           }
         }
       }
