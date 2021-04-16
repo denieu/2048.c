@@ -72,6 +72,11 @@ typedef enum enum_cursorState {
   CURSOR_VISIBLE,
 } enum_cursorState;
 
+typedef enum enum_direction {
+  LEFT = 0,
+  RIGHT,
+} enum_direction;
+
 typedef enum enum_gameCards {
   CARD2 = 1,
   CARD4,
