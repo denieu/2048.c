@@ -5,6 +5,8 @@
  *----------------------------------------------------------------------------*/
 type_gameState getDefaultGameState(){
   type_gameState defaultGameState = {0};
+
+  defaultGameState.gameStatus = GAME_RUNNING;
   defaultGameState.score = 0;
   defaultGameState.moves = 0;
 
@@ -29,10 +31,10 @@ type_gameState getDefaultGameState(){
  * Retorna TRUE caso tenha pelo menos uma casa livre
  * Retorna FALSE caso não tenha nenhuma casa livre
  *----------------------------------------------------------------------------*/
-bool verifyFreeHouse(type_gameState gameState){
+bool verifyFreeHouse(type_gameState * gameState){
   for(int line = 0; line < 4; line++){
     for(int collumn = 0; collumn < 4; collumn++){
-      if(gameState.gameBoard[line][collumn] == NULL){
+      if(gameState->gameBoard[line][collumn] == NULL){
         //O tabuleiro possui pelo menos uma casa livre
         return TRUE;
       }
@@ -75,8 +77,7 @@ bool addCardInBoard(type_gameState * gameState, int chanceToDouble){
     }
 
     //Verifica se o tabuleiro ainda possui alguma casa livre
-    if(verifyFreeHouse(*gameState) == FALSE){
-      //Não havia nenhuma casa livre no tabuleiro
+    if(verifyFreeHouse(gameState) == FALSE){
       return FALSE;
     }
   }
@@ -86,11 +87,30 @@ bool addCardInBoard(type_gameState * gameState, int chanceToDouble){
 }
 
 /*------------------------------------------------------------------------------
- * Rotaciona o tabuleiro de jogo "repeat" vezes para o lado "direction"
+ * Verifica se o jogador ganhou, fez 2048
  *
- * X: Numero de vezes que o tabuleiro sera rotacionado
- * Y: 0 = Tabuleiro será rotacionado para a direita
- *    1 = Tabuleiro será rotacionado para a esquerda
+ * Retorna TRUE caso o jogador tenha ganhado
+ * Retorna FALSE caso o jogador ainda não tenha ganhado
+ *----------------------------------------------------------------------------*/
+bool verifyPlayerWin(type_appState * appState){
+  for(int line = 0; line < 4; line++){
+    for(int collumn = 0; collumn < 4; collumn++){
+      if(appState->gameState.gameBoard[line][collumn] != NULL){
+        if(*appState->gameState.gameBoard[line][collumn] == appState->gameState.gameCards[10]){
+          return TRUE;
+        }
+      }
+    }
+  }
+
+  return FALSE;
+}
+
+/*------------------------------------------------------------------------------
+ * Rotaciona o tabuleiro de jogo para o lado "direction"
+ *
+ * direction: 0 = Tabuleiro será rotacionado para a direita
+ *            1 = Tabuleiro será rotacionado para a esquerda
  *----------------------------------------------------------------------------*/
 void rotateGameBoard(type_appState * appState, enum_direction direction){
   type_gameState oldGameState = appState->gameState;
@@ -243,10 +263,26 @@ void handleGameAction(type_appState * appState){
     appState->gameState.moves++;
 
     //Verifica se o jogador ganhou
-
-    //Se não for possivel adicionar nenhuma peça no tabuleiro o jogador perdeu
-    if(addCardInBoard(&appState->gameState, 10) == FALSE){
+    if(verifyPlayerWin(appState) == TRUE){
+      appState->gameState.gameStatus = GAME_WIN;
       appState->screen.currentScreen = SCREEN_ENDGAME;
+      return;
+    }
+
+    //Adiciona uma nova carta ao tabuleiro para a proxima rodada
+    addCardInBoard(&appState->gameState, 10);
+  }
+  else {
+    //Não conseguiu jogar verifica se existem casas livres
+    if(verifyFreeHouse(&appState->gameState) == FALSE){
+      //Verifica se tem alguma jogada possivel
+      if(TRUE){
+        //Não existem casas livres e não existe nenhuma jogada possivel,
+        //encerra o jogo com derrota
+        appState->gameState.gameStatus = GAME_LOSE;
+        appState->screen.currentScreen = SCREEN_ENDGAME;
+        return;
+      }
     }
   }
 }
