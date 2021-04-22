@@ -32,6 +32,9 @@
 		<Unit filename="includes/main.h" />
 		<Unit filename="includes/screen.h" />
 		<Unit filename="includes/screen_components.h" />
+		<Unit filename="resources/resource.rc">
+			<Option compilerVar="WINDRES" />
+		</Unit>
 		<Unit filename="src/appState.c">
 			<Option compilerVar="CC" />
 		</Unit>
