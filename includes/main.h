@@ -7,7 +7,7 @@
 #include <string.h>
 #include <math.h>
 #include <time.h>
-#include "../includes/conio2.h" //gotoxy, textcolor, textbackground
+#include "../libs/conio2.h" //gotoxy, textcolor, textbackground
 
 //Constants
 #define FALSE 0
@@ -22,7 +22,7 @@
 #define WIDTH_MENU_SELECTOR 3
 
 #define MENU_LOGO_LINES 7
-#define MENU_LOGO_COLUMNS 9   
+#define MENU_LOGO_COLUMNS 9
 
 #define GAME_CARD_WIDTH 12
 #define GAME_CARD_HEIGHT 7
