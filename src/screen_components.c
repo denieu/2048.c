@@ -1,6 +1,5 @@
 #include "../includes/screen_components.h"
 #include "../includes/conio2.h" //gotoxy, textcolor, textbackground
-#include "windows.h"
 
 /*------------------------------------------------------------------------------
  * Retorna a string centralizada, com base no tamanho informado
