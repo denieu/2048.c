@@ -7,7 +7,7 @@
 #include <string.h>
 #include <math.h>
 #include <time.h>
-#include "../includes/conio2.h" //gotoxy, textcolor, textbackground
+#include "../libs/conio2.h" //gotoxy, textcolor, textbackground
 
 //Constants
 #define FALSE 0
@@ -22,10 +22,14 @@
 #define WIDTH_MENU_SELECTOR 3
 
 #define MENU_LOGO_LINES 7
-#define MENU_LOGO_COLUMNS 9   
+#define MENU_LOGO_COLUMNS 9
 
 #define GAME_CARD_WIDTH 12
 #define GAME_CARD_HEIGHT 7
+
+#define DEFAULT_SCREEN_TITLE L"2048c"
+#define DEFAULT_SCREEN_X_SIZE 75
+#define DEFAULT_SCREEN_Y_SIZE 27
 
 typedef unsigned char bool;
 
@@ -98,6 +102,7 @@ typedef enum enum_gameCards {
 } enum_gameCards;
 
 typedef enum enum_screens {
+  SCREEN_NONE = -1,
   SCREEN_MENU = 0,
   SCREEN_GAME,
   SCREEN_ENDGAME,
@@ -128,6 +133,7 @@ typedef struct type_gameState {
 } type_gameState;
 
 typedef struct type_screenState{
+  enum_screens lastScreen;
   enum_screens currentScreen;
   enum_menuState menuState;
 } type_screenState;

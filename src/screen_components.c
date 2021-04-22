@@ -1,6 +1,4 @@
 #include "../includes/screen_components.h"
-#include "../includes/conio2.h" //gotoxy, textcolor, textbackground
-#include "windows.h"
 
 /*------------------------------------------------------------------------------
  * Retorna a string centralizada, com base no tamanho informado
@@ -42,20 +40,20 @@ void print_menuButton(char * placeholder, int posX, int posY, bool selected){
   int placeholderSize = strlen(placeholder);
   int numberOfSpaces = WIDTH_BUTTON_MENU - placeholderSize - WIDTH_MENU_SELECTOR;
 
-  for(int count = 0; count < numberOfSpaces ; count++)
-    selection[count] = ' ';
-
-  selection[numberOfSpaces] = '<';
-  selection[numberOfSpaces + 1] = '-';
-  selection[numberOfSpaces + 2] = '-';
-  selection[numberOfSpaces + 3] = '\0';
-
   gotoxy(posX, posY);
 
-  if(selected == TRUE)
-    textcolor(RED);
+  for(int count = 0; count < numberOfSpaces + 3; count++)
+    selection[count] = ' ';
 
-  printf("%s%s", placeholder, (selected == TRUE) ? selection : "");
+  if(selected == TRUE){
+    textcolor(RED);
+    selection[numberOfSpaces] = '<';
+    selection[numberOfSpaces + 1] = '-';
+    selection[numberOfSpaces + 2] = '-';
+  }
+  selection[numberOfSpaces + 3] = '\0';
+
+  printf("%s%s", placeholder, selection);
 
   textbackground(DEFAULT_BG_COLOR);
   textcolor(DEFAULT_TEXT_COLOR);
@@ -168,22 +166,22 @@ void print_gameBoardEdges(int posX, int posY){
  * Printa um casa do tabuleiro
  *----------------------------------------------------------------------------*/
 void print_gameCard(enum_gameCards * card, int posX, int posY){
-  COLORS gameCardColors[11] = {
-    BLUE, GREEN, CYAN, RED, MAGENTA, BROWN,
+  COLORS gameCardColors[12] = {
+    BLACK, BLUE, GREEN, CYAN, RED, MAGENTA, BROWN,
     DARKGRAY, LIGHTBLUE, LIGHTGREEN, LIGHTCYAN, LIGHTRED
   };
 
-  if(card != NULL){
-    textbackground(gameCardColors[*card - 1]); textcolor(DEFAULT_TEXT_COLOR);
+  textbackground(gameCardColors[card != NULL ? *card : 0]); textcolor(DEFAULT_TEXT_COLOR);
 
-    //Printa fundo da casa
-    for(int count = 0; count < GAME_CARD_HEIGHT - 2; count++){
-      gotoxy(posX + 2, posY + 1 + count);
-      for(int count2 = 0; count2 < GAME_CARD_WIDTH - 3; count2++){
-        printf(" ");
-      }
+  //Printa fundo da casa
+  for(int count = 0; count < GAME_CARD_HEIGHT - 2; count++){
+    gotoxy(posX + 2, posY + 1 + count);
+    for(int count2 = 0; count2 < GAME_CARD_WIDTH - 3; count2++){
+      printf(" ");
     }
+  }
 
+  if(card != NULL){
     gotoxy(posX + 2, posY + GAME_CARD_HEIGHT / 2);
     int cardValue = pow(2, *card);
     char cardString[GAME_CARD_WIDTH] = {'\0'};

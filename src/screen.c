@@ -14,10 +14,30 @@ void setCursor(enum_cursorState cursorState){
 }
 
 /*------------------------------------------------------------------------------
+ * Ajusta a tela para o tamanho correto 
+ * para impedir o usuario de redimensionar para um tamanho incorreto
+ *----------------------------------------------------------------------------*/
+void configScreenSize(int sizeX, int sizeY){
+  HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+  SMALL_RECT sr;
+  COORD consoleSize;
+
+  consoleSize.X = sizeX; 
+  consoleSize.Y = sizeY;
+
+  sr.Top = sr.Left = 0;
+  sr.Right = consoleSize.X - 1; 
+  sr.Bottom = consoleSize.Y - 1;
+
+  SetConsoleWindowInfo(console, TRUE, &sr);
+  SetConsoleScreenBufferSize(console, consoleSize);
+}
+
+/*------------------------------------------------------------------------------
  * Printa a tela do menu principal
  *----------------------------------------------------------------------------*/
 void screen_mainMenu(type_appState currentAppState){
-  int menuXStart = 10;
+  int menuXStart = 19;
   enum_menuState menuState = currentAppState.screen.menuState;
 
   print_logoLetter(LOGO_2, menuXStart, 3, DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
@@ -37,12 +57,12 @@ void screen_mainMenu(type_appState currentAppState){
  * Printa a tela dentro de jogo
  *----------------------------------------------------------------------------*/
 void screen_inGame(type_appState * currentAppState){
-  print_inGameMenu(2, 2);
-  print_gameStatus(currentAppState->gameState, 2, 9);
-  print_inGameRanking(currentAppState->leaderboard, 2, 15);
+  print_inGameMenu(3, 2);
+  print_gameStatus(currentAppState->gameState, 3, 9);
+  print_inGameRanking(currentAppState->leaderboard, 3, 15);
 
-  print_gameBoardEdges(27, 2);
-  print_gameBoard(&currentAppState->gameState, 27, 2);
+  print_gameBoardEdges(28, 2);
+  print_gameBoard(&currentAppState->gameState, 28, 2);
 }
 
 /*------------------------------------------------------------------------------
@@ -52,8 +72,21 @@ void printAppState(type_appState * currentAppState){
   //Esconde o cursos da tela
   setCursor(CURSOR_HIDDEN);
 
-  //Limpa a tela
-  clrscr();
+  //Seta o titulo do terminal
+  SetConsoleTitleW(DEFAULT_SCREEN_TITLE);
+
+  //Isso faz a tela ficar correta após a inicialização do app
+  if(currentAppState->screen.lastScreen == SCREEN_NONE){
+    configScreenSize(DEFAULT_SCREEN_X_SIZE, DEFAULT_SCREEN_Y_SIZE);
+    clrscr();
+  }
+
+  //Ajusta o tamanho da tela
+  configScreenSize(DEFAULT_SCREEN_X_SIZE, DEFAULT_SCREEN_Y_SIZE);
+
+  //Limpa a tela se a tela mudou
+  if(currentAppState->screen.lastScreen != currentAppState->screen.currentScreen)
+    clrscr();
 
   //Mostra a tela correta relativa a currentScreen
   switch (currentAppState->screen.currentScreen){

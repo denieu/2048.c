@@ -1,0 +1,5 @@
+MAINICON                ICON                    "./img/icon.ico"
+IDI_WIN32NATIVE         ICON                    "./img/icon3.ico"
+IDI_SMALL               ICON                    "./img/icon3.ico"
+PROPERTYICON            ICON                    "./img/icon3.ico"
+FOLDERICON              ICON                    "./img/icon3.ico"

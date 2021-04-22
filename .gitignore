@@ -1,4 +1,5 @@
 .vscode
 obj
 bin
-2048c*
+2048c.layout
+2048c.depend

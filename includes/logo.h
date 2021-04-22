@@ -3,7 +3,6 @@
 
 //Includes
 #include "../includes/main.h"
-#include "../includes/conio2.h" //gotoxy, textcolor, textbackground
 
 //Types
 typedef enum enum_logoLetters{

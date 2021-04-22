@@ -14,6 +14,7 @@ type_appState getDefaultAppState(){
   defaultAppState.gameState = getDefaultGameState();
 
   //Variaveis de controle da tela
+  defaultAppState.screen.lastScreen = SCREEN_NONE;
   defaultAppState.screen.currentScreen = SCREEN_MENU;
   defaultAppState.screen.menuState = STATE_MENU_FIRST + 1;
 
@@ -85,10 +86,12 @@ void handleUserAction(type_appState * appState){
   if(appState->userAction != ACTION_NONE){
     switch (appState->screen.currentScreen){
       case SCREEN_MENU:
+        appState->screen.lastScreen = SCREEN_MENU;
         handleMenuAction(appState);
         break;
 
       case SCREEN_GAME:
+        appState->screen.lastScreen = SCREEN_GAME;
         switch (appState->userAction){
           case ACTION_UP:
           case ACTION_DOWN:
@@ -106,6 +109,7 @@ void handleUserAction(type_appState * appState){
         break;
 
       case SCREEN_ENDGAME:
+        appState->screen.lastScreen = SCREEN_ENDGAME;
         switch (appState->userAction){
           case ACTION_ESCAPE:
             appState->screen.currentScreen = SCREEN_MENU;
@@ -116,6 +120,7 @@ void handleUserAction(type_appState * appState){
         break;
 
       case SCREEN_HELP:
+        appState->screen.lastScreen = SCREEN_HELP;
         switch (appState->userAction){
           case ACTION_ESCAPE:
             appState->screen.currentScreen = SCREEN_MENU;

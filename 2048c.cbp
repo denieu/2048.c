@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="2048c" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Release">
+				<Option output="bin/2048c" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add library="libs/libconio.a" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="includes/appState.h" />
+		<Unit filename="includes/conio2.h" />
+		<Unit filename="includes/controls.h" />
+		<Unit filename="includes/gameState.h" />
+		<Unit filename="includes/leaderboard.h" />
+		<Unit filename="includes/logo.h" />
+		<Unit filename="includes/main.h" />
+		<Unit filename="includes/screen.h" />
+		<Unit filename="includes/screen_components.h" />
+		<Unit filename="resources/resource.rc">
+			<Option compilerVar="WINDRES" />
+		</Unit>
+		<Unit filename="src/appState.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/controls.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/gameState.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/leaderboard.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/logo.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/screen.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/screen_components.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Extensions />
+	</Project>
+</CodeBlocks_project_file>
