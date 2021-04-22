@@ -14,7 +14,7 @@ type_appState getDefaultAppState(){
   defaultAppState.gameState = getDefaultGameState();
 
   //Variaveis de controle da tela
-  defaultAppState.screen.lastScreen = SCREEN_MENU;
+  defaultAppState.screen.lastScreen = SCREEN_NONE;
   defaultAppState.screen.currentScreen = SCREEN_MENU;
   defaultAppState.screen.menuState = STATE_MENU_FIRST + 1;
 

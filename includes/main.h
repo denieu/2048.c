@@ -27,6 +27,10 @@
 #define GAME_CARD_WIDTH 12
 #define GAME_CARD_HEIGHT 7
 
+#define DEFAULT_SCREEN_TITLE L"2048c"
+#define DEFAULT_SCREEN_X_SIZE 75
+#define DEFAULT_SCREEN_Y_SIZE 27
+
 typedef unsigned char bool;
 
 //Enums
@@ -98,6 +102,7 @@ typedef enum enum_gameCards {
 } enum_gameCards;
 
 typedef enum enum_screens {
+  SCREEN_NONE = -1,
   SCREEN_MENU = 0,
   SCREEN_GAME,
   SCREEN_ENDGAME,
