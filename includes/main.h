@@ -128,6 +128,7 @@ typedef struct type_gameState {
 } type_gameState;
 
 typedef struct type_screenState{
+  enum_screens lastScreen;
   enum_screens currentScreen;
   enum_menuState menuState;
 } type_screenState;
