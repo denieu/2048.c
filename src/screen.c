@@ -52,9 +52,8 @@ void printAppState(type_appState * currentAppState){
   //Esconde o cursos da tela
   setCursor(CURSOR_HIDDEN);
 
-  //Limpa a tela se a tela mudou
-  if(currentAppState->screen.lastScreen != currentAppState->screen.currentScreen)
-    clrscr();
+  //Limpa a tela
+  clrscr();
 
   //Mostra a tela correta relativa a currentScreen
   switch (currentAppState->screen.currentScreen){
