@@ -7,5 +7,6 @@
 //Functions
 type_leaderboard readLeaderboardFile();
 void writeLeaderboardFile(type_leaderboard * newSave);
+void bubbleSortLeaderboard(type_leaderboard * leaderboard);
 
 #endif  /*LEADERBOARD_H*/

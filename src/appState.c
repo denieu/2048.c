@@ -1,5 +1,6 @@
 #include "../includes/appState.h"
 #include "../includes/gameState.h"
+#include "../includes/leaderboard.h"
 
 /*------------------------------------------------------------------------------
  * Retorna o appState default
@@ -112,8 +113,10 @@ void handleUserAction(type_appState * appState){
         appState->screen.lastScreen = SCREEN_ENDGAME;
         switch (appState->userAction){
            case ACTION_ENTER:
-            strcpy(appState->leaderboard.name[0], appState->userString);
-            appState->leaderboard.points[0] = appState->gameState.score;
+            strcpy(appState->leaderboard.name[11], appState->userString);
+            appState->leaderboard.points[11] = appState->gameState.score;
+
+            bubbleSortLeaderboard(&appState->leaderboard);
 
             appState->screen.currentScreen = SCREEN_MENU;
             break;
