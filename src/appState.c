@@ -113,10 +113,15 @@ void handleUserAction(type_appState * appState){
         appState->screen.lastScreen = SCREEN_ENDGAME;
         switch (appState->userAction){
            case ACTION_ENTER:
+            //Adiciona o novo resultado a struct leaderboard na ultima posição, que não aparece na tela
             strcpy(appState->leaderboard.name[11], appState->userString);
             appState->leaderboard.points[11] = appState->gameState.score;
 
+            //Organiza a struct em ordem decrescente
             bubbleSortLeaderboard(&appState->leaderboard);
+
+            //Salva a struct em arquivo
+            writeLeaderboardFile(&appState->leaderboard);
 
             appState->screen.currentScreen = SCREEN_MENU;
             break;
