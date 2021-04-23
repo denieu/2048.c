@@ -14,7 +14,7 @@ void setCursor(enum_cursorState cursorState){
 }
 
 /*------------------------------------------------------------------------------
- * Ajusta a tela para o tamanho correto 
+ * Ajusta a tela para o tamanho correto
  * para impedir o usuario de redimensionar para um tamanho incorreto
  *----------------------------------------------------------------------------*/
 void configScreenSize(int sizeX, int sizeY){
@@ -22,11 +22,11 @@ void configScreenSize(int sizeX, int sizeY){
   SMALL_RECT sr;
   COORD consoleSize;
 
-  consoleSize.X = sizeX; 
+  consoleSize.X = sizeX;
   consoleSize.Y = sizeY;
 
   sr.Top = sr.Left = 0;
-  sr.Right = consoleSize.X - 1; 
+  sr.Right = consoleSize.X - 1;
   sr.Bottom = consoleSize.Y - 1;
 
   SetConsoleWindowInfo(console, TRUE, &sr);
@@ -66,9 +66,23 @@ void screen_inGame(type_appState * currentAppState){
 }
 
 /*------------------------------------------------------------------------------
+ * Printa a tela de fim de partida
+ *----------------------------------------------------------------------------*/
+void screen_endGame(type_appState * currentAppState){
+  print_endGameStatus(currentAppState->gameState.gameStatus, 27, 7);
+
+  print_gameStatus(currentAppState->gameState, 27, 13);
+
+  print_querryUserString("Digite seu nome", 27, 19);
+}
+
+/*------------------------------------------------------------------------------
  * Printa a tela atual com base no "currentAppState"
  *----------------------------------------------------------------------------*/
 void printAppState(type_appState * currentAppState){
+  //Seta as cores para as default
+  textbackground(DEFAULT_BG_COLOR);textcolor(DEFAULT_TEXT_COLOR);
+
   //Esconde o cursos da tela
   setCursor(CURSOR_HIDDEN);
 
@@ -99,7 +113,8 @@ void printAppState(type_appState * currentAppState){
       break;
 
     case SCREEN_ENDGAME:
-      printf("Esta eh a tela de fim provisoria");
+      screen_endGame(currentAppState);
+      setCursor(CURSOR_VISIBLE);
       break;
 
     case SCREEN_HELP:

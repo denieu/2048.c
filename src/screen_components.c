@@ -19,6 +19,9 @@ void stringCentrilize(char * string, int maxSize){
   strcpy(string, newString);
 }
 
+/*------------------------------------------------------------------------------
+ * Printa duas strings centralizadas em duas colunas
+ *----------------------------------------------------------------------------*/
 void printTwoCollumns(char * left, char * right, int leftSize, int rightSize){
   char leftString[12] = {'\0'};
   char rightString[12] = {'\0'};
@@ -208,4 +211,76 @@ void print_gameBoard(type_gameState * gameState, int posX, int posY){
 
   textbackground(DEFAULT_BG_COLOR);
   textcolor(DEFAULT_TEXT_COLOR);
+}
+
+/*------------------------------------------------------------------------------
+ * Printa o componente que informa vitorio ou derrota do jogador
+ *----------------------------------------------------------------------------*/
+void print_endGameStatus(enum_gameStatus status, int posX, int posY){
+  char spaces[30] = {'\0'};
+  char endString[30] = {'\0'};
+
+  //Printa a borda mais escura
+  textbackground(LIGHTGRAY);
+  sprintf(spaces, " ");
+  stringCentrilize(spaces, 19);
+  
+  for(int count = 0; count < 5; count++){
+    gotoxy(posX, posY + count);
+    printf("  ");
+    
+    gotoxy(posX + 21, posY + count);
+    printf("  ");
+
+    if(count % 2 == 0){
+      gotoxy(posX + 2, posY + count);
+      printf("%s", spaces);
+    }
+  }
+ 
+  //Printa os espaços claros
+  textbackground(DARKGRAY);
+
+  for(int count = 1; count <= 3; count++){
+    gotoxy(posX + 2, posY + count);
+    printf("%s", spaces);
+  }
+
+  //Printa oe stado do game
+  if(status == GAME_WIN){
+    textcolor(LIGHTGREEN);
+    sprintf(endString, "Vitoria");
+  }
+  else if(status == GAME_LOSE){
+    textcolor(RED);
+    sprintf(endString, "Derrota");
+  }
+  stringCentrilize(endString, 19);
+
+  gotoxy(posX + 2, posY + 2);
+  printf("%s", endString);
+
+  //Volta para as cores default
+  textbackground(DEFAULT_BG_COLOR);textcolor(DEFAULT_TEXT_COLOR);
+}
+
+/*------------------------------------------------------------------------------
+ * Printa componente que pede para o usuario digitar algo
+ *----------------------------------------------------------------------------*/
+void print_querryUserString(const char * placeholder, int posX, int posY){
+  char string[30] = {'\0'};
+
+  gotoxy(posX, posY);
+  textbackground(LIGHTGRAY);textcolor(BLACK);
+  sprintf(string, "%s", placeholder);
+  stringCentrilize(string, 23);
+  printf("%s", string);
+
+  gotoxy(posX, posY + 1);
+  textbackground(DARKGRAY);textcolor(WHITE);
+  sprintf(string, " ");
+  stringCentrilize(string, 23);
+  printf("%s", string);
+
+  gotoxy(posX + 1, posY + 1);
 }
