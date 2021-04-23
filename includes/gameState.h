@@ -6,7 +6,7 @@
 
 //Functions
 type_gameState getDefaultGameState();
-bool addCardInBoard(type_gameState * gameState, int chanceToDouble);
+void newGame(type_appState * appState);
 void handleGameAction(type_appState * appState);
 void undoGameAction(type_appState * appState);
 

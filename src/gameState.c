@@ -89,6 +89,21 @@ bool addCardInBoard(type_gameState * gameState, int chanceToDouble){
 }
 
 /*------------------------------------------------------------------------------
+ * Inicia um novo jogo, resetando todas as variaveis para seu estado inicial
+ *----------------------------------------------------------------------------*/
+void newGame(type_appState * appState){
+  //Seta o estado default inicial do jogo
+  appState->gameState = getDefaultGameState();
+
+  //Adiciona as duas cartas inicias ao tabuleiro
+  addCardInBoard(&appState->gameState, 0);
+  addCardInBoard(&appState->gameState, 0);
+
+  //Redireciona para a tela de jogo
+  appState->screen.currentScreen = SCREEN_GAME;
+}
+
+/*------------------------------------------------------------------------------
  * Verifica se o jogador ganhou, fez 2048
  *
  * Retorna TRUE caso o jogador tenha ganhado

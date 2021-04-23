@@ -47,15 +47,7 @@ void handleMenuAction(type_appState * appState){
           break;
 
         case STATE_MENU_NEWGAME:
-          //Seta o estado default inicial do jogo
-          appState->gameState = getDefaultGameState();
-
-          //Adiciona as duas cartas inicias ao tabuleiro
-          addCardInBoard(&appState->gameState, 0);
-          addCardInBoard(&appState->gameState, 0);
-
-          //Redireciona para a tela de jogo
-          appState->screen.currentScreen = SCREEN_GAME;
+          newGame(appState);
           break;
 
         case STATE_MENU_HELP:
@@ -98,6 +90,10 @@ void handleUserAction(type_appState * appState){
           case ACTION_LEFT:
           case ACTION_RIGTH:
             handleGameAction(appState);
+            break;
+
+          case ACTION_GAME_NEW:
+            newGame(appState);
             break;
             
           case ACTION_GAME_UNDO:
