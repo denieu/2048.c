@@ -46,14 +46,14 @@ void print_menuButton(char * placeholder, int posX, int posY, bool selected){
     selection[count] = ' ';
 
   if(selected == TRUE){
-    textcolor(RED);
+    textbackground(DARKGRAY);textcolor(WHITE);
     selection[numberOfSpaces] = '<';
     selection[numberOfSpaces + 1] = '-';
     selection[numberOfSpaces + 2] = '-';
   }
   selection[numberOfSpaces + 3] = '\0';
 
-  printf("%s%s", placeholder, selection);
+  printf(" %s%s ", placeholder, selection);
 
   textbackground(DEFAULT_BG_COLOR);
   textcolor(DEFAULT_TEXT_COLOR);
