@@ -3,16 +3,29 @@
 /*------------------------------------------------------------------------------
  * Captura e retorna a ação realizada pelo usuario
  *----------------------------------------------------------------------------*/
-enum_userAction captureUserAction(type_appState currentAppState){
+void captureUserAction(type_appState * appState){
   enum_userAction userAction = {0};
-  int keyPressed = getch();
+  int keyPressed = 0;
+  char string[21] = {'\0'};
 
-  //Deixa o caracter digitado maiusculo
-  if(isalpha(keyPressed))
-    keyPressed = toupper(keyPressed);
+  //Se for a tela de fim de jogo deve capturar o nome do usuario
+  if(appState->screen.currentScreen == SCREEN_ENDGAME){
+    fgets(string, 9, stdin);
+    string[strlen(string) - 1] = '\0';
+    strcpy(appState->userString, string);
 
+    keyPressed = KEY_ENTER;
+  }
+  else {
+    keyPressed = getch();
+
+    //Deixa o caracter digitado maiusculo
+    if(isalpha(keyPressed))
+      keyPressed = toupper(keyPressed);
+  }
+  
   //Captura a ação com base na tela atual
-  switch (currentAppState.screen.currentScreen){
+  switch (appState->screen.currentScreen){
     case SCREEN_MENU:
       if(keyPressed == KEY_UP){
         userAction = ACTION_UP;
@@ -56,7 +69,10 @@ enum_userAction captureUserAction(type_appState currentAppState){
       break;
 
     case SCREEN_ENDGAME:
-      if(keyPressed == KEY_ESCAPE){
+      if(keyPressed == KEY_ENTER){
+        userAction = ACTION_ENTER;
+      }
+      else if(keyPressed == KEY_ESCAPE){
         userAction = ACTION_ESCAPE;
       }
       break;
@@ -75,5 +91,6 @@ enum_userAction captureUserAction(type_appState currentAppState){
       break;
   }
 
-  return userAction;
+  appState->userAction = userAction;
+  return;
 }

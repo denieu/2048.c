@@ -20,7 +20,7 @@ int main(){
     printAppState(&appState);
 
     //Captura ação do usuario e salva em gameState.userAction
-    appState.userAction = captureUserAction(appState);
+    captureUserAction(&appState);
 
     //Retorna um novo appState com base na ação do usuario
     handleUserAction(&appState);

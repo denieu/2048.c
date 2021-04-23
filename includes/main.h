@@ -151,6 +151,7 @@ typedef struct type_screenState{
 typedef struct type_appState {
   enum_appStatus appStatus;
   enum_userAction userAction;
+  char userString[22];
   type_leaderboard leaderboard;
   type_gameState gameState;
   type_screenState screen;
