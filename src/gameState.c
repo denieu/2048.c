@@ -16,9 +16,11 @@ type_gameState getDefaultGameState(){
   }
 
   //Zerando tabuleiro de jogo
-  for(int count1 = 0; count1 < 4; count1++){
-     for(int count2 = 0; count2 < 4; count2++){
-      defaultGameState.gameBoard[count1][count2] = NULL;
+  for(int line = 0; line < 4; line++){
+     for(int collumn = 0; collumn < 4; collumn++){
+      defaultGameState.auxGameBoard[line][collumn] = NULL;
+      defaultGameState.lastGameBoard[line][collumn] = NULL;
+      defaultGameState.gameBoard[line][collumn] = NULL;
     }
   }
 
@@ -269,7 +271,17 @@ bool verifyPossibleMoves(type_appState * appState){
  * Altera o appState com base na ação realizada dentro do jogo
  *----------------------------------------------------------------------------*/
 void handleGameAction(type_appState * appState){
+  //Auxiliar para verificar se ocorreu alguma ação/movimento no tabuleiro
   bool isMoved = FALSE;
+
+  //Salva os dados atuais nas auxiliares antes do movimento
+  appState->gameState.auxScore = appState->gameState.score;
+  appState->gameState.auxMoves = appState->gameState.moves;
+  for(int line = 0; line < 4; line++){
+    for(int collumn = 0; collumn < 4; collumn++){
+      appState->gameState.auxGameBoard[line][collumn] = appState->gameState.gameBoard[line][collumn];
+    }
+  }
 
   //Rotaciona tabuleiro sempre pra cima para tratar mais facilmente
   boardRotateUp(appState);
@@ -284,6 +296,15 @@ void handleGameAction(type_appState * appState){
   if(isMoved == TRUE) {
     //Incrementa o numero de movimentos
     appState->gameState.moves++;
+
+    //Salva os dados auxiares nas variaveis que salvam o ultimo movimento
+    appState->gameState.lastScore = appState->gameState.auxScore;
+    appState->gameState.lastMoves = appState->gameState.auxMoves;
+    for(int line = 0; line < 4; line++){
+      for(int collumn = 0; collumn < 4; collumn++){
+        appState->gameState.lastGameBoard[line][collumn] = appState->gameState.auxGameBoard[line][collumn];
+      }
+    }
 
     //Verifica se o jogador ganhou
     if(verifyPlayerWin(appState) == TRUE){
@@ -307,4 +328,22 @@ void handleGameAction(type_appState * appState){
       return;
     }
   }
+}
+
+/*------------------------------------------------------------------------------
+ * Desfaz a ultima ação feita pelo usuario no jogo
+ *----------------------------------------------------------------------------*/
+void undoGameAction(type_appState * appState){
+  //Volta o gameBoard para lastGameBoard
+  for(int line = 0; line < 4; line++){
+    for(int collumn = 0; collumn < 4; collumn++){
+      appState->gameState.gameBoard[line][collumn] = appState->gameState.lastGameBoard[line][collumn];
+    }
+  }
+
+  //Volta o score para o lastScore
+  appState->gameState.score = appState->gameState.lastScore;
+
+  //Volta o moves para o lastMoves
+  appState->gameState.moves = appState->gameState.lastMoves;
 }

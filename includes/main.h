@@ -7,6 +7,7 @@
 #include <string.h>
 #include <math.h>
 #include <time.h>
+#include <ctype.h>
 #include "../libs/conio2.h" //gotoxy, textcolor, textbackground
 
 //Constants
@@ -126,9 +127,18 @@ typedef struct type_leaderboard {
 
 typedef struct type_gameState {
   enum_gameStatus gameStatus;
+
+  int auxScore;
+  int lastScore;
   int score;
+
+  int auxMoves;
+  int lastMoves;
   int moves;
+
   enum_gameCards gameCards[11];
+  enum_gameCards * auxGameBoard[4][4];
+  enum_gameCards * lastGameBoard[4][4];
   enum_gameCards * gameBoard[4][4];
 } type_gameState;
 

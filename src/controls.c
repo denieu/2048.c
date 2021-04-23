@@ -7,6 +7,10 @@ enum_userAction captureUserAction(type_appState currentAppState){
   enum_userAction userAction = {0};
   int keyPressed = getch();
 
+  //Deixa o caracter digitado maiusculo
+  if(isalpha(keyPressed))
+    keyPressed = toupper(keyPressed);
+
   //Captura a ação com base na tela atual
   switch (currentAppState.screen.currentScreen){
     case SCREEN_MENU:
