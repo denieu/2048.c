@@ -1,5 +1,6 @@
 #include "../includes/appState.h"
 #include "../includes/gameState.h"
+#include "../includes/leaderboard.h"
 
 /*------------------------------------------------------------------------------
  * Retorna o appState default
@@ -47,15 +48,7 @@ void handleMenuAction(type_appState * appState){
           break;
 
         case STATE_MENU_NEWGAME:
-          //Seta o estado default inicial do jogo
-          appState->gameState = getDefaultGameState();
-
-          //Adiciona as duas cartas inicias ao tabuleiro
-          addCardInBoard(&appState->gameState, 0);
-          addCardInBoard(&appState->gameState, 0);
-
-          //Redireciona para a tela de jogo
-          appState->screen.currentScreen = SCREEN_GAME;
+          newGame(appState);
           break;
 
         case STATE_MENU_HELP:
@@ -100,6 +93,14 @@ void handleUserAction(type_appState * appState){
             handleGameAction(appState);
             break;
 
+          case ACTION_GAME_NEW:
+            newGame(appState);
+            break;
+
+          case ACTION_GAME_UNDO:
+            undoGameAction(appState);
+            break;
+
           case ACTION_ESCAPE:
             appState->screen.currentScreen = SCREEN_MENU;
             break;
@@ -111,6 +112,20 @@ void handleUserAction(type_appState * appState){
       case SCREEN_ENDGAME:
         appState->screen.lastScreen = SCREEN_ENDGAME;
         switch (appState->userAction){
+           case ACTION_ENTER:
+            //Adiciona o novo resultado a struct leaderboard na ultima posição, que não aparece na tela
+            strcpy(appState->leaderboard.name[11], appState->userString);
+            appState->leaderboard.points[11] = appState->gameState.score;
+
+            //Organiza a struct em ordem decrescente
+            bubbleSortLeaderboard(&appState->leaderboard);
+
+            //Salva a struct em arquivo
+            writeLeaderboardFile(&appState->leaderboard);
+
+            appState->screen.currentScreen = SCREEN_MENU;
+            break;
+
           case ACTION_ESCAPE:
             appState->screen.currentScreen = SCREEN_MENU;
             break;

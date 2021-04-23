@@ -14,7 +14,7 @@ void setCursor(enum_cursorState cursorState){
 }
 
 /*------------------------------------------------------------------------------
- * Ajusta a tela para o tamanho correto 
+ * Ajusta a tela para o tamanho correto
  * para impedir o usuario de redimensionar para um tamanho incorreto
  *----------------------------------------------------------------------------*/
 void configScreenSize(int sizeX, int sizeY){
@@ -22,11 +22,11 @@ void configScreenSize(int sizeX, int sizeY){
   SMALL_RECT sr;
   COORD consoleSize;
 
-  consoleSize.X = sizeX; 
+  consoleSize.X = sizeX;
   consoleSize.Y = sizeY;
 
   sr.Top = sr.Left = 0;
-  sr.Right = consoleSize.X - 1; 
+  sr.Right = consoleSize.X - 1;
   sr.Bottom = consoleSize.Y - 1;
 
   SetConsoleWindowInfo(console, TRUE, &sr);
@@ -47,10 +47,10 @@ void screen_mainMenu(type_appState currentAppState){
   print_logoLetter(LOGO_DOT, menuXStart + 31, 3, DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
   print_logoLetter(LOGO_C, menuXStart + 34, 3, DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
 
-  print_menuButton("Continuar", menuXStart + 12, 13, (menuState == STATE_MENU_CONTINUE) ? TRUE : FALSE);
-  print_menuButton("Novo Jogo", menuXStart + 12, 15, (menuState == STATE_MENU_NEWGAME) ? TRUE : FALSE);
-  print_menuButton("Ajuda", menuXStart + 12, 17, (menuState == STATE_MENU_HELP) ? TRUE : FALSE);
-  print_menuButton("Sair", menuXStart + 12, 19, (menuState == STATE_MENU_EXIT) ? TRUE : FALSE);
+  print_menuButton("Continuar", menuXStart + 11, 13, (menuState == STATE_MENU_CONTINUE) ? TRUE : FALSE);
+  print_menuButton("Novo Jogo", menuXStart + 11, 15, (menuState == STATE_MENU_NEWGAME) ? TRUE : FALSE);
+  print_menuButton("Ajuda", menuXStart + 11, 17, (menuState == STATE_MENU_HELP) ? TRUE : FALSE);
+  print_menuButton("Sair", menuXStart + 11, 19, (menuState == STATE_MENU_EXIT) ? TRUE : FALSE);
 }
 
 /*------------------------------------------------------------------------------
@@ -59,16 +59,30 @@ void screen_mainMenu(type_appState currentAppState){
 void screen_inGame(type_appState * currentAppState){
   print_inGameMenu(3, 2);
   print_gameStatus(currentAppState->gameState, 3, 9);
-  print_inGameRanking(currentAppState->leaderboard, 3, 15);
+  print_inGameRanking(&currentAppState->leaderboard, 3, 15);
 
   print_gameBoardEdges(28, 2);
   print_gameBoard(&currentAppState->gameState, 28, 2);
 }
 
 /*------------------------------------------------------------------------------
+ * Printa a tela de fim de partida
+ *----------------------------------------------------------------------------*/
+void screen_endGame(type_appState * currentAppState){
+  print_endGameStatus(currentAppState->gameState.gameStatus, 27, 7);
+
+  print_gameStatus(currentAppState->gameState, 27, 13);
+
+  print_querryUserString("Digite seu nome", 27, 19);
+}
+
+/*------------------------------------------------------------------------------
  * Printa a tela atual com base no "currentAppState"
  *----------------------------------------------------------------------------*/
 void printAppState(type_appState * currentAppState){
+  //Seta as cores para as default
+  textbackground(DEFAULT_BG_COLOR);textcolor(DEFAULT_TEXT_COLOR);
+
   //Esconde o cursos da tela
   setCursor(CURSOR_HIDDEN);
 
@@ -99,7 +113,8 @@ void printAppState(type_appState * currentAppState){
       break;
 
     case SCREEN_ENDGAME:
-      printf("Esta eh a tela de fim provisoria");
+      screen_endGame(currentAppState);
+      setCursor(CURSOR_VISIBLE);
       break;
 
     case SCREEN_HELP:
