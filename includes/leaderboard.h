@@ -6,6 +6,6 @@
 
 //Functions
 type_leaderboard readLeaderboardFile();
-void writeLeaderboardFile(type_leaderboard newSave);
+void writeLeaderboardFile(type_leaderboard * newSave);
 
 #endif  /*LEADERBOARD_H*/

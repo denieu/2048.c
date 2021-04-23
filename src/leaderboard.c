@@ -12,6 +12,6 @@ type_leaderboard readLeaderboardFile(){
 /*------------------------------------------------------------------------------
  * Escreve a estrutura newLeaderboard no arquivo "leaderboard"
  *----------------------------------------------------------------------------*/
-void writeLeaderboardFile(type_leaderboard newLeaderboard){
+void writeLeaderboardFile(type_leaderboard * newLeaderboard){
   
 }
