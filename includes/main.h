@@ -121,7 +121,7 @@ typedef enum enum_menuState{
 
 //Types
 typedef struct type_leaderboard {
-  char name[15][11];
+  char name[12][11];
   int points[12];
 } type_leaderboard;
 
