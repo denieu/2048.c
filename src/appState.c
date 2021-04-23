@@ -95,7 +95,7 @@ void handleUserAction(type_appState * appState){
           case ACTION_GAME_NEW:
             newGame(appState);
             break;
-            
+
           case ACTION_GAME_UNDO:
             undoGameAction(appState);
             break;
@@ -111,6 +111,13 @@ void handleUserAction(type_appState * appState){
       case SCREEN_ENDGAME:
         appState->screen.lastScreen = SCREEN_ENDGAME;
         switch (appState->userAction){
+           case ACTION_ENTER:
+            strcpy(appState->leaderboard.name[0], appState->userString);
+            appState->leaderboard.points[0] = appState->gameState.score;
+
+            appState->screen.currentScreen = SCREEN_MENU;
+            break;
+
           case ACTION_ESCAPE:
             appState->screen.currentScreen = SCREEN_MENU;
             break;
