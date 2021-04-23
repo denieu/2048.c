@@ -122,7 +122,7 @@ void print_gameStatus(type_gameState gameState, int posX, int posY){
 /*------------------------------------------------------------------------------
  * Printa o ranking dentro jogo, score e jogadores
  *----------------------------------------------------------------------------*/
-void print_inGameRanking(type_leaderboard leaderboard, int posX, int posY){
+void print_inGameRanking(type_leaderboard * leaderboard, int posX, int posY){
   char number[15] = {'\0'};
   char name[15] = {'\0'};
 
@@ -134,11 +134,11 @@ void print_inGameRanking(type_leaderboard leaderboard, int posX, int posY){
   for(int count = 0;count<11; count++){
     gotoxy(posX, posY+count+1);
 
-    if(leaderboard.points[count] != 0)
-      sprintf(number, "%d", leaderboard.points[count]);
+    if(leaderboard->points[count] != 0)
+      sprintf(number, "%d", leaderboard->points[count]);
     else
       sprintf(number, " ");
-    strcpy(name, leaderboard.name[count]);
+    strcpy(name, leaderboard->name[count]);
 
     printTwoCollumns(number, name, 11, 11);
   }
@@ -282,5 +282,5 @@ void print_querryUserString(const char * placeholder, int posX, int posY){
   stringCentrilize(string, 23);
   printf("%s", string);
 
-  gotoxy(posX + 1, posY + 1);
+  gotoxy(posX + 7, posY + 1);
 }

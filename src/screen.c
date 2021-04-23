@@ -59,7 +59,7 @@ void screen_mainMenu(type_appState currentAppState){
 void screen_inGame(type_appState * currentAppState){
   print_inGameMenu(3, 2);
   print_gameStatus(currentAppState->gameState, 3, 9);
-  print_inGameRanking(currentAppState->leaderboard, 3, 15);
+  print_inGameRanking(&currentAppState->leaderboard, 3, 15);
 
   print_gameBoardEdges(28, 2);
   print_gameBoard(&currentAppState->gameState, 28, 2);
