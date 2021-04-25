@@ -8,7 +8,7 @@
 #include <math.h>
 #include <time.h>
 #include <ctype.h>
-#include "../libs/conio2.h" //gotoxy, textcolor, textbackground
+#include "../includes/conio2.h" //gotoxy, textcolor, textbackground
 
 //Constants
 #define FALSE 0
@@ -33,6 +33,11 @@
 #define DEFAULT_SCREEN_Y_SIZE 27
 
 typedef unsigned char bool;
+
+//Macros
+#define SET_COLOR(BG, TEXT) \
+  textbackground(BG); \
+  textcolor(TEXT);
 
 //Enums
 typedef enum enum_appStatus {
@@ -125,6 +130,11 @@ typedef struct type_leaderboard {
   int points[12];
 } type_leaderboard;
 
+typedef struct type_gameCard {
+  COLORS color;
+  int value;
+} type_gameCard;
+
 typedef struct type_gameState {
   enum_gameStatus gameStatus;
 
@@ -136,10 +146,10 @@ typedef struct type_gameState {
   int lastMoves;
   int moves;
 
-  enum_gameCards gameCards[11];
-  enum_gameCards * auxGameBoard[4][4];
-  enum_gameCards * lastGameBoard[4][4];
-  enum_gameCards * gameBoard[4][4];
+  type_gameCard gameCards[11];
+  type_gameCard * auxGameBoard[4][4];
+  type_gameCard * lastGameBoard[4][4];
+  type_gameCard * gameBoard[4][4];
 } type_gameState;
 
 typedef struct type_screenState{
