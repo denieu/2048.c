@@ -8,7 +8,7 @@
 #include <math.h>
 #include <time.h>
 #include <ctype.h>
-#include "../libs/conio2.h" //gotoxy, textcolor, textbackground
+#include "../includes/conio2.h" //gotoxy, textcolor, textbackground
 
 //Constants
 #define FALSE 0
