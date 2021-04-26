@@ -81,7 +81,7 @@ void screen_endGame(type_appState * currentAppState){
  *----------------------------------------------------------------------------*/
 void printAppState(type_appState * currentAppState){
   //Seta as cores para as default
-  textbackground(DEFAULT_BG_COLOR);textcolor(DEFAULT_TEXT_COLOR);
+  SET_COLOR(DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
 
   //Esconde o cursos da tela
   setCursor(CURSOR_HIDDEN);

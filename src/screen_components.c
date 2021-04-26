@@ -49,7 +49,7 @@ void print_menuButton(char * placeholder, int posX, int posY, bool selected){
     selection[count] = ' ';
 
   if(selected == TRUE){
-    textbackground(DARKGRAY);textcolor(WHITE);
+    SET_COLOR(DARKGRAY, WHITE);
     selection[numberOfSpaces] = '<';
     selection[numberOfSpaces + 1] = '-';
     selection[numberOfSpaces + 2] = '-';
@@ -58,8 +58,7 @@ void print_menuButton(char * placeholder, int posX, int posY, bool selected){
 
   printf(" %s%s ", placeholder, selection);
 
-  textbackground(DEFAULT_BG_COLOR);
-  textcolor(DEFAULT_TEXT_COLOR);
+  SET_COLOR(DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
 }
 
 /*------------------------------------------------------------------------------
@@ -67,10 +66,10 @@ void print_menuButton(char * placeholder, int posX, int posY, bool selected){
  *----------------------------------------------------------------------------*/
 void print_inGameMenu(int posX, int posY){
   gotoxy(posX, posY);
-  textbackground(LIGHTGRAY); textcolor(BLACK);
+  SET_COLOR(LIGHTGRAY, BLACK);
   printTwoCollumns("Tecla", "Acao", 11, 11);
 
-  textbackground(DARKGRAY);textcolor(WHITE);
+  SET_COLOR(DARKGRAY, WHITE);
   gotoxy(posX, posY + 1);
   printTwoCollumns("ESC", "Sair", 11, 11);
 
@@ -86,8 +85,7 @@ void print_inGameMenu(int posX, int posY){
   gotoxy(posX, posY + 5);
   printTwoCollumns("Setas", "Jogar", 11, 11);
 
-  textbackground(DEFAULT_BG_COLOR);
-  textcolor(DEFAULT_TEXT_COLOR);
+  SET_COLOR(DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
 }
 
 /*------------------------------------------------------------------------------
@@ -97,26 +95,24 @@ void print_gameStatus(type_gameState gameState, int posX, int posY){
   char number[30] = {'\0'};
 
   gotoxy(posX, posY);
-  textbackground(LIGHTGRAY);textcolor(BLACK);
+  SET_COLOR(LIGHTGRAY, BLACK);
   printf("         Score         ");
 
+  gotoxy(posX, posY + 3);
+  printf("       Movimentos      ");
+
   gotoxy(posX, posY + 1);
-  textbackground(DARKGRAY);textcolor(WHITE);
+  SET_COLOR(DARKGRAY, WHITE);
   sprintf(number, "%d", gameState.score);
   stringCentrilize(number, 23);
   printf("%s", number);
 
-  gotoxy(posX, posY + 3);
-  textbackground(LIGHTGRAY);textcolor(BLACK);
-  printf("       Movimentos      ");
-
   gotoxy(posX, posY + 4);
-  textbackground(DARKGRAY);textcolor(WHITE);
   sprintf(number, "%d", gameState.moves);
   stringCentrilize(number, 23);
   printf("%s", number);
 
-  textbackground(DEFAULT_BG_COLOR);textcolor(DEFAULT_TEXT_COLOR);
+  SET_COLOR(DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
 }
 
 /*------------------------------------------------------------------------------
@@ -126,11 +122,11 @@ void print_inGameRanking(type_leaderboard * leaderboard, int posX, int posY){
   char number[15] = {'\0'};
   char name[15] = {'\0'};
 
-  textbackground(LIGHTGRAY);textcolor(BLACK);
+  SET_COLOR(LIGHTGRAY, BLACK);
   gotoxy(posX, posY);
   printf("        Ranking        ");
 
-  textbackground(DARKGRAY);textcolor(WHITE);
+  SET_COLOR(DARKGRAY, WHITE);
   for(int count = 0;count<11; count++){
     gotoxy(posX, posY+count+1);
 
@@ -143,15 +139,14 @@ void print_inGameRanking(type_leaderboard * leaderboard, int posX, int posY){
     printTwoCollumns(number, name, 11, 11);
   }
 
-  textbackground(DEFAULT_BG_COLOR);
-  textcolor(DEFAULT_TEXT_COLOR);
+  SET_COLOR(DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
 }
 
 /*------------------------------------------------------------------------------
  * Printa a borda do tabuleiro
  *----------------------------------------------------------------------------*/
 void print_gameBoardEdges(int posX, int posY){
-  textbackground(LIGHTGRAY);textcolor(BLACK);
+  SET_COLOR(LIGHTGRAY, BLACK);
 
   for(int line = 0; line < 5; line++){
     for(int count = 0; count < (GAME_CARD_WIDTH * 4) - 2; count++){
@@ -163,13 +158,14 @@ void print_gameBoardEdges(int posX, int posY){
       printf("  ");
     }
   }
+  SET_COLOR(DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
 }
 
 /*------------------------------------------------------------------------------
  * Printa um casa do tabuleiro
  *----------------------------------------------------------------------------*/
 void print_gameCard(type_gameCard * card, int posX, int posY){
-  textbackground(card != NULL ? card->color : DEFAULT_BG_COLOR); textcolor(DEFAULT_TEXT_COLOR);
+  SET_COLOR(card != NULL ? card->color : DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
 
   //Printa fundo da casa
   for(int count = 0; count < GAME_CARD_HEIGHT - 2; count++){
@@ -188,7 +184,7 @@ void print_gameCard(type_gameCard * card, int posX, int posY){
     printf("%s", cardString);
   }
 
-  textbackground(DEFAULT_BG_COLOR); textcolor(DEFAULT_TEXT_COLOR);
+  SET_COLOR(DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
 }
 
 /*------------------------------------------------------------------------------
@@ -203,8 +199,7 @@ void print_gameBoard(type_gameState * gameState, int posX, int posY){
     }
   }
 
-  textbackground(DEFAULT_BG_COLOR);
-  textcolor(DEFAULT_TEXT_COLOR);
+  SET_COLOR(DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
 }
 
 /*------------------------------------------------------------------------------
@@ -255,7 +250,7 @@ void print_endGameStatus(enum_gameStatus status, int posX, int posY){
   printf("%s", endString);
 
   //Volta para as cores default
-  textbackground(DEFAULT_BG_COLOR);textcolor(DEFAULT_TEXT_COLOR);
+  SET_COLOR(DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
 }
 
 /*------------------------------------------------------------------------------
@@ -265,13 +260,13 @@ void print_querryUserString(const char * placeholder, int posX, int posY){
   char string[30] = {'\0'};
 
   gotoxy(posX, posY);
-  textbackground(LIGHTGRAY);textcolor(BLACK);
+  SET_COLOR(LIGHTGRAY, BLACK);
   sprintf(string, "%s", placeholder);
   stringCentrilize(string, 23);
   printf("%s", string);
 
   gotoxy(posX, posY + 1);
-  textbackground(DARKGRAY);textcolor(WHITE);
+  SET_COLOR(DARKGRAY, WHITE);
   sprintf(string, " ");
   stringCentrilize(string, 23);
   printf("%s", string);

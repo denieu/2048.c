@@ -34,6 +34,11 @@
 
 typedef unsigned char bool;
 
+//Macros
+#define SET_COLOR(BG, TEXT) \
+  textbackground(BG); \
+  textcolor(TEXT);
+
 //Enums
 typedef enum enum_appStatus {
   STATUS_OK = 0,
