@@ -6,13 +6,19 @@
 type_gameState getDefaultGameState(){
   type_gameState defaultGameState = {0};
 
+  COLORS gameCardColors[12] = {
+    BLUE, GREEN, CYAN, RED, MAGENTA, BROWN,
+    DARKGRAY, LIGHTBLUE, LIGHTGREEN, LIGHTCYAN, LIGHTRED
+  };
+
   defaultGameState.gameStatus = GAME_RUNNING;
   defaultGameState.score = 0;
   defaultGameState.moves = 0;
 
   //Alocando estrutura das cartas
   for(int card = 0; card < 11; card++){
-    defaultGameState.gameCards[card] = card + 1;
+    defaultGameState.gameCards[card].value = pow(2, card + 1);;
+    defaultGameState.gameCards[card].color = gameCardColors[card];
   }
 
   //Zerando tabuleiro de jogo
@@ -113,7 +119,7 @@ bool verifyPlayerWin(type_appState * appState){
   for(int line = 0; line < 4; line++){
     for(int collumn = 0; collumn < 4; collumn++){
       if(appState->gameState.gameBoard[line][collumn] != NULL){
-        if(*appState->gameState.gameBoard[line][collumn] == appState->gameState.gameCards[10]){
+        if(appState->gameState.gameBoard[line][collumn]->value == appState->gameState.gameCards[10].value){
           return TRUE;
         }
       }
@@ -215,7 +221,7 @@ bool boardSlideUp(type_appState * appState){
           //Se a proxima linha estiver no range valido(<4) e a proxima linha não for nula
           if(line + count < 4 && appState->gameState.gameBoard[line + count][collumn] != NULL){
             //Verifica se a proxima linha é igual a linha atual
-            if(*appState->gameState.gameBoard[line][collumn] == *appState->gameState.gameBoard[line + count][collumn]){
+            if(appState->gameState.gameBoard[line][collumn] == appState->gameState.gameBoard[line + count][collumn]){
               //Se sim incrementa o valor da linha atual,
               //tranforma a proxima linha em nula
               //e continua para verificar a proxima linha
@@ -223,7 +229,7 @@ bool boardSlideUp(type_appState * appState){
               appState->gameState.gameBoard[line + count][collumn] = NULL;
 
               //Incrementa o score do jogador com o valor da nova peça
-              appState->gameState.score += pow(2, *appState->gameState.gameBoard[line][collumn]);
+              appState->gameState.score += appState->gameState.gameBoard[line][collumn]->value;
 
               ret = TRUE;
             }

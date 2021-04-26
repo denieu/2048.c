@@ -80,14 +80,12 @@ void print_logoLetter(enum_logoLetters selectedLetter, int posX, int posY, COLOR
       break;
   }
 
-  textbackground(bgColor);
-  textcolor(textColor);
+  SET_COLOR(bgColor, textColor);
 
   for(int count = 0; count < MENU_LOGO_LINES; count++){
     gotoxy(posX, posY + count);
     printf("%s", letter[count]);
   }
 
-  textbackground(DEFAULT_BG_COLOR);
-  textcolor(DEFAULT_TEXT_COLOR);
+  SET_COLOR(DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
 }
