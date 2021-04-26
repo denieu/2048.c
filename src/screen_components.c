@@ -168,13 +168,8 @@ void print_gameBoardEdges(int posX, int posY){
 /*------------------------------------------------------------------------------
  * Printa um casa do tabuleiro
  *----------------------------------------------------------------------------*/
-void print_gameCard(enum_gameCards * card, int posX, int posY){
-  COLORS gameCardColors[12] = {
-    BLACK, BLUE, GREEN, CYAN, RED, MAGENTA, BROWN,
-    DARKGRAY, LIGHTBLUE, LIGHTGREEN, LIGHTCYAN, LIGHTRED
-  };
-
-  textbackground(gameCardColors[card != NULL ? *card : 0]); textcolor(DEFAULT_TEXT_COLOR);
+void print_gameCard(type_gameCard * card, int posX, int posY){
+  textbackground(card != NULL ? card->color : DEFAULT_BG_COLOR); textcolor(DEFAULT_TEXT_COLOR);
 
   //Printa fundo da casa
   for(int count = 0; count < GAME_CARD_HEIGHT - 2; count++){
@@ -186,9 +181,8 @@ void print_gameCard(enum_gameCards * card, int posX, int posY){
 
   if(card != NULL){
     gotoxy(posX + 2, posY + GAME_CARD_HEIGHT / 2);
-    int cardValue = pow(2, *card);
     char cardString[GAME_CARD_WIDTH] = {'\0'};
-    sprintf(cardString, "%d", cardValue);
+    sprintf(cardString, "%d", card->value);
 
     stringCentrilize(cardString, GAME_CARD_WIDTH - 3);
     printf("%s", cardString);
