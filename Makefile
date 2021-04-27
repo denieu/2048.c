@@ -1,5 +1,7 @@
 #Compilador
 COMPILADOR=gcc
+#Compilador
+COMPILADOR_RC=windres
 #Nome do seu executavel
 NOME_EXECUTAVEL=2048c
 #Diretorio dos arquivos binarios
@@ -12,11 +14,15 @@ OBJ=./obj
 SRC=./src
 #Diretorio dos arquivos de bibliotecas
 LIB=./libs
+#Diretorio dos recursos
+RC=./resources
 #Libs a linkas ao projeto
 LIBFLAGS=-lconio
 
+#Flags compilador RC
+FLAGS_RC=-O coff -o
 #Para otimizar e mostrar mais avisos
-FLAGS= -O3 -Wall
+FLAGS= -g -Wall
 #Para encontrar as bibliotecas utilizadas(em "-lm", apenas um exemplo, caso seu compilador nao faca isso por voce)
 LIBS= -lm -L$(LIB) $(LIBFLAGS)
 
@@ -30,8 +36,11 @@ OBJETOS=$(addprefix $(OBJ)/, $(addsuffix .o, $(OBJLIMPAR)))
 
 .PHONY: all clean
 
-all: compilar $(NOME_EXECUTAVEL)
+all: compilar_rc compilar $(NOME_EXECUTAVEL)
 
+#Compilar e criar os arquivos-recurso
+compilar_rc:
+	$(COMPILADOR_RC) $(RC)/resource.rc $(FLAGS_RC) $(OBJ)/resource.res
 #Arquivos .o do projeto
 compilar: $(OBJETOS)
 
@@ -41,7 +50,7 @@ $(OBJ)/%.o: $(SRC)/%.c $(INCLUDE)/%.h
 
 #Linkar e criar o executavel
 $(NOME_EXECUTAVEL): $(OBJETOS)
-	$(COMPILADOR) $(FLAGS) $(OBJETOS) $(LIBS) -o $(BIN)/$@
+	$(COMPILADOR) $(FLAGS) $(OBJ)/resource.res $(OBJETOS) $(LIBS) -o $(BIN)/$@
 
 #Executar programa
 run:
@@ -50,4 +59,5 @@ run:
 #Limpar executavel
 clean:
 	rm -f $(OBJ)/*.o
+	rm -f $(OBJ)/*.res
 	rm -f $(BIN)/$(NOME_EXECUTAVEL)

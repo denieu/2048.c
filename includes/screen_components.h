@@ -1,3 +1,12 @@
+/*------------------------------------------------------------------------------
+ * 2048.c
+ *
+ * File: screen_components.h
+ * Author: Daniel Wojcickoski
+ * Date: 2021/04/28
+ * 
+ * MIT License - Copyright (c) 2021 Daniel Wojcickoski
+ *----------------------------------------------------------------------------*/
 #ifndef  SCREEN_COMPONENTS_H
 #define  SCREEN_COMPONENTS_H
 
@@ -12,6 +21,6 @@ void print_inGameRanking(type_leaderboard * leaderboard, int posX, int posY);
 void print_gameBoardEdges(int posX, int posY);
 void print_gameBoard(type_gameState * gameState, int posX, int posY);
 void print_endGameStatus(enum_gameStatus status, int posX, int posY);
-void print_querryUserString(const char * placeholder, int posX, int posY);
+void print_querryUserString(const char * placeholder, int posX, int posY, COLORS color1, COLORS color2);
 
 #endif  /*SCREEN_COMPONENTS_H*/

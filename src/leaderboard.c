@@ -1,3 +1,12 @@
+/*------------------------------------------------------------------------------
+ * 2048.c
+ *
+ * File: leaderboard.c
+ * Author: Daniel Wojcickoski
+ * Date: 2021/04/28
+ * 
+ * MIT License - Copyright (c) 2021 Daniel Wojcickoski
+ *----------------------------------------------------------------------------*/
 #include "../includes/leaderboard.h"
 
 /*------------------------------------------------------------------------------
@@ -5,21 +14,22 @@
  *----------------------------------------------------------------------------*/
 type_leaderboard readLeaderboardFile(){
   type_leaderboard leaderboard = { 0 };
-  char auxName[20] = {0};
+  char auxName[255] = {0};
 
   FILE *leaderboardFile = NULL;
   leaderboardFile = fopen(PATH_LEADERBOARD, "rt");
   if(leaderboardFile == NULL)
     return leaderboard;
 
-  for(int count = 0; count < 11; count++){
+  for(int count = 0; count < 10; count++){
     fscanf(leaderboardFile, "%d", &leaderboard.points[count]);
-    fgets(leaderboard.name[count], 11, leaderboardFile);
+    fgets(auxName, 255, leaderboardFile);
     
-    strcpy(auxName, leaderboard.name[count]);
-    strcpy(leaderboard.name[count], &auxName[1]);
+    strncpy(leaderboard.name[count], &auxName[1], MAX_LEADERBOARD_LENGHT);
 
+    //Adicionando o \0 para ter certeza que não ficou com o tamanho maior que o esperado no programa
     leaderboard.name[count][strlen(leaderboard.name[count]) - 1] = '\0';
+    leaderboard.name[count][MAX_LEADERBOARD_LENGHT - 1] = '\0';
   }
 
   fclose(leaderboardFile);
@@ -33,10 +43,8 @@ void writeLeaderboardFile(type_leaderboard * leaderboard){
   FILE *leaderboardFile = NULL;
   leaderboardFile = fopen(PATH_LEADERBOARD, "w+");
 
-  for(int count = 0; count < 11; count++){
-    char string[30] = {0};
-    sprintf(string, "%d\t%s\n", leaderboard->points[count], leaderboard->name[count]);
-    fwrite(string, sizeof(char), strlen(string), leaderboardFile);
+  for(int count = 0; count < 10; count++){
+    fprintf(leaderboardFile, "%d\t%s\n", leaderboard->points[count], leaderboard->name[count]);
   }
 
   fclose(leaderboardFile);
@@ -48,13 +56,13 @@ void writeLeaderboardFile(type_leaderboard * leaderboard){
 void bubbleSortLeaderboard(type_leaderboard * leaderboard){
   int flag = 0, end = 0;
 
-  char auxName[15] = { 0 };
+  char auxName[MAX_LEADERBOARD_LENGHT + 1] = { 0 };
   int auxPoints = 0;
 
   do{
     flag = 0;
 
-    for(int count = 11; count > end; count--){
+    for(int count = 10; count > end; count--){
       if(leaderboard->points[count] > leaderboard->points[count - 1]){
         strcpy(auxName, leaderboard->name[count]);
         auxPoints = leaderboard->points[count];

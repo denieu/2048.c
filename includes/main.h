@@ -1,3 +1,12 @@
+/*------------------------------------------------------------------------------
+ * 2048.c
+ *
+ * File: main.h
+ * Author: Daniel Wojcickoski
+ * Date: 2021/04/28
+ * 
+ * MIT License - Copyright (c) 2021 Daniel Wojcickoski
+ *----------------------------------------------------------------------------*/
 #ifndef  MAIN_H
 #define  MAIN_H
 
@@ -13,6 +22,7 @@
 //Constants
 #define FALSE 0
 #define TRUE  1
+#define NO_CHANGE -2
 
 //Screen constants
 #define DEFAULT_BG_COLOR BLACK
@@ -32,7 +42,9 @@
 #define DEFAULT_SCREEN_X_SIZE 75
 #define DEFAULT_SCREEN_Y_SIZE 27
 
-typedef unsigned char bool;
+#define MAX_LEADERBOARD_LENGHT 15
+
+typedef unsigned char bool; //Variavel Booleana, deve receber TRUE ou FALSE
 
 //Macros
 #define SET_COLOR(BG, TEXT) \
@@ -69,12 +81,18 @@ typedef enum enum_userAction {
   ACTION_LEFT,
   ACTION_RIGTH,
   ACTION_ENTER,
+
+  ACTION_PRE_ESCAPE,
+  ACTION_NO_ESCAPE,
   ACTION_ESCAPE,
 
   ACTION_GAME_CONTINUE,
   ACTION_GAME_NEW,
-  ACTION_GAME_SAVE,
+
   ACTION_GAME_UNDO,
+  
+  ACTION_GAME_PRE_SAVE,
+  ACTION_GAME_SAVE,
 } enum_userAction;
 
 typedef enum enum_gameStatus{
@@ -94,7 +112,8 @@ typedef enum enum_direction {
 } enum_direction;
 
 typedef enum enum_gameCards {
-  CARD2 = 1,
+  CARDNONE = 0,
+  CARD2,
   CARD4,
   CARD8,
   CARD16,
@@ -112,26 +131,33 @@ typedef enum enum_screens {
   SCREEN_MENU = 0,
   SCREEN_GAME,
   SCREEN_ENDGAME,
-  SCREEN_HELP,
+  SCREEN_RANKING,
 } enum_screens;
 
 typedef enum enum_menuState{
   STATE_MENU_FIRST,
   STATE_MENU_CONTINUE,
   STATE_MENU_NEWGAME,
-  STATE_MENU_HELP,
   STATE_MENU_EXIT,
   STATE_MENU_LAST,
+  STATE_MENU_CONTINUE_SELECT,
 } enum_menuState;
+
+typedef enum enum_gameState{
+  STATE_GAME_NORMAL,
+  STATE_GAME_ESCAPE,
+  STATE_GAME_SAVE,
+} enum_gameState;
 
 //Types
 typedef struct type_leaderboard {
-  char name[12][11];
-  int points[12];
+  int points[11];
+  char name[11][MAX_LEADERBOARD_LENGHT];
 } type_leaderboard;
 
 typedef struct type_gameCard {
   COLORS color;
+  enum_gameCards exponent;
   int value;
 } type_gameCard;
 
@@ -152,10 +178,26 @@ typedef struct type_gameState {
   type_gameCard * gameBoard[4][4];
 } type_gameState;
 
-typedef struct type_screenState{
+
+typedef struct type_gameSave {
+  enum_gameStatus gameStatus;
+  
+  int lastScore;
+  int score;
+  int lastMoves;
+  int moves;
+
+  enum_gameCards lastGameBoard[4][4];
+  enum_gameCards gameBoard[4][4];
+} type_gameSave;
+
+typedef struct type_screenState {
   enum_screens lastScreen;
   enum_screens currentScreen;
   enum_menuState menuState;
+  enum_gameState gameState;
+
+  bool forceClear;
 } type_screenState;
 
 typedef struct type_appState {

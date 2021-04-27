@@ -1,3 +1,12 @@
+/*------------------------------------------------------------------------------
+ * 2048.c
+ *
+ * File: gameState.c
+ * Author: Daniel Wojcickoski
+ * Date: 2021/04/28
+ * 
+ * MIT License - Copyright (c) 2021 Daniel Wojcickoski
+ *----------------------------------------------------------------------------*/
 #include "../includes/gameState.h"
 
 /*------------------------------------------------------------------------------
@@ -17,7 +26,8 @@ type_gameState getDefaultGameState(){
 
   //Alocando estrutura das cartas
   for(int card = 0; card < 11; card++){
-    defaultGameState.gameCards[card].value = pow(2, card + 1);;
+    defaultGameState.gameCards[card].value = pow(2, card + 1);
+    defaultGameState.gameCards[card].exponent = card + 1;
     defaultGameState.gameCards[card].color = gameCardColors[card];
   }
 

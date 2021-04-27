@@ -1,3 +1,12 @@
+/*------------------------------------------------------------------------------
+ * 2048.c
+ *
+ * File: screen_components.c
+ * Author: Daniel Wojcickoski
+ * Date: 2021/04/28
+ * 
+ * MIT License - Copyright (c) 2021 Daniel Wojcickoski
+ *----------------------------------------------------------------------------*/
 #include "../includes/screen_components.h"
 
 /*------------------------------------------------------------------------------
@@ -9,13 +18,20 @@ void stringCentrilize(char * string, int maxSize){
   char posSpaces[100] = {'\0'};
   char newString[100] = {'\0'};
 
-  for(int count = 0; count < (maxSize - stringSize) / 2; count++){
+  int qtdPreSpaces = (maxSize - stringSize) / 2;
+  int qtdPosSpaces = (maxSize - stringSize - qtdPreSpaces);
+
+  for(int count = 0; count < qtdPreSpaces ; count++){
     preSpaces[count] = ' ';
   }
-  for(int count = 0; count < (maxSize - stringSize - strlen(preSpaces)); count++){
+  for(int count = 0; count < qtdPosSpaces; count++){
     posSpaces[count] = ' ';
   }
-  sprintf(newString, "%s%s%s", preSpaces, string, posSpaces);
+
+  strcat(newString, preSpaces);
+  strcat(newString, string);
+  strcat(newString, posSpaces);
+
   strcpy(string, newString);
 }
 
@@ -23,16 +39,28 @@ void stringCentrilize(char * string, int maxSize){
  * Printa duas strings centralizadas em duas colunas
  *----------------------------------------------------------------------------*/
 void printTwoCollumns(char * left, char * right, int leftSize, int rightSize){
-  char leftString[12] = {'\0'};
-  char rightString[12] = {'\0'};
+  char leftString[100] = {'\0'};
+  char rightString[100] = {'\0'};
+  char auxString[100] = {'\0'};
 
+  char preSpaces[100] = {'\0'};
+  char posSpaces[100] = {'\0'};
+  int qtdPreSpaces = leftSize - strlen(left);
+  int qtdPosSpaces = rightSize  - strlen(right);
+
+  for(int count = 0; count < qtdPreSpaces ; count++){
+    preSpaces[count] = ' ';
+  }
+  for(int count = 0; count < qtdPosSpaces; count++){
+    posSpaces[count] = ' ';
+  }
+  
   strcpy(leftString, left);
   strcpy(rightString, right);
 
-  stringCentrilize(leftString, leftSize);
-  stringCentrilize(rightString, rightSize);
+  sprintf(auxString, "%s%s %s%s", preSpaces, leftString, rightString, posSpaces);
 
-  printf("%s %s", leftString, rightString);
+  printf("%s", auxString);
 }
 
 /*------------------------------------------------------------------------------
@@ -126,8 +154,11 @@ void print_inGameRanking(type_leaderboard * leaderboard, int posX, int posY){
   gotoxy(posX, posY);
   printf("        Ranking        ");
 
+  gotoxy(posX, posY + 11);
+  printf("                       ");
+
   SET_COLOR(DARKGRAY, WHITE);
-  for(int count = 0;count<11; count++){
+  for(int count = 0;count<10; count++){
     gotoxy(posX, posY+count+1);
 
     if(leaderboard->points[count] != 0)
@@ -136,7 +167,7 @@ void print_inGameRanking(type_leaderboard * leaderboard, int posX, int posY){
       sprintf(number, " ");
     strcpy(name, leaderboard->name[count]);
 
-    printTwoCollumns(number, name, 11, 11);
+    printTwoCollumns(number, name, 7, 15);
   }
 
   SET_COLOR(DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
@@ -193,9 +224,7 @@ void print_gameCard(type_gameCard * card, int posX, int posY){
 void print_gameBoard(type_gameState * gameState, int posX, int posY){
   for(int collumn = 0; collumn < 4; collumn++){
     for(int line = 0; line < 4; line++){
-      if(gameState->moves == gameState->lastMoves || gameState->gameBoard[line][collumn] != gameState->lastGameBoard[line][collumn]){
-        print_gameCard(gameState->gameBoard[line][collumn], posX + collumn * (GAME_CARD_WIDTH - 1), posY + line * (GAME_CARD_HEIGHT - 1));
-      }
+      print_gameCard(gameState->gameBoard[line][collumn], posX + collumn * (GAME_CARD_WIDTH - 1), posY + line * (GAME_CARD_HEIGHT - 1));
     }
   }
 
@@ -256,20 +285,20 @@ void print_endGameStatus(enum_gameStatus status, int posX, int posY){
 /*------------------------------------------------------------------------------
  * Printa componente que pede para o usuario digitar algo
  *----------------------------------------------------------------------------*/
-void print_querryUserString(const char * placeholder, int posX, int posY){
+void print_querryUserString(const char * placeholder, int posX, int posY, COLORS color1, COLORS color2){
   char string[30] = {'\0'};
 
   gotoxy(posX, posY);
-  SET_COLOR(LIGHTGRAY, BLACK);
+  SET_COLOR(color1, BLACK);
   sprintf(string, "%s", placeholder);
   stringCentrilize(string, 23);
   printf("%s", string);
 
   gotoxy(posX, posY + 1);
-  SET_COLOR(DARKGRAY, WHITE);
+  SET_COLOR(color2, WHITE);
   sprintf(string, " ");
   stringCentrilize(string, 23);
   printf("%s", string);
 
-  gotoxy(posX + 7, posY + 1);
+  gotoxy(posX + 1, posY + 1);
 }
