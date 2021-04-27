@@ -43,9 +43,17 @@ void handleMenuAction(type_appState * appState){
     case ACTION_ENTER:
       switch (appState->screen.menuState){
         case STATE_MENU_CONTINUE:
-          readSaveFile(appState, "teste");
-
-          appState->screen.currentScreen = SCREEN_GAME;
+          if(appState->screen.currentPopup != POPUP_CONTINUE){
+            appState->screen.lastPopup = appState->screen.currentPopup;
+            appState->screen.currentPopup = POPUP_CONTINUE;
+          }
+          else {
+            appState->screen.lastPopup = appState->screen.currentPopup;
+            appState->screen.currentPopup = POPUP_NONE;
+            
+            if(readSaveFile(appState, appState->userString) == TRUE)
+              appState->screen.currentScreen = SCREEN_GAME;
+          }
           break;
 
         case STATE_MENU_NEWGAME:
@@ -101,14 +109,14 @@ void handleUserAction(type_appState * appState){
           case ACTION_GAME_UNDO:
             undoGameAction(appState);
             break;
-            
+
           case ACTION_GAME_PRE_SAVE:
             appState->screen.lastPopup = appState->screen.currentPopup;
             appState->screen.currentPopup = POPUP_SAVE;
             break;
 
           case ACTION_GAME_SAVE:
-            writeSaveFile(&appState->gameState, &appState->userString);
+            writeSaveFile(&appState->gameState, appState->userString);
             appState->screen.lastPopup = appState->screen.currentPopup;
             appState->screen.currentPopup = POPUP_NONE;
             break;

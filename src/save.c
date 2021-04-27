@@ -61,18 +61,23 @@ void gameStateToSave(type_gameSave * gameSave, type_gameState * gameState){
 /*------------------------------------------------------------------------------
  * Lê e retorna a estrutura salva no arquivo de save especificado em path
  *----------------------------------------------------------------------------*/
-void readSaveFile(type_appState * appState, const char * filename){
+bool readSaveFile(type_appState * appState, const char * filename){
   type_gameSave save = {0};
   
   //Abre,le a estrutura save e fecha o arquivo binario
   FILE * saveFile = NULL;
   saveFile = fopen(filename, "rb");
 
+  if(saveFile == NULL)
+    return FALSE;
+
   fread(&save, sizeof(type_gameSave), 1, saveFile);
   
   fclose(saveFile);
 
   saveToAppState(appState, &save);
+  
+  return TRUE;
 }
 
 /*------------------------------------------------------------------------------

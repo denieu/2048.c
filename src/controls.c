@@ -27,6 +27,16 @@ void captureUserAction(type_appState * appState){
     keyPressed = 0;
   }
 
+  //Busca a string para salvar o arquivo
+  else if(appState->screen.currentPopup == POPUP_CONTINUE){
+    fgets(string, 10, stdin);
+    string[strlen(string) - 1] = '\0';
+    strcpy(appState->userString, string);
+
+    userAction = ACTION_ENTER;
+    keyPressed = 0;
+  }
+
   //Confirma o escape
   else if(appState->screen.currentPopup == POPUP_ESCAPE){
     keyPressed = getch();

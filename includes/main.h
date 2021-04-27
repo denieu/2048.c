@@ -135,6 +135,7 @@ typedef enum enum_popup{
   POPUP_NONE,
   POPUP_ESCAPE,
   POPUP_SAVE,
+  POPUP_CONTINUE,
 } enum_popup;
 
 //Types

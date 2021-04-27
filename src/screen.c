@@ -136,6 +136,10 @@ void printAppState(type_appState * currentAppState){
       print_querryUserString(" ", 27, 13, LIGHTRED, LIGHTGRAY);
       print_querryUserString("Para sair tecle [S]", 27, 14, LIGHTGRAY, LIGHTRED);
       break;
+
+    case POPUP_CONTINUE:
+      print_querryUserString("Save a carregar", 27, 14, LIGHTGRAY, DARKGRAY);
+      break;
     
     default:
       currentAppState->screen.currentPopup = POPUP_NONE;
