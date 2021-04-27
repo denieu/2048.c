@@ -100,6 +100,8 @@ void handleUserAction(type_appState * appState){
           case ACTION_LEFT:
           case ACTION_RIGTH:
             handleGameAction(appState);
+            appState->screen.lastPopup = appState->screen.currentPopup;
+            appState->screen.currentPopup = POPUP_NONE;
             break;
 
           case ACTION_GAME_NEW:

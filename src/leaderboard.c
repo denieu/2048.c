@@ -34,9 +34,7 @@ void writeLeaderboardFile(type_leaderboard * leaderboard){
   leaderboardFile = fopen(PATH_LEADERBOARD, "w+");
 
   for(int count = 0; count < 11; count++){
-    char string[30] = {0};
-    sprintf(string, "%d\t%s\n", leaderboard->points[count], leaderboard->name[count]);
-    fwrite(string, sizeof(char), strlen(string), leaderboardFile);
+    fprintf(leaderboardFile, "%d\t%s\n", leaderboard->points[count], leaderboard->name[count]);
   }
 
   fclose(leaderboardFile);
