@@ -94,7 +94,8 @@ typedef enum enum_direction {
 } enum_direction;
 
 typedef enum enum_gameCards {
-  CARD2 = 1,
+  CARDNONE = 0,
+  CARD2,
   CARD4,
   CARD8,
   CARD16,
@@ -132,6 +133,7 @@ typedef struct type_leaderboard {
 
 typedef struct type_gameCard {
   COLORS color;
+  enum_gameCards exponent;
   int value;
 } type_gameCard;
 
@@ -152,7 +154,20 @@ typedef struct type_gameState {
   type_gameCard * gameBoard[4][4];
 } type_gameState;
 
-typedef struct type_screenState{
+
+typedef struct type_gameSave {
+  enum_gameStatus gameStatus;
+  
+  int lastScore;
+  int score;
+  int lastMoves;
+  int moves;
+
+  enum_gameCards lastGameBoard[4][4];
+  enum_gameCards gameBoard[4][4];
+} type_gameSave;
+
+typedef struct type_screenState {
   enum_screens lastScreen;
   enum_screens currentScreen;
   enum_menuState menuState;

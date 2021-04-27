@@ -17,7 +17,8 @@ type_gameState getDefaultGameState(){
 
   //Alocando estrutura das cartas
   for(int card = 0; card < 11; card++){
-    defaultGameState.gameCards[card].value = pow(2, card + 1);;
+    defaultGameState.gameCards[card].value = pow(2, card + 1);
+    defaultGameState.gameCards[card].exponent = card + 1;
     defaultGameState.gameCards[card].color = gameCardColors[card];
   }
 
