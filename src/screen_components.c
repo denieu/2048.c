@@ -193,9 +193,7 @@ void print_gameCard(type_gameCard * card, int posX, int posY){
 void print_gameBoard(type_gameState * gameState, int posX, int posY){
   for(int collumn = 0; collumn < 4; collumn++){
     for(int line = 0; line < 4; line++){
-      if(gameState->moves == gameState->lastMoves || gameState->gameBoard[line][collumn] != gameState->lastGameBoard[line][collumn]){
-        print_gameCard(gameState->gameBoard[line][collumn], posX + collumn * (GAME_CARD_WIDTH - 1), posY + line * (GAME_CARD_HEIGHT - 1));
-      }
+      print_gameCard(gameState->gameBoard[line][collumn], posX + collumn * (GAME_CARD_WIDTH - 1), posY + line * (GAME_CARD_HEIGHT - 1));
     }
   }
 
@@ -256,17 +254,17 @@ void print_endGameStatus(enum_gameStatus status, int posX, int posY){
 /*------------------------------------------------------------------------------
  * Printa componente que pede para o usuario digitar algo
  *----------------------------------------------------------------------------*/
-void print_querryUserString(const char * placeholder, int posX, int posY){
+void print_querryUserString(const char * placeholder, int posX, int posY, COLORS color1, COLORS color2){
   char string[30] = {'\0'};
 
   gotoxy(posX, posY);
-  SET_COLOR(LIGHTGRAY, BLACK);
+  SET_COLOR(color1, BLACK);
   sprintf(string, "%s", placeholder);
   stringCentrilize(string, 23);
   printf("%s", string);
 
   gotoxy(posX, posY + 1);
-  SET_COLOR(DARKGRAY, WHITE);
+  SET_COLOR(color2, WHITE);
   sprintf(string, " ");
   stringCentrilize(string, 23);
   printf("%s", string);

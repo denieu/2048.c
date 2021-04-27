@@ -12,6 +12,6 @@ void print_inGameRanking(type_leaderboard * leaderboard, int posX, int posY);
 void print_gameBoardEdges(int posX, int posY);
 void print_gameBoard(type_gameState * gameState, int posX, int posY);
 void print_endGameStatus(enum_gameStatus status, int posX, int posY);
-void print_querryUserString(const char * placeholder, int posX, int posY);
+void print_querryUserString(const char * placeholder, int posX, int posY, COLORS color1, COLORS color2);
 
 #endif  /*SCREEN_COMPONENTS_H*/

@@ -1,6 +1,7 @@
 #include "../includes/appState.h"
 #include "../includes/gameState.h"
 #include "../includes/leaderboard.h"
+#include "../includes/save.h"
 
 /*------------------------------------------------------------------------------
  * Retorna o appState default
@@ -42,9 +43,17 @@ void handleMenuAction(type_appState * appState){
     case ACTION_ENTER:
       switch (appState->screen.menuState){
         case STATE_MENU_CONTINUE:
-          //Busca um arquivo de save e joga ele para o GameState
-
-          appState->screen.currentScreen = SCREEN_GAME;
+          if(appState->screen.currentPopup != POPUP_CONTINUE){
+            appState->screen.lastPopup = appState->screen.currentPopup;
+            appState->screen.currentPopup = POPUP_CONTINUE;
+          }
+          else {
+            appState->screen.lastPopup = appState->screen.currentPopup;
+            appState->screen.currentPopup = POPUP_NONE;
+            
+            if(readSaveFile(appState, appState->userString) == TRUE)
+              appState->screen.currentScreen = SCREEN_GAME;
+          }
           break;
 
         case STATE_MENU_NEWGAME:
@@ -91,6 +100,8 @@ void handleUserAction(type_appState * appState){
           case ACTION_LEFT:
           case ACTION_RIGTH:
             handleGameAction(appState);
+            appState->screen.lastPopup = appState->screen.currentPopup;
+            appState->screen.currentPopup = POPUP_NONE;
             break;
 
           case ACTION_GAME_NEW:
@@ -101,11 +112,32 @@ void handleUserAction(type_appState * appState){
             undoGameAction(appState);
             break;
 
+          case ACTION_GAME_PRE_SAVE:
+            appState->screen.lastPopup = appState->screen.currentPopup;
+            appState->screen.currentPopup = POPUP_SAVE;
+            break;
+
+          case ACTION_GAME_SAVE:
+            writeSaveFile(&appState->gameState, appState->userString);
+            appState->screen.lastPopup = appState->screen.currentPopup;
+            appState->screen.currentPopup = POPUP_NONE;
+            break;
+
+          case ACTION_PRE_ESCAPE:
+            appState->screen.lastPopup = appState->screen.currentPopup;
+            appState->screen.currentPopup = POPUP_ESCAPE;
+            break;
+
           case ACTION_ESCAPE:
+            appState->screen.lastPopup = POPUP_NONE;
+            appState->screen.currentPopup = POPUP_NONE;
             appState->screen.currentScreen = SCREEN_MENU;
             break;
 
-          default:break;
+          default:
+            appState->screen.lastPopup = appState->screen.currentPopup;
+            appState->screen.currentPopup = POPUP_NONE;
+            break;
         }
         break;
 

@@ -4,18 +4,60 @@
  * Captura e retorna a ação realizada pelo usuario
  *----------------------------------------------------------------------------*/
 void captureUserAction(type_appState * appState){
-  enum_userAction userAction = {0};
+  enum_userAction userAction = 0;
   int keyPressed = 0;
   char string[21] = {'\0'};
 
   //Se for a tela de fim de jogo deve capturar o nome do usuario
   if(appState->screen.currentScreen == SCREEN_ENDGAME){
-    fgets(string, 9, stdin);
+    fgets(string, 10, stdin);
     string[strlen(string) - 1] = '\0';
     strcpy(appState->userString, string);
 
     keyPressed = KEY_ENTER;
   }
+
+  //Busca a string para salvar o arquivo
+  else if(appState->screen.currentPopup == POPUP_SAVE){
+    fgets(string, 10, stdin);
+    string[strlen(string) - 1] = '\0';
+    strcpy(appState->userString, string);
+
+    userAction = ACTION_GAME_SAVE;
+    keyPressed = 0;
+  }
+
+  //Busca a string para salvar o arquivo
+  else if(appState->screen.currentPopup == POPUP_CONTINUE){
+    fgets(string, 10, stdin);
+    string[strlen(string) - 1] = '\0';
+    strcpy(appState->userString, string);
+
+    userAction = ACTION_ENTER;
+    keyPressed = 0;
+  }
+
+  //Confirma o escape
+  else if(appState->screen.currentPopup == POPUP_ESCAPE){
+    keyPressed = getch();
+
+    if(isalpha(keyPressed))
+      keyPressed = toupper(keyPressed);
+
+    switch (keyPressed){
+      case KEY_S:
+        userAction = ACTION_ESCAPE;
+        break;
+      
+      default:
+        userAction = ACTION_NO_ESCAPE;
+        break;
+    }
+    
+    keyPressed = 0;
+  }
+
+  //No caso default somente captura a tecla digitada pelo jogador
   else {
     keyPressed = getch();
 
@@ -58,13 +100,13 @@ void captureUserAction(type_appState * appState){
         userAction = ACTION_GAME_NEW;
       }
       else if(keyPressed == KEY_S){
-        userAction = ACTION_GAME_SAVE;
+        userAction = ACTION_GAME_PRE_SAVE;
       }
       else if(keyPressed == KEY_U){
         userAction = ACTION_GAME_UNDO;
       }
       else if(keyPressed == KEY_ESCAPE){
-        userAction = ACTION_ESCAPE;
+        userAction = ACTION_PRE_ESCAPE;
       }
       break;
 
