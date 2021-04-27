@@ -254,17 +254,17 @@ void print_endGameStatus(enum_gameStatus status, int posX, int posY){
 /*------------------------------------------------------------------------------
  * Printa componente que pede para o usuario digitar algo
  *----------------------------------------------------------------------------*/
-void print_querryUserString(const char * placeholder, int posX, int posY){
+void print_querryUserString(const char * placeholder, int posX, int posY, COLORS color1, COLORS color2){
   char string[30] = {'\0'};
 
   gotoxy(posX, posY);
-  SET_COLOR(LIGHTGRAY, BLACK);
+  SET_COLOR(color1, BLACK);
   sprintf(string, "%s", placeholder);
   stringCentrilize(string, 23);
   printf("%s", string);
 
   gotoxy(posX, posY + 1);
-  SET_COLOR(DARKGRAY, WHITE);
+  SET_COLOR(color2, WHITE);
   sprintf(string, " ");
   stringCentrilize(string, 23);
   printf("%s", string);

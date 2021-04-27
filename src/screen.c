@@ -73,7 +73,7 @@ void screen_endGame(type_appState * currentAppState){
 
   print_gameStatus(currentAppState->gameState, 27, 13);
 
-  print_querryUserString("Digite seu nome", 27, 19);
+  print_querryUserString("Digite seu nome", 27, 19, LIGHTGRAY, DARKGRAY);
 }
 
 /*------------------------------------------------------------------------------
@@ -99,7 +99,8 @@ void printAppState(type_appState * currentAppState){
   configScreenSize(DEFAULT_SCREEN_X_SIZE, DEFAULT_SCREEN_Y_SIZE);
 
   //Limpa a tela se a tela mudou
-  if(currentAppState->screen.lastScreen != currentAppState->screen.currentScreen)
+  if(currentAppState->screen.lastScreen != currentAppState->screen.currentScreen ||
+     currentAppState->screen.lastPopup != currentAppState->screen.currentPopup)
     clrscr();
 
   //Mostra a tela correta relativa a currentScreen
@@ -123,6 +124,21 @@ void printAppState(type_appState * currentAppState){
 
     default:
       currentAppState->screen.currentScreen = SCREEN_MENU;
+      break;
+  }
+
+  switch (currentAppState->screen.currentPopup){
+    case POPUP_SAVE:
+      print_querryUserString("Nome do save", 27, 13, LIGHTRED, DARKGRAY);
+      break;
+
+    case POPUP_ESCAPE:
+      print_querryUserString(" ", 27, 13, LIGHTRED, LIGHTGRAY);
+      print_querryUserString("Para sair tecle [S]", 27, 14, LIGHTGRAY, LIGHTRED);
+      break;
+    
+    default:
+      currentAppState->screen.currentPopup = POPUP_NONE;
       break;
   }
 }

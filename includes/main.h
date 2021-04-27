@@ -69,12 +69,18 @@ typedef enum enum_userAction {
   ACTION_LEFT,
   ACTION_RIGTH,
   ACTION_ENTER,
+
+  ACTION_PRE_ESCAPE,
+  ACTION_NO_ESCAPE,
   ACTION_ESCAPE,
 
   ACTION_GAME_CONTINUE,
   ACTION_GAME_NEW,
-  ACTION_GAME_SAVE,
+
   ACTION_GAME_UNDO,
+  
+  ACTION_GAME_PRE_SAVE,
+  ACTION_GAME_SAVE,
 } enum_userAction;
 
 typedef enum enum_gameStatus{
@@ -125,6 +131,12 @@ typedef enum enum_menuState{
   STATE_MENU_LAST,
 } enum_menuState;
 
+typedef enum enum_popup{
+  POPUP_NONE,
+  POPUP_ESCAPE,
+  POPUP_SAVE,
+} enum_popup;
+
 //Types
 typedef struct type_leaderboard {
   char name[12][11];
@@ -171,6 +183,9 @@ typedef struct type_screenState {
   enum_screens lastScreen;
   enum_screens currentScreen;
   enum_menuState menuState;
+
+  enum_popup lastPopup;
+  enum_popup currentPopup;
 } type_screenState;
 
 typedef struct type_appState {
