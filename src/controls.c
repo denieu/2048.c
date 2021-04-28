@@ -25,6 +25,8 @@ void captureUserAction(type_appState * appState){
   int keyPressed = 0;
   char string[21] = {'\0'};
 
+  setbuf(stdin, NULL); //Limpa o buffer do teclado, estava causando erro na fgets
+
   //Momentos onde é necessario capturar uma string ao inves de uma tecla
   if( (appState->screen.currentScreen == SCREEN_ENDGAME) ||
       (appState->screen.menuState == STATE_MENU_CONTINUE_SELECT) ||
