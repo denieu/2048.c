@@ -1,5 +1,12 @@
 #include "../includes/controls.h"
 
+//Macros
+#define CASE_SELECT(key, action) { \
+  case key: \
+    userAction = action; \
+    break; \
+}
+
 /*------------------------------------------------------------------------------
  * Captura e retorna a ação realizada pelo usuario
  *----------------------------------------------------------------------------*/
@@ -68,57 +75,38 @@ void captureUserAction(type_appState * appState){
     if(isalpha(keyPressed))
       keyPressed = toupper(keyPressed);
   }
-  
+
   //Captura a ação com base na tela atual
   switch (appState->screen.currentScreen){
     case SCREEN_MENU:
-      if(keyPressed == KEY_UP){
-        userAction = ACTION_UP;
-      }
-      else if(keyPressed == KEY_DOWN){
-        userAction = ACTION_DOWN;
-      }
-      else if(keyPressed == KEY_ENTER){
-        userAction = ACTION_ENTER;
-      }
-      else if(keyPressed == KEY_ESCAPE){
-        userAction = ACTION_ESCAPE;
+      switch (keyPressed){
+        CASE_SELECT(KEY_UP, ACTION_UP);
+        CASE_SELECT(KEY_DOWN, ACTION_DOWN);
+        CASE_SELECT(KEY_ENTER, ACTION_ENTER);
+        CASE_SELECT(KEY_ESCAPE, ACTION_ESCAPE);
+        default: break;
       }
       break;
       
     case SCREEN_GAME:
-      if(keyPressed == KEY_UP){
-        userAction = ACTION_UP;
-      }
-      else if(keyPressed == KEY_LEFT){
-        userAction = ACTION_LEFT;
-      }
-      else if(keyPressed == KEY_RIGHT){
-        userAction = ACTION_RIGTH;
-      }
-      else if(keyPressed == KEY_DOWN){
-        userAction = ACTION_DOWN;
-      }
-      else if(keyPressed == KEY_N){
-        userAction = ACTION_GAME_NEW;
-      }
-      else if(keyPressed == KEY_S){
-        userAction = ACTION_GAME_PRE_SAVE;
-      }
-      else if(keyPressed == KEY_U){
-        userAction = ACTION_GAME_UNDO;
-      }
-      else if(keyPressed == KEY_ESCAPE){
-        userAction = ACTION_PRE_ESCAPE;
+      switch (keyPressed){
+        CASE_SELECT(KEY_UP, ACTION_UP);
+        CASE_SELECT(KEY_LEFT, ACTION_LEFT);
+        CASE_SELECT(KEY_RIGHT, ACTION_RIGTH);
+        CASE_SELECT(KEY_DOWN, ACTION_DOWN);
+        CASE_SELECT(KEY_N, ACTION_GAME_NEW);
+        CASE_SELECT(KEY_S, ACTION_GAME_PRE_SAVE);
+        CASE_SELECT(KEY_U, ACTION_GAME_UNDO);
+        CASE_SELECT(KEY_ESCAPE, ACTION_PRE_ESCAPE);
+        default: break;
       }
       break;
 
     case SCREEN_ENDGAME:
-      if(keyPressed == KEY_ENTER){
-        userAction = ACTION_ENTER;
-      }
-      else if(keyPressed == KEY_ESCAPE){
-        userAction = ACTION_ESCAPE;
+      switch (keyPressed){
+        CASE_SELECT(KEY_ENTER, ACTION_ENTER);
+        CASE_SELECT(KEY_ESCAPE, ACTION_ESCAPE);
+        default: break;
       }
       break;
     
