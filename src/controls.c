@@ -18,7 +18,8 @@ void captureUserAction(type_appState * appState){
   }
 
   //Busca a string para salvar o arquivo
-  else if(appState->screen.currentPopup == POPUP_SAVE){
+  else if(appState->screen.currentScreen == SCREEN_GAME && 
+          appState->screen.gameState == STATE_GAME_SAVE){
     fgets(string, 10, stdin);
     string[strlen(string) - 1] = '\0';
     strcpy(appState->userString, string);
@@ -28,7 +29,8 @@ void captureUserAction(type_appState * appState){
   }
 
   //Busca a string para salvar o arquivo
-  else if(appState->screen.currentPopup == POPUP_CONTINUE){
+  else if(appState->screen.currentScreen == SCREEN_MENU && 
+          appState->screen.menuState == STATE_MENU_CONTINUE_SELECT){
     fgets(string, 10, stdin);
     string[strlen(string) - 1] = '\0';
     strcpy(appState->userString, string);
@@ -38,7 +40,8 @@ void captureUserAction(type_appState * appState){
   }
 
   //Confirma o escape
-  else if(appState->screen.currentPopup == POPUP_ESCAPE){
+  else if(appState->screen.currentScreen == SCREEN_GAME && 
+          appState->screen.gameState == STATE_GAME_ESCAPE){
     keyPressed = getch();
 
     if(isalpha(keyPressed))
@@ -113,15 +116,6 @@ void captureUserAction(type_appState * appState){
     case SCREEN_ENDGAME:
       if(keyPressed == KEY_ENTER){
         userAction = ACTION_ENTER;
-      }
-      else if(keyPressed == KEY_ESCAPE){
-        userAction = ACTION_ESCAPE;
-      }
-      break;
-
-    case SCREEN_HELP:
-      if(keyPressed == KEY_ENTER){
-        userAction = ACTION_ESCAPE;
       }
       else if(keyPressed == KEY_ESCAPE){
         userAction = ACTION_ESCAPE;

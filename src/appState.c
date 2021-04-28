@@ -43,25 +43,20 @@ void handleMenuAction(type_appState * appState){
     case ACTION_ENTER:
       switch (appState->screen.menuState){
         case STATE_MENU_CONTINUE:
-          if(appState->screen.currentPopup != POPUP_CONTINUE){
-            appState->screen.lastPopup = appState->screen.currentPopup;
-            appState->screen.currentPopup = POPUP_CONTINUE;
-          }
-          else {
-            appState->screen.lastPopup = appState->screen.currentPopup;
-            appState->screen.currentPopup = POPUP_NONE;
-            
-            if(readSaveFile(appState, appState->userString) == TRUE)
-              appState->screen.currentScreen = SCREEN_GAME;
-          }
+          appState->screen.menuState = STATE_MENU_CONTINUE_SELECT;
+          break;
+
+        case STATE_MENU_CONTINUE_SELECT:
+          appState->screen.menuState = STATE_MENU_CONTINUE;
+
+          if(readSaveFile(appState, appState->userString) == TRUE)
+            appState->screen.currentScreen = SCREEN_GAME;
+          else
+            appState->screen.forceClear = TRUE;
           break;
 
         case STATE_MENU_NEWGAME:
           newGame(appState);
-          break;
-
-        case STATE_MENU_HELP:
-          appState->screen.currentScreen = SCREEN_HELP;
           break;
 
         case STATE_MENU_EXIT:
@@ -100,8 +95,7 @@ void handleUserAction(type_appState * appState){
           case ACTION_LEFT:
           case ACTION_RIGTH:
             handleGameAction(appState);
-            appState->screen.lastPopup = appState->screen.currentPopup;
-            appState->screen.currentPopup = POPUP_NONE;
+            appState->screen.gameState = STATE_GAME_NORMAL;
             break;
 
           case ACTION_GAME_NEW:
@@ -113,30 +107,32 @@ void handleUserAction(type_appState * appState){
             break;
 
           case ACTION_GAME_PRE_SAVE:
-            appState->screen.lastPopup = appState->screen.currentPopup;
-            appState->screen.currentPopup = POPUP_SAVE;
+            appState->screen.gameState = STATE_GAME_SAVE;
             break;
 
           case ACTION_GAME_SAVE:
             writeSaveFile(&appState->gameState, appState->userString);
-            appState->screen.lastPopup = appState->screen.currentPopup;
-            appState->screen.currentPopup = POPUP_NONE;
+            appState->screen.forceClear = TRUE;
+            appState->screen.gameState = STATE_GAME_NORMAL;
             break;
 
           case ACTION_PRE_ESCAPE:
-            appState->screen.lastPopup = appState->screen.currentPopup;
-            appState->screen.currentPopup = POPUP_ESCAPE;
+            appState->screen.gameState = STATE_GAME_ESCAPE;
             break;
 
           case ACTION_ESCAPE:
-            appState->screen.lastPopup = POPUP_NONE;
-            appState->screen.currentPopup = POPUP_NONE;
+            appState->screen.forceClear = TRUE;
+            appState->screen.gameState = STATE_GAME_NORMAL;
             appState->screen.currentScreen = SCREEN_MENU;
             break;
 
+          case ACTION_NO_ESCAPE:
+            appState->screen.forceClear = TRUE;
+            appState->screen.gameState = STATE_GAME_NORMAL;
+            break;
+
           default:
-            appState->screen.lastPopup = appState->screen.currentPopup;
-            appState->screen.currentPopup = POPUP_NONE;
+            appState->screen.gameState = STATE_GAME_NORMAL;
             break;
         }
         break;
@@ -158,17 +154,6 @@ void handleUserAction(type_appState * appState){
             appState->screen.currentScreen = SCREEN_MENU;
             break;
 
-          case ACTION_ESCAPE:
-            appState->screen.currentScreen = SCREEN_MENU;
-            break;
-
-          default:break;
-        }
-        break;
-
-      case SCREEN_HELP:
-        appState->screen.lastScreen = SCREEN_HELP;
-        switch (appState->userAction){
           case ACTION_ESCAPE:
             appState->screen.currentScreen = SCREEN_MENU;
             break;

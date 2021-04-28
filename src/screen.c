@@ -49,8 +49,11 @@ void screen_mainMenu(type_appState currentAppState){
 
   print_menuButton("Continuar", menuXStart + 11, 13, (menuState == STATE_MENU_CONTINUE) ? TRUE : FALSE);
   print_menuButton("Novo Jogo", menuXStart + 11, 15, (menuState == STATE_MENU_NEWGAME) ? TRUE : FALSE);
-  print_menuButton("Ajuda", menuXStart + 11, 17, (menuState == STATE_MENU_HELP) ? TRUE : FALSE);
-  print_menuButton("Sair", menuXStart + 11, 19, (menuState == STATE_MENU_EXIT) ? TRUE : FALSE);
+  print_menuButton("Sair", menuXStart + 11, 17, (menuState == STATE_MENU_EXIT) ? TRUE : FALSE);
+
+  if(currentAppState.screen.menuState == STATE_MENU_CONTINUE_SELECT){
+    print_querryUserString("Save a carregar", 27, 14, LIGHTGRAY, DARKGRAY);
+  }
 }
 
 /*------------------------------------------------------------------------------
@@ -63,6 +66,19 @@ void screen_inGame(type_appState * currentAppState){
 
   print_gameBoardEdges(28, 2);
   print_gameBoard(&currentAppState->gameState, 28, 2);
+
+  switch (currentAppState->screen.gameState){
+    case STATE_GAME_ESCAPE:
+      print_querryUserString(" ", 27, 13, LIGHTRED, LIGHTGRAY);
+      print_querryUserString("Para sair tecle [S]", 27, 14, LIGHTGRAY, LIGHTRED);
+      break;
+
+    case STATE_GAME_SAVE:
+      print_querryUserString("Nome do save", 27, 13, LIGHTRED, DARKGRAY);
+      break;
+    
+    default: break;
+  }
 }
 
 /*------------------------------------------------------------------------------
@@ -100,8 +116,10 @@ void printAppState(type_appState * currentAppState){
 
   //Limpa a tela se a tela mudou
   if(currentAppState->screen.lastScreen != currentAppState->screen.currentScreen ||
-     currentAppState->screen.lastPopup != currentAppState->screen.currentPopup)
+     currentAppState->screen.forceClear == TRUE){
     clrscr();
+    currentAppState->screen.forceClear = FALSE;
+  }
 
   //Mostra a tela correta relativa a currentScreen
   switch (currentAppState->screen.currentScreen){
@@ -118,31 +136,8 @@ void printAppState(type_appState * currentAppState){
       setCursor(CURSOR_VISIBLE);
       break;
 
-    case SCREEN_HELP:
-
-      break;
-
     default:
       currentAppState->screen.currentScreen = SCREEN_MENU;
-      break;
-  }
-
-  switch (currentAppState->screen.currentPopup){
-    case POPUP_SAVE:
-      print_querryUserString("Nome do save", 27, 13, LIGHTRED, DARKGRAY);
-      break;
-
-    case POPUP_ESCAPE:
-      print_querryUserString(" ", 27, 13, LIGHTRED, LIGHTGRAY);
-      print_querryUserString("Para sair tecle [S]", 27, 14, LIGHTGRAY, LIGHTRED);
-      break;
-
-    case POPUP_CONTINUE:
-      print_querryUserString("Save a carregar", 27, 14, LIGHTGRAY, DARKGRAY);
-      break;
-    
-    default:
-      currentAppState->screen.currentPopup = POPUP_NONE;
       break;
   }
 }

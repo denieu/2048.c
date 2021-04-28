@@ -32,7 +32,7 @@
 #define DEFAULT_SCREEN_X_SIZE 75
 #define DEFAULT_SCREEN_Y_SIZE 27
 
-typedef unsigned char bool;
+typedef unsigned char bool; //Variavel Booleana, deve receber TRUE ou FALSE
 
 //Macros
 #define SET_COLOR(BG, TEXT) \
@@ -119,24 +119,22 @@ typedef enum enum_screens {
   SCREEN_MENU = 0,
   SCREEN_GAME,
   SCREEN_ENDGAME,
-  SCREEN_HELP,
 } enum_screens;
 
 typedef enum enum_menuState{
   STATE_MENU_FIRST,
   STATE_MENU_CONTINUE,
   STATE_MENU_NEWGAME,
-  STATE_MENU_HELP,
   STATE_MENU_EXIT,
   STATE_MENU_LAST,
+  STATE_MENU_CONTINUE_SELECT,
 } enum_menuState;
 
-typedef enum enum_popup{
-  POPUP_NONE,
-  POPUP_ESCAPE,
-  POPUP_SAVE,
-  POPUP_CONTINUE,
-} enum_popup;
+typedef enum enum_gameState{
+  STATE_GAME_NORMAL,
+  STATE_GAME_ESCAPE,
+  STATE_GAME_SAVE,
+} enum_gameState;
 
 //Types
 typedef struct type_leaderboard {
@@ -184,9 +182,9 @@ typedef struct type_screenState {
   enum_screens lastScreen;
   enum_screens currentScreen;
   enum_menuState menuState;
+  enum_gameState gameState;
 
-  enum_popup lastPopup;
-  enum_popup currentPopup;
+  bool forceClear;
 } type_screenState;
 
 typedef struct type_appState {
