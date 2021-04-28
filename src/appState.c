@@ -74,7 +74,7 @@ void handleMenuAction(type_appState * appState){
 
         case STATE_MENU_CONTINUE_SELECT:
           if(readSaveFile(appState, appState->userString) == TRUE)
-            changeScreenState(appState, SCREEN_GAME, STATE_MENU_CONTINUE, NO_CHANGE, NO_CHANGE);
+            changeScreenState(appState, SCREEN_GAME, STATE_MENU_CONTINUE, NO_CHANGE, FALSE);
           else
             changeScreenState(appState, NO_CHANGE, NO_CHANGE, NO_CHANGE, TRUE);
           break;
@@ -107,10 +107,12 @@ void handleUserAction(type_appState * appState){
   if(appState->userAction != ACTION_NONE){
     switch (appState->screen.currentScreen){
       case SCREEN_MENU:
+        appState->screen.lastScreen = SCREEN_MENU;
         handleMenuAction(appState);
         break;
 
       case SCREEN_GAME:
+        appState->screen.lastScreen = SCREEN_GAME;
         switch (appState->userAction){
           case ACTION_UP:
           case ACTION_DOWN:
@@ -155,6 +157,7 @@ void handleUserAction(type_appState * appState){
         break;
 
       case SCREEN_ENDGAME:
+        appState->screen.lastScreen = SCREEN_ENDGAME;
         switch (appState->userAction){
            case ACTION_ENTER:
             //Adiciona o novo resultado a struct leaderboard na ultima posição, que não aparece na tela
