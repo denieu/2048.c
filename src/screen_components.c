@@ -269,5 +269,5 @@ void print_querryUserString(const char * placeholder, int posX, int posY, COLORS
   stringCentrilize(string, 23);
   printf("%s", string);
 
-  gotoxy(posX + 7, posY + 1);
+  gotoxy(posX + 1, posY + 1);
 }
