@@ -83,9 +83,9 @@ void handleMenuAction(type_appState * appState){
 
         case STATE_MENU_CONTINUE_SELECT:
           if(readSaveFile(appState, appState->userString) == TRUE)
-            changeScreenState(appState, SCREEN_GAME, STATE_MENU_CONTINUE, NO_CHANGE, FALSE);
+            changeScreenState(appState, SCREEN_GAME, STATE_MENU_CONTINUE, NO_CHANGE, NO_CHANGE);
           else
-            changeScreenState(appState, NO_CHANGE, NO_CHANGE, NO_CHANGE, TRUE);
+            changeScreenState(appState, NO_CHANGE, STATE_MENU_CONTINUE, NO_CHANGE, TRUE);
           break;
 
         case STATE_MENU_NEWGAME:
