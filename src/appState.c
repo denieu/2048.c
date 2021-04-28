@@ -95,8 +95,7 @@ void handleMenuAction(type_appState * appState){
       appState->appStatus = STATUS_OK;
       break;
 
-    default:
-      break;
+    default: break;
   }
 }
 
@@ -177,7 +176,7 @@ void handleUserAction(type_appState * appState){
             changeScreenState(appState, SCREEN_MENU, NO_CHANGE, NO_CHANGE, NO_CHANGE);
             break;
 
-          default:break;
+          default: break;
         }
         break;
 
