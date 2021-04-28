@@ -1,4 +1,30 @@
+/*------------------------------------------------------------------------------
+ * 2048.c
+ *
+ * File: controls.c
+ * Author: Daniel Wojcickoski
+ * Date: 2021/04/28
+ * 
+ * MIT License - Copyright (c) 2021 Daniel Wojcickoski
+ *----------------------------------------------------------------------------*/
 #include "../includes/controls.h"
+
+//Macros
+#define CASE_SELECT(key, action) { \
+  case key: \
+    userAction = action; \
+    break; \
+}
+#define CASE_DEFAULT(action) { \
+  default: \
+    userAction = action; \
+    break; \
+}
+#define GETCH_UPPER() { \
+  keyPressed = getch(); \
+  if(isalpha(keyPressed)) \
+    keyPressed = toupper(keyPressed); \
+}
 
 /*------------------------------------------------------------------------------
  * Captura e retorna a ação realizada pelo usuario
@@ -6,131 +32,66 @@
 void captureUserAction(type_appState * appState){
   enum_userAction userAction = 0;
   int keyPressed = 0;
-  char string[21] = {'\0'};
+  char string[22] = {'\0'};
 
-  //Se for a tela de fim de jogo deve capturar o nome do usuario
-  if(appState->screen.currentScreen == SCREEN_ENDGAME){
-    fgets(string, 10, stdin);
+  //setbuf(stdin, NULL); //Limpa o buffer do teclado, estava causando erro na fgets
+
+  //Momentos onde é necessario capturar uma string ao inves de uma tecla
+  if( (appState->screen.currentScreen == SCREEN_ENDGAME) ||
+      (appState->screen.menuState == STATE_MENU_CONTINUE_SELECT) ||
+      (appState->screen.gameState == STATE_GAME_SAVE) ){
+    fgets(string, MAX_LEADERBOARD_LENGHT + 1, stdin);
     string[strlen(string) - 1] = '\0';
     strcpy(appState->userString, string);
 
-    keyPressed = KEY_ENTER;
+    if(appState->screen.gameState == STATE_GAME_SAVE)
+      userAction = ACTION_GAME_SAVE;
+    else
+      userAction = ACTION_ENTER;
   }
+  else{
+    GETCH_UPPER();
 
-  //Busca a string para salvar o arquivo
-  else if(appState->screen.currentPopup == POPUP_SAVE){
-    fgets(string, 10, stdin);
-    string[strlen(string) - 1] = '\0';
-    strcpy(appState->userString, string);
-
-    userAction = ACTION_GAME_SAVE;
-    keyPressed = 0;
-  }
-
-  //Busca a string para salvar o arquivo
-  else if(appState->screen.currentPopup == POPUP_CONTINUE){
-    fgets(string, 10, stdin);
-    string[strlen(string) - 1] = '\0';
-    strcpy(appState->userString, string);
-
-    userAction = ACTION_ENTER;
-    keyPressed = 0;
-  }
-
-  //Confirma o escape
-  else if(appState->screen.currentPopup == POPUP_ESCAPE){
-    keyPressed = getch();
-
-    if(isalpha(keyPressed))
-      keyPressed = toupper(keyPressed);
-
-    switch (keyPressed){
-      case KEY_S:
-        userAction = ACTION_ESCAPE;
+    //Captura a ação com base na tela atual
+    switch (appState->screen.currentScreen){
+      case SCREEN_MENU:
+        switch (keyPressed){
+          CASE_SELECT(KEY_UP, ACTION_UP);
+          CASE_SELECT(KEY_DOWN, ACTION_DOWN);
+          CASE_SELECT(KEY_ENTER, ACTION_ENTER);
+          CASE_SELECT(KEY_ESCAPE, ACTION_ESCAPE);
+          default: break;
+        }
+        break;
+        
+      case SCREEN_GAME:
+        if(appState->screen.gameState == STATE_GAME_ESCAPE){
+          switch (keyPressed){
+            CASE_SELECT(KEY_S, ACTION_ESCAPE);
+            CASE_DEFAULT(ACTION_NO_ESCAPE);
+          }
+        }
+        else {
+          switch (keyPressed){
+            CASE_SELECT(KEY_UP, ACTION_UP);
+            CASE_SELECT(KEY_LEFT, ACTION_LEFT);
+            CASE_SELECT(KEY_RIGHT, ACTION_RIGTH);
+            CASE_SELECT(KEY_DOWN, ACTION_DOWN);
+            CASE_SELECT(KEY_N, ACTION_GAME_NEW);
+            CASE_SELECT(KEY_S, ACTION_GAME_PRE_SAVE);
+            CASE_SELECT(KEY_U, ACTION_GAME_UNDO);
+            CASE_SELECT(KEY_ESCAPE, ACTION_PRE_ESCAPE);
+            default: break;
+          }
+        }
+        break;
+        
+      case SCREEN_RANKING:
+        userAction = ACTION_ENTER;
         break;
       
-      default:
-        userAction = ACTION_NO_ESCAPE;
-        break;
+      CASE_DEFAULT(ACTION_ESCAPE);
     }
-    
-    keyPressed = 0;
-  }
-
-  //No caso default somente captura a tecla digitada pelo jogador
-  else {
-    keyPressed = getch();
-
-    //Deixa o caracter digitado maiusculo
-    if(isalpha(keyPressed))
-      keyPressed = toupper(keyPressed);
-  }
-  
-  //Captura a ação com base na tela atual
-  switch (appState->screen.currentScreen){
-    case SCREEN_MENU:
-      if(keyPressed == KEY_UP){
-        userAction = ACTION_UP;
-      }
-      else if(keyPressed == KEY_DOWN){
-        userAction = ACTION_DOWN;
-      }
-      else if(keyPressed == KEY_ENTER){
-        userAction = ACTION_ENTER;
-      }
-      else if(keyPressed == KEY_ESCAPE){
-        userAction = ACTION_ESCAPE;
-      }
-      break;
-      
-    case SCREEN_GAME:
-      if(keyPressed == KEY_UP){
-        userAction = ACTION_UP;
-      }
-      else if(keyPressed == KEY_LEFT){
-        userAction = ACTION_LEFT;
-      }
-      else if(keyPressed == KEY_RIGHT){
-        userAction = ACTION_RIGTH;
-      }
-      else if(keyPressed == KEY_DOWN){
-        userAction = ACTION_DOWN;
-      }
-      else if(keyPressed == KEY_N){
-        userAction = ACTION_GAME_NEW;
-      }
-      else if(keyPressed == KEY_S){
-        userAction = ACTION_GAME_PRE_SAVE;
-      }
-      else if(keyPressed == KEY_U){
-        userAction = ACTION_GAME_UNDO;
-      }
-      else if(keyPressed == KEY_ESCAPE){
-        userAction = ACTION_PRE_ESCAPE;
-      }
-      break;
-
-    case SCREEN_ENDGAME:
-      if(keyPressed == KEY_ENTER){
-        userAction = ACTION_ENTER;
-      }
-      else if(keyPressed == KEY_ESCAPE){
-        userAction = ACTION_ESCAPE;
-      }
-      break;
-
-    case SCREEN_HELP:
-      if(keyPressed == KEY_ENTER){
-        userAction = ACTION_ESCAPE;
-      }
-      else if(keyPressed == KEY_ESCAPE){
-        userAction = ACTION_ESCAPE;
-      }
-      break;
-    
-    default:
-      userAction = ACTION_ESCAPE;
-      break;
   }
 
   appState->userAction = userAction;

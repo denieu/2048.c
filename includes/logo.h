@@ -1,3 +1,12 @@
+/*------------------------------------------------------------------------------
+ * 2048.c
+ *
+ * File: logo.h
+ * Author: Daniel Wojcickoski
+ * Date: 2021/04/28
+ * 
+ * MIT License - Copyright (c) 2021 Daniel Wojcickoski
+ *----------------------------------------------------------------------------*/
 #ifndef  LOGO_H
 #define  LOGO_H
 
