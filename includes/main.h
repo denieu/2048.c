@@ -13,6 +13,7 @@
 //Constants
 #define FALSE 0
 #define TRUE  1
+#define NO_CHANGE -2
 
 //Screen constants
 #define DEFAULT_BG_COLOR BLACK

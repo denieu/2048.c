@@ -4,6 +4,32 @@
 #include "../includes/save.h"
 
 /*------------------------------------------------------------------------------
+ * Atualiza as variaveis relativas a tela
+ *----------------------------------------------------------------------------*/
+void changeScreenState(type_appState * appState, int screen, int menuState, int gameState, int forceClear){
+  //Atualiza variaveis de tela
+  if(screen != NO_CHANGE){
+    appState->screen.lastScreen = appState->screen.currentScreen;
+    appState->screen.currentScreen = screen;
+  }
+
+  //Atualiza menuState
+  if(menuState != NO_CHANGE){
+    appState->screen.menuState = menuState;
+  }
+
+  //Atualiza menuState
+  if(gameState != NO_CHANGE){
+    appState->screen.gameState = gameState;
+  }
+
+  //Atualiza menuState
+  if(forceClear != NO_CHANGE){
+    appState->screen.forceClear = forceClear;
+  }
+}
+
+/*------------------------------------------------------------------------------
  * Retorna o appState default
  *----------------------------------------------------------------------------*/
 type_appState getDefaultAppState(){
@@ -43,16 +69,14 @@ void handleMenuAction(type_appState * appState){
     case ACTION_ENTER:
       switch (appState->screen.menuState){
         case STATE_MENU_CONTINUE:
-          appState->screen.menuState = STATE_MENU_CONTINUE_SELECT;
+          changeScreenState(appState, NO_CHANGE, STATE_MENU_CONTINUE_SELECT, NO_CHANGE, NO_CHANGE);
           break;
 
         case STATE_MENU_CONTINUE_SELECT:
-          appState->screen.menuState = STATE_MENU_CONTINUE;
-
           if(readSaveFile(appState, appState->userString) == TRUE)
-            appState->screen.currentScreen = SCREEN_GAME;
+            changeScreenState(appState, SCREEN_GAME, STATE_MENU_CONTINUE, NO_CHANGE, NO_CHANGE);
           else
-            appState->screen.forceClear = TRUE;
+            changeScreenState(appState, NO_CHANGE, NO_CHANGE, NO_CHANGE, TRUE);
           break;
 
         case STATE_MENU_NEWGAME:
@@ -83,19 +107,16 @@ void handleUserAction(type_appState * appState){
   if(appState->userAction != ACTION_NONE){
     switch (appState->screen.currentScreen){
       case SCREEN_MENU:
-        appState->screen.lastScreen = SCREEN_MENU;
         handleMenuAction(appState);
         break;
 
       case SCREEN_GAME:
-        appState->screen.lastScreen = SCREEN_GAME;
         switch (appState->userAction){
           case ACTION_UP:
           case ACTION_DOWN:
           case ACTION_LEFT:
           case ACTION_RIGTH:
             handleGameAction(appState);
-            appState->screen.gameState = STATE_GAME_NORMAL;
             break;
 
           case ACTION_GAME_NEW:
@@ -107,38 +128,33 @@ void handleUserAction(type_appState * appState){
             break;
 
           case ACTION_GAME_PRE_SAVE:
-            appState->screen.gameState = STATE_GAME_SAVE;
+            changeScreenState(appState, NO_CHANGE, NO_CHANGE, STATE_GAME_SAVE, NO_CHANGE);
             break;
 
           case ACTION_GAME_SAVE:
             writeSaveFile(&appState->gameState, appState->userString);
-            appState->screen.forceClear = TRUE;
-            appState->screen.gameState = STATE_GAME_NORMAL;
+            changeScreenState(appState, NO_CHANGE, NO_CHANGE, STATE_GAME_NORMAL, TRUE);
             break;
 
           case ACTION_PRE_ESCAPE:
-            appState->screen.gameState = STATE_GAME_ESCAPE;
+            changeScreenState(appState, NO_CHANGE, NO_CHANGE, STATE_GAME_ESCAPE, NO_CHANGE);
             break;
 
           case ACTION_ESCAPE:
-            appState->screen.forceClear = TRUE;
-            appState->screen.gameState = STATE_GAME_NORMAL;
-            appState->screen.currentScreen = SCREEN_MENU;
+            changeScreenState(appState, SCREEN_MENU, NO_CHANGE, STATE_GAME_NORMAL, TRUE);
             break;
 
           case ACTION_NO_ESCAPE:
-            appState->screen.forceClear = TRUE;
-            appState->screen.gameState = STATE_GAME_NORMAL;
+            changeScreenState(appState, NO_CHANGE, NO_CHANGE, STATE_GAME_NORMAL, TRUE);
             break;
 
           default:
-            appState->screen.gameState = STATE_GAME_NORMAL;
+            changeScreenState(appState, SCREEN_GAME, NO_CHANGE, STATE_GAME_NORMAL, TRUE);
             break;
         }
         break;
 
       case SCREEN_ENDGAME:
-        appState->screen.lastScreen = SCREEN_ENDGAME;
         switch (appState->userAction){
            case ACTION_ENTER:
             //Adiciona o novo resultado a struct leaderboard na ultima posição, que não aparece na tela
@@ -151,11 +167,11 @@ void handleUserAction(type_appState * appState){
             //Salva a struct em arquivo
             writeLeaderboardFile(&appState->leaderboard);
 
-            appState->screen.currentScreen = SCREEN_MENU;
+            changeScreenState(appState, SCREEN_MENU, NO_CHANGE, NO_CHANGE, NO_CHANGE);
             break;
 
           case ACTION_ESCAPE:
-            appState->screen.currentScreen = SCREEN_MENU;
+            changeScreenState(appState, SCREEN_MENU, NO_CHANGE, NO_CHANGE, NO_CHANGE);
             break;
 
           default:break;
@@ -163,7 +179,7 @@ void handleUserAction(type_appState * appState){
         break;
 
       default:
-        appState->screen.currentScreen = SCREEN_MENU;
+        changeScreenState(appState, SCREEN_MENU, NO_CHANGE, NO_CHANGE, NO_CHANGE);
         break;
     }
   }
