@@ -145,6 +145,10 @@ void printAppState(type_appState * currentAppState){
       setCursor(CURSOR_VISIBLE);
       break;
 
+    case SCREEN_RANKING:
+      print_inGameRanking(&currentAppState->leaderboard, 27, 8);
+      break;
+
     default:
       currentAppState->screen.currentScreen = SCREEN_MENU;
       break;

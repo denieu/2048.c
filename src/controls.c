@@ -85,6 +85,10 @@ void captureUserAction(type_appState * appState){
           }
         }
         break;
+        
+      case SCREEN_RANKING:
+        userAction = ACTION_ENTER;
+        break;
       
       CASE_DEFAULT(ACTION_ESCAPE);
     }

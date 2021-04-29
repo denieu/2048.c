@@ -178,10 +178,20 @@ void handleUserAction(type_appState * appState){
             //Salva a struct em arquivo
             writeLeaderboardFile(&appState->leaderboard);
 
-            changeScreenState(appState, SCREEN_MENU, NO_CHANGE, NO_CHANGE, NO_CHANGE);
+            changeScreenState(appState, SCREEN_RANKING, NO_CHANGE, NO_CHANGE, NO_CHANGE);
             break;
 
           case ACTION_ESCAPE:
+            changeScreenState(appState, SCREEN_MENU, NO_CHANGE, NO_CHANGE, NO_CHANGE);
+            break;
+
+          default: break;
+        }
+        break;
+
+      case SCREEN_RANKING:
+        switch (appState->userAction){
+           case ACTION_ENTER:
             changeScreenState(appState, SCREEN_MENU, NO_CHANGE, NO_CHANGE, NO_CHANGE);
             break;
 

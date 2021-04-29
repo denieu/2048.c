@@ -131,6 +131,7 @@ typedef enum enum_screens {
   SCREEN_MENU = 0,
   SCREEN_GAME,
   SCREEN_ENDGAME,
+  SCREEN_RANKING,
 } enum_screens;
 
 typedef enum enum_menuState{
