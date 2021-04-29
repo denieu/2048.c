@@ -4,7 +4,7 @@
  * File: appState.c
  * Author: Daniel Wojcickoski
  * Date: 2021/04/28
- * 
+ *
  * MIT License - Copyright (c) 2021 Daniel Wojcickoski
  *----------------------------------------------------------------------------*/
 #include "../includes/appState.h"
@@ -169,8 +169,8 @@ void handleUserAction(type_appState * appState){
         switch (appState->userAction){
            case ACTION_ENTER:
             //Adiciona o novo resultado a struct leaderboard na ultima posição, que não aparece na tela
-            strcpy(appState->leaderboard.name[11], appState->userString);
-            appState->leaderboard.points[11] = appState->gameState.score;
+            strcpy(appState->leaderboard.name[10], appState->userString);
+            appState->leaderboard.points[10] = appState->gameState.score;
 
             //Organiza a struct em ordem decrescente
             bubbleSortLeaderboard(&appState->leaderboard);

@@ -18,13 +18,20 @@ void stringCentrilize(char * string, int maxSize){
   char posSpaces[100] = {'\0'};
   char newString[100] = {'\0'};
 
-  for(int count = 0; count < (maxSize - stringSize) / 2; count++){
+  int qtdPreSpaces = (maxSize - stringSize) / 2;
+  int qtdPosSpaces = (maxSize - stringSize - qtdPreSpaces);
+
+  for(int count = 0; count < qtdPreSpaces ; count++){
     preSpaces[count] = ' ';
   }
-  for(int count = 0; count < (maxSize - stringSize - strlen(preSpaces)); count++){
+  for(int count = 0; count < qtdPosSpaces; count++){
     posSpaces[count] = ' ';
   }
-  sprintf(newString, "%s%s%s", preSpaces, string, posSpaces);
+
+  strcat(newString, preSpaces);
+  strcat(newString, string);
+  strcat(newString, posSpaces);
+
   strcpy(string, newString);
 }
 
@@ -32,16 +39,28 @@ void stringCentrilize(char * string, int maxSize){
  * Printa duas strings centralizadas em duas colunas
  *----------------------------------------------------------------------------*/
 void printTwoCollumns(char * left, char * right, int leftSize, int rightSize){
-  char leftString[12] = {'\0'};
-  char rightString[12] = {'\0'};
+  char leftString[100] = {'\0'};
+  char rightString[100] = {'\0'};
+  char auxString[100] = {'\0'};
 
+  char preSpaces[100] = {'\0'};
+  char posSpaces[100] = {'\0'};
+  int qtdPreSpaces = leftSize - strlen(left);
+  int qtdPosSpaces = rightSize  - strlen(right);
+
+  for(int count = 0; count < qtdPreSpaces ; count++){
+    preSpaces[count] = ' ';
+  }
+  for(int count = 0; count < qtdPosSpaces; count++){
+    posSpaces[count] = ' ';
+  }
+  
   strcpy(leftString, left);
   strcpy(rightString, right);
 
-  stringCentrilize(leftString, leftSize);
-  stringCentrilize(rightString, rightSize);
+  sprintf(auxString, "%s%s %s%s", preSpaces, leftString, rightString, posSpaces);
 
-  printf("%s %s", leftString, rightString);
+  printf("%s", auxString);
 }
 
 /*------------------------------------------------------------------------------
@@ -135,8 +154,11 @@ void print_inGameRanking(type_leaderboard * leaderboard, int posX, int posY){
   gotoxy(posX, posY);
   printf("        Ranking        ");
 
+  gotoxy(posX, posY + 11);
+  printf("                       ");
+
   SET_COLOR(DARKGRAY, WHITE);
-  for(int count = 0;count<11; count++){
+  for(int count = 0;count<10; count++){
     gotoxy(posX, posY+count+1);
 
     if(leaderboard->points[count] != 0)
@@ -145,7 +167,7 @@ void print_inGameRanking(type_leaderboard * leaderboard, int posX, int posY){
       sprintf(number, " ");
     strcpy(name, leaderboard->name[count]);
 
-    printTwoCollumns(number, name, 11, 11);
+    printTwoCollumns(number, name, 7, 15);
   }
 
   SET_COLOR(DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);

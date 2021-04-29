@@ -42,6 +42,8 @@
 #define DEFAULT_SCREEN_X_SIZE 75
 #define DEFAULT_SCREEN_Y_SIZE 27
 
+#define MAX_LEADERBOARD_LENGHT 15
+
 typedef unsigned char bool; //Variavel Booleana, deve receber TRUE ou FALSE
 
 //Macros
@@ -148,8 +150,8 @@ typedef enum enum_gameState{
 
 //Types
 typedef struct type_leaderboard {
-  char name[12][11];
-  int points[12];
+  int points[11];
+  char name[11][MAX_LEADERBOARD_LENGHT];
 } type_leaderboard;
 
 typedef struct type_gameCard {

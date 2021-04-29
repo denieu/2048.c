@@ -32,15 +32,15 @@
 void captureUserAction(type_appState * appState){
   enum_userAction userAction = 0;
   int keyPressed = 0;
-  char string[21] = {'\0'};
+  char string[22] = {'\0'};
 
-  setbuf(stdin, NULL); //Limpa o buffer do teclado, estava causando erro na fgets
+  //setbuf(stdin, NULL); //Limpa o buffer do teclado, estava causando erro na fgets
 
   //Momentos onde é necessario capturar uma string ao inves de uma tecla
   if( (appState->screen.currentScreen == SCREEN_ENDGAME) ||
       (appState->screen.menuState == STATE_MENU_CONTINUE_SELECT) ||
       (appState->screen.gameState == STATE_GAME_SAVE) ){
-    fgets(string, 10, stdin);
+    fgets(string, MAX_LEADERBOARD_LENGHT + 1, stdin);
     string[strlen(string) - 1] = '\0';
     strcpy(appState->userString, string);
 
