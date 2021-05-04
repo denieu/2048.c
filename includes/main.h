@@ -151,8 +151,8 @@ typedef enum enum_gameState{
 
 //Types
 typedef struct type_leaderboard {
-  int points[11];
-  char name[11][MAX_LEADERBOARD_LENGHT];
+  int points[11];                         //Salva a pontuação de cada usuario
+  char name[11][MAX_LEADERBOARD_LENGHT];  //Salva o nome de cada usuario
 } type_leaderboard;
 
 typedef struct type_gameCard {
@@ -162,22 +162,21 @@ typedef struct type_gameCard {
 } type_gameCard;
 
 typedef struct type_gameState {
-  enum_gameStatus gameStatus;
+  enum_gameStatus gameStatus;         //Salva o estado do jogo atual(run, win, lose)
 
-  int auxScore;
-  int lastScore;
-  int score;
+  int auxScore;                       //Salva o valor auxiliar de score
+  int lastScore;                      //Salva o valor do ultimo score
+  int score;                          //Salva o valor do score atual
 
-  int auxMoves;
-  int lastMoves;
-  int moves;
+  int auxMoves;                       //Salva o valor auxiliar de movimentos
+  int lastMoves;                      //Salva o ultimo valor dos movimentos
+  int moves;                          //Salva o numero de movimentos atual
 
-  type_gameCard gameCards[11];
-  type_gameCard * auxGameBoard[4][4];
-  type_gameCard * lastGameBoard[4][4];
-  type_gameCard * gameBoard[4][4];
+  type_gameCard gameCards[11];        //Salva todas as 11 "cartas" do jogo 2 a 2048
+  type_gameCard * auxGameBoard[4][4]; //Salva a carta auxiliar de cada casa do tabuleiro
+  type_gameCard * lastGameBoard[4][4];//Salva a carta de cada casa na ultima jogada
+  type_gameCard * gameBoard[4][4];    //Salva qual carta esta em cada casa atualmente
 } type_gameState;
-
 
 typedef struct type_gameSave {
   enum_gameStatus gameStatus;
@@ -192,21 +191,21 @@ typedef struct type_gameSave {
 } type_gameSave;
 
 typedef struct type_screenState {
-  enum_screens lastScreen;
-  enum_screens currentScreen;
-  enum_menuState menuState;
-  enum_gameState gameState;
+  enum_screens lastScreen;    //Salva qual a ultima tela mostrada
+  enum_screens currentScreen; //Salva qual tela deve ser mostrada atualmente
+  enum_menuState menuState;   //Salva em qual item deve ser mostrado o seletor do menu
+  enum_gameState gameState;   //Salva qual confirmação deve se mostrada dentro de jogo
 
-  bool forceClear;
+  bool forceClear;            //Flag que força a tela a ser limpa, caso TRUE
 } type_screenState;
 
 typedef struct type_appState {
-  enum_appStatus appStatus;
-  enum_userAction userAction;
-  char userString[22];
-  type_leaderboard leaderboard;
-  type_gameState gameState;
-  type_screenState screen;
+  enum_appStatus appStatus;     //Salva o estado atual da aplicação(run, exitOk, exitError)
+  enum_userAction userAction;   //Salva a ação efetuada pelo usuario
+  char userString[22];          //Salva a string digitada pelo usuario
+  type_leaderboard leaderboard; //Salva os dados do ranking de jogadores
+  type_gameState gameState;     //Salva o estado do jogo atual
+  type_screenState screen;      //Salva o estado atual da tela
 } type_appState;
 
 #endif  /*MAIN_H*/
