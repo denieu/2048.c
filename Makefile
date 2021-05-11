@@ -1,63 +1,87 @@
-#Compilador
-COMPILADOR=gcc
-#Compilador
-COMPILADOR_RC=windres
-#Nome do seu executavel
-NOME_EXECUTAVEL=2048c
-#Diretorio dos arquivos binarios
+#------------------------------------------------------------------------------#
+# project-pattern.c
+#
+# Author: Daniel Wojcickoski
+# Date: 2021/05/23
+# Url: https://github.com/denieu/project-pattern.c
+#
+# MIT License - Copyright (c) 2021 Daniel Wojcickoski
+#------------------------------------------------------------------------------#
+
+#Compiler
+COMPILER=gcc
+#Resource compiler
+RC_COMPILER=windres
+#Executable name
+FILENAME=2048C
+#Directory of binary files
 BIN=./bin
-#Diretorio dos arquivos .h e .hpp
+#Directory of .h files
 INCLUDE=./includes
-#Diretorio dos arquivos-objetos
+#Directory of object files
 OBJ=./obj
-#Diretorio dos arquivos .c e .cpp
+#Directory of .c files
 SRC=./src
-#Diretorio dos arquivos de bibliotecas
+#Directory of lib files
 LIB=./libs
-#Diretorio dos recursos
+#Directory of .rc files
 RC=./resources
-#Libs a linkas ao projeto
-LIBFLAGS=-lconio
 
-#Flags compilador RC
-FLAGS_RC=-O coff -o
-#Para otimizar e mostrar mais avisos
+#Compiler flags
 FLAGS= -g -Wall
-#Para encontrar as bibliotecas utilizadas(em "-lm", apenas um exemplo, caso seu compilador nao faca isso por voce)
-LIBS= -lm -L$(LIB) $(LIBFLAGS)
+#RC compiler flags
+RC_FLAGS=-O coff -o
+#Project libs
+LIB_FLAGS=-lconio
+#Libs to link with the compiler
+LIBS= -lm -L$(LIB) $(LIB_FLAGS)
 
-#Pega todos arquivos .c e muda os nomes para .o
-#Fontes .c
-FONTES=$(wildcard $(SRC)/*.c)
-#Retirar prefixo e sufixo
-OBJLIMPAR=$(notdir $(basename $(FONTES)))
-#Adicionar novo prefixo e sufixo
-OBJETOS=$(addprefix $(OBJ)/, $(addsuffix .o, $(OBJLIMPAR)))
+#Change .c files to .o files
+#Files .c
+C_SRC=$(wildcard $(SRC)/*.c)
+#Remove prefix and suffix
+OBJ_CLEAN=$(notdir $(basename $(C_SRC)))
+#Add new prefix and suffix
+OBJ_FILES=$(addprefix $(OBJ)/, $(addsuffix .o, $(OBJ_CLEAN)))
 
+#Change .rc files to .res files
+#Files .rc
+RC_SRC=$(wildcard $(RC)/*.rc)
+#Remove prefix and suffix
+RC_CLEAN=$(notdir $(basename $(RC_SRC)))
+#Add new prefix and suffix
+RES_FILES=$(addprefix $(OBJ)/, $(addsuffix .res, $(RC_CLEAN)))
+
+#Commands
 .PHONY: all clean
 
-all: compilar_rc compilar $(NOME_EXECUTAVEL)
+#Make .res .o and final binary
+all: compile rc_compile $(FILENAME)
 
-#Compilar e criar os arquivos-recurso
-compilar_rc:
-	$(COMPILADOR_RC) $(RC)/resource.rc $(FLAGS_RC) $(OBJ)/resource.res
-#Arquivos .o do projeto
-compilar: $(OBJETOS)
+#Make .o files
+compile: $(OBJ_FILES)
 
-#Compilar e criar os arquivos-objetos
+#Make .res files
+rc_compile: $(RES_FILES)
+
+#Make .o file macro
 $(OBJ)/%.o: $(SRC)/%.c $(INCLUDE)/%.h
-	$(COMPILADOR) $(FLAGS) -c $< -I $(INCLUDE) -o $@
+	$(COMPILER) $(FLAGS) -c $< -I $(INCLUDE) -o $@
 
-#Linkar e criar o executavel
-$(NOME_EXECUTAVEL): $(OBJETOS)
-	$(COMPILADOR) $(FLAGS) $(OBJ)/resource.res $(OBJETOS) $(LIBS) -o $(BIN)/$@
+#Make .res file macro
+$(OBJ)/%.res: $(RC)/%.rc
+	$(RC_COMPILER) $< $(RC_FLAGS) $@
 
-#Executar programa
+#Make final binary macro
+$(FILENAME): $(OBJ_FILES) $(RES_FILES)
+	$(COMPILER) $(FLAGS) $(RES_FILES) $(OBJ_FILES) $(LIBS) -o $(BIN)/$@
+
+#Run program
 run:
-	$(BIN)/$(NOME_EXECUTAVEL)
+	$(BIN)/$(FILENAME)
 
-#Limpar executavel
+#Clean executable and objects
 clean:
 	rm -f $(OBJ)/*.o
 	rm -f $(OBJ)/*.res
-	rm -f $(BIN)/$(NOME_EXECUTAVEL)
+	rm -f $(BIN)/$(FILENAME)

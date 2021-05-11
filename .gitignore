@@ -4,3 +4,4 @@ bin/*
 2048c.layout
 2048c.depend
 leaderboard.txt
+!.gitkeep
