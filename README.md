@@ -9,3 +9,16 @@
         The game was developed in C for Windows using the Conio2 library.
     </h4>
 </div>
+
+## Installation
+Make sure you already have build essentials installed.
+```bash
+    $ https://github.com/danielwojcickoski/2048.c.git
+    $ cd ./2048.c
+    $ make
+```
+Windows
+```bash
+    $ cd ./bin
+    $ 2048c.exe
+```
