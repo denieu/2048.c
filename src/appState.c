@@ -129,7 +129,12 @@ void handleUserAction(type_appState * appState){
             handleGameAction(appState);
             break;
 
+          case ACTION_GAME_PRE_NEW:
+            changeScreenState(appState, NO_CHANGE, NO_CHANGE, STATE_GAME_NEW, NO_CHANGE);
+            break;
+
           case ACTION_GAME_NEW:
+            changeScreenState(appState, NO_CHANGE, NO_CHANGE, STATE_GAME_NORMAL, TRUE);
             newGame(appState);
             break;
 

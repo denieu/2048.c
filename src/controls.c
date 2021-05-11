@@ -71,13 +71,19 @@ void captureUserAction(type_appState * appState){
             CASE_DEFAULT(ACTION_NO_ESCAPE);
           }
         }
+        else if(appState->screen.gameState == STATE_GAME_NEW){
+          switch (keyPressed){
+            CASE_SELECT(KEY_S, ACTION_GAME_NEW);
+            CASE_DEFAULT(ACTION_NO_ESCAPE);
+          }
+        }
         else {
           switch (keyPressed){
             CASE_SELECT(KEY_UP, ACTION_UP);
             CASE_SELECT(KEY_LEFT, ACTION_LEFT);
             CASE_SELECT(KEY_RIGHT, ACTION_RIGTH);
             CASE_SELECT(KEY_DOWN, ACTION_DOWN);
-            CASE_SELECT(KEY_N, ACTION_GAME_NEW);
+            CASE_SELECT(KEY_N, ACTION_GAME_PRE_NEW);
             CASE_SELECT(KEY_S, ACTION_GAME_PRE_SAVE);
             CASE_SELECT(KEY_U, ACTION_GAME_UNDO);
             CASE_SELECT(KEY_ESCAPE, ACTION_PRE_ESCAPE);

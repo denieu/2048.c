@@ -87,6 +87,7 @@ typedef enum enum_userAction {
   ACTION_ESCAPE,
 
   ACTION_GAME_CONTINUE,
+  ACTION_GAME_PRE_NEW,
   ACTION_GAME_NEW,
 
   ACTION_GAME_UNDO,
@@ -146,6 +147,7 @@ typedef enum enum_menuState{
 typedef enum enum_gameState{
   STATE_GAME_NORMAL,
   STATE_GAME_ESCAPE,
+  STATE_GAME_NEW,
   STATE_GAME_SAVE,
 } enum_gameState;
 
