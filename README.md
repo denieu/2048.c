@@ -22,3 +22,14 @@ Windows
     $ cd ./bin
     $ 2048c.exe
 ```
+
+## Screenshots
+### Menu
+<p align="center">
+  <img src="img/1_menu.png" alt="Menu Screenshot"/>
+</p>
+
+### Game
+<p align="center">
+  <img src="img/2_game.png"  alt="Game Screenshot"/>
+</p>
