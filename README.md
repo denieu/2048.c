@@ -13,7 +13,7 @@
 ## Compiling and Running
 Make sure you already have build essentials installed.
 ```bash
-    $ got clone https://github.com/danielwojcickoski/2048.c.git
+    $ git clone https://github.com/danielwojcickoski/2048.c.git
     $ cd ./2048.c
     $ make
 ```
