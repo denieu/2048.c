@@ -10,7 +10,7 @@
     </h4>
 </div>
 
-## Installation
+## Compiling and Running
 Make sure you already have build essentials installed.
 ```bash
     $ https://github.com/danielwojcickoski/2048.c.git
