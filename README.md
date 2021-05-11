@@ -13,14 +13,14 @@
 ## Compiling and Running
 Make sure you already have build essentials installed.
 ```bash
-    $ git clone https://github.com/danielwojcickoski/2048.c.git
-    $ cd ./2048.c
-    $ make
+    git clone https://github.com/danielwojcickoski/2048.c.git
+    cd ./2048.c
+    make
 ```
 Windows
 ```bash
-    $ cd ./bin
-    $ 2048c.exe
+    cd ./bin
+    2048c.exe
 ```
 
 ## Screenshots
