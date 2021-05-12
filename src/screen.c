@@ -23,8 +23,7 @@ void setCursor(enum_cursorState cursorState){
 }
 
 /*------------------------------------------------------------------------------
- * Ajusta a tela para o tamanho correto
- * para impedir o usuario de redimensionar para um tamanho incorreto
+ * Ajusta o buffer do terminal para o tamanho sizeX sizeY
  *----------------------------------------------------------------------------*/
 void configScreenSize(int sizeX, int sizeY){
   HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -79,7 +78,12 @@ void screen_inGame(type_appState * currentAppState){
   switch (currentAppState->screen.gameState){
     case STATE_GAME_ESCAPE:
       print_querryUserString(" ", 27, 13, LIGHTRED, LIGHTGRAY);
-      print_querryUserString("Para sair tecle [S]", 27, 14, LIGHTGRAY, LIGHTRED);
+      print_querryUserString("Sair [S]", 27, 14, LIGHTGRAY, LIGHTRED);
+      break;
+
+    case STATE_GAME_NEW:
+      print_querryUserString(" ", 27, 13, LIGHTRED, LIGHTGRAY);
+      print_querryUserString("Novo Jogo [S]", 27, 14, LIGHTGRAY, LIGHTRED);
       break;
 
     case STATE_GAME_SAVE:
@@ -114,16 +118,16 @@ void printAppState(type_appState * currentAppState){
   //Seta o titulo do terminal
   SetConsoleTitleW(DEFAULT_SCREEN_TITLE);
 
-  //Isso faz a tela ficar correta após a inicialização do app
+  //Isso faz o terminal ficar correta após a inicialização do app
   if(currentAppState->screen.lastScreen == SCREEN_NONE){
     configScreenSize(DEFAULT_SCREEN_X_SIZE, DEFAULT_SCREEN_Y_SIZE);
     clrscr();
   }
 
-  //Ajusta o tamanho da tela
+  //Ajusta o tamanho do buffer do terminal
   configScreenSize(DEFAULT_SCREEN_X_SIZE, DEFAULT_SCREEN_Y_SIZE);
 
-  //Limpa a tela se a tela mudou
+  //Limpa a tela se a tela mudou ou caso a flag esteja ativa
   if(currentAppState->screen.lastScreen != currentAppState->screen.currentScreen ||
      currentAppState->screen.forceClear == TRUE){
     clrscr();
