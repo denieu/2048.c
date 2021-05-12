@@ -22,6 +22,10 @@ Windows
     cd ./bin
     2048c.exe
 ```
+or
+```bash
+    make run
+```
 
 ## Screenshots
 ### Menu
