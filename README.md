@@ -21,9 +21,8 @@ Windows
 ```bash
     cd ./bin
     2048c.exe
-```
-or
-```bash
+    
+    #Or
     make run
 ```
 
