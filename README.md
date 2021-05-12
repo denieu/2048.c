@@ -10,19 +10,16 @@
     </h4>
 </div>
 
-## Compiling and Running
+## Compiling
 Make sure you already have build essentials installed.
 ```bash
     git clone https://github.com/danielwojcickoski/2048.c.git
     cd ./2048.c
     make
 ```
-Windows
+
+## Running
 ```bash
-    cd ./bin
-    2048c.exe
-    
-    #Or
     make run
 ```
 
