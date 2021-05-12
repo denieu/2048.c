@@ -23,11 +23,6 @@ Make sure you already have build essentials installed.
 ```bash
     make run
 ```
-Without Make
-```bash
-    cd ./2048.c/bin
-    ./2048c.exe
-```
 
 ## Screenshots
 ### Menu
