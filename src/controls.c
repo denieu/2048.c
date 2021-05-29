@@ -9,13 +9,15 @@
  *----------------------------------------------------------------------------*/
 #include "../includes/controls.h"
 
-//Macros
-#define CASE_SELECT(key, action) { \
+/*------------------------------------------------------------------------------
+ * Macros
+ *----------------------------------------------------------------------------*/
+#define CASE_USER_ACTION(key, action) { \
   case key: \
     userAction = action; \
     break; \
 }
-#define CASE_DEFAULT(action) { \
+#define CASE_USER_ACTION_DEFAULT(action) { \
   default: \
     userAction = action; \
     break; \
@@ -27,16 +29,13 @@
 }
 
 /*------------------------------------------------------------------------------
- * Captura e retorna a ação realizada pelo usuario
+ * Capture and return the action taken by the user
  *----------------------------------------------------------------------------*/
-void captureUserAction(type_appState * appState){
-  enum_userAction userAction = 0;
+void captureUserAction(appState_t * appState){
+  userAction_e userAction = 0;
   int keyPressed = 0;
   char string[22] = {'\0'};
 
-  //setbuf(stdin, NULL); //Limpa o buffer do teclado, estava causando erro na fgets
-
-  //Momentos onde é necessario capturar uma string ao inves de uma tecla
   if( (appState->screen.currentScreen == SCREEN_ENDGAME) ||
       (appState->screen.menuState == STATE_MENU_CONTINUE_SELECT) ||
       (appState->screen.gameState == STATE_GAME_SAVE) ){
@@ -52,14 +51,13 @@ void captureUserAction(type_appState * appState){
   else{
     GETCH_UPPER();
 
-    //Captura a ação com base na tela atual
     switch (appState->screen.currentScreen){
       case SCREEN_MENU:
         switch (keyPressed){
-          CASE_SELECT(KEY_UP, ACTION_UP);
-          CASE_SELECT(KEY_DOWN, ACTION_DOWN);
-          CASE_SELECT(KEY_ENTER, ACTION_ENTER);
-          CASE_SELECT(KEY_ESCAPE, ACTION_ESCAPE);
+          CASE_USER_ACTION(KEY_UP, ACTION_UP);
+          CASE_USER_ACTION(KEY_DOWN, ACTION_DOWN);
+          CASE_USER_ACTION(KEY_ENTER, ACTION_ENTER);
+          CASE_USER_ACTION(KEY_ESCAPE, ACTION_ESCAPE);
           default: break;
         }
         break;
@@ -67,26 +65,26 @@ void captureUserAction(type_appState * appState){
       case SCREEN_GAME:
         if(appState->screen.gameState == STATE_GAME_ESCAPE){
           switch (keyPressed){
-            CASE_SELECT(KEY_S, ACTION_ESCAPE);
-            CASE_DEFAULT(ACTION_NO_ESCAPE);
+            CASE_USER_ACTION(KEY_S, ACTION_ESCAPE);
+            CASE_USER_ACTION_DEFAULT(ACTION_NO_ESCAPE);
           }
         }
         else if(appState->screen.gameState == STATE_GAME_NEW){
           switch (keyPressed){
-            CASE_SELECT(KEY_S, ACTION_GAME_NEW);
-            CASE_DEFAULT(ACTION_NO_ESCAPE);
+            CASE_USER_ACTION(KEY_S, ACTION_GAME_NEW);
+            CASE_USER_ACTION_DEFAULT(ACTION_NO_ESCAPE);
           }
         }
         else {
           switch (keyPressed){
-            CASE_SELECT(KEY_UP, ACTION_UP);
-            CASE_SELECT(KEY_LEFT, ACTION_LEFT);
-            CASE_SELECT(KEY_RIGHT, ACTION_RIGTH);
-            CASE_SELECT(KEY_DOWN, ACTION_DOWN);
-            CASE_SELECT(KEY_N, ACTION_GAME_PRE_NEW);
-            CASE_SELECT(KEY_S, ACTION_GAME_PRE_SAVE);
-            CASE_SELECT(KEY_U, ACTION_GAME_UNDO);
-            CASE_SELECT(KEY_ESCAPE, ACTION_PRE_ESCAPE);
+            CASE_USER_ACTION(KEY_UP, ACTION_UP);
+            CASE_USER_ACTION(KEY_LEFT, ACTION_LEFT);
+            CASE_USER_ACTION(KEY_RIGHT, ACTION_RIGTH);
+            CASE_USER_ACTION(KEY_DOWN, ACTION_DOWN);
+            CASE_USER_ACTION(KEY_N, ACTION_GAME_PRE_NEW);
+            CASE_USER_ACTION(KEY_S, ACTION_GAME_PRE_SAVE);
+            CASE_USER_ACTION(KEY_U, ACTION_GAME_UNDO);
+            CASE_USER_ACTION(KEY_ESCAPE, ACTION_PRE_ESCAPE);
             default: break;
           }
         }
@@ -96,7 +94,7 @@ void captureUserAction(type_appState * appState){
         userAction = ACTION_ENTER;
         break;
       
-      CASE_DEFAULT(ACTION_ESCAPE);
+      CASE_USER_ACTION_DEFAULT(ACTION_ESCAPE);
     }
   }
 

@@ -17,7 +17,9 @@
 #include <math.h>
 #include <time.h>
 #include <ctype.h>
-#include "../includes/conio2.h" //gotoxy, textcolor, textbackground
+#include <pthread.h>
+#include <windows.h>
+#include "../includes/conio2.h"
 
 //Constants
 #define FALSE 0
@@ -52,13 +54,13 @@ typedef unsigned char bool; //Variavel Booleana, deve receber TRUE ou FALSE
   textcolor(TEXT);
 
 //Enums
-typedef enum enum_appStatus {
+typedef enum {
   STATUS_OK = 0,
   STATUS_ERROR,
   STATUS_RUNNING,
-} enum_appStatus;
+} appStatus_e;
 
-typedef enum enum_keys{
+typedef enum {
   KEY_ENTER = 13,
   KEY_ESCAPE = 27,
   KEY_SPACE = 32,
@@ -71,9 +73,9 @@ typedef enum enum_keys{
   KEY_LEFT = 75,
   KEY_RIGHT = 77,
   KEY_DOWN = 80,
-} enum_keys;
+} keys_e;
 
-typedef enum enum_userAction {
+typedef enum {
   ACTION_NONE = 0,
 
   ACTION_UP,
@@ -94,25 +96,25 @@ typedef enum enum_userAction {
   
   ACTION_GAME_PRE_SAVE,
   ACTION_GAME_SAVE,
-} enum_userAction;
+} userAction_e;
 
-typedef enum enum_gameStatus{
+typedef enum {
   GAME_RUNNING = 0,
   GAME_LOSE,
   GAME_WIN,
-} enum_gameStatus;
+} gameStatus_e;
 
-typedef enum enum_cursorState {
+typedef enum {
   CURSOR_HIDDEN = 0,
   CURSOR_VISIBLE,
-} enum_cursorState;
+} cursorState_e;
 
-typedef enum enum_direction {
+typedef enum {
   LEFT = 0,
   RIGHT,
-} enum_direction;
+} direction_e;
 
-typedef enum enum_gameCards {
+typedef enum {
   CARDNONE = 0,
   CARD2,
   CARD4,
@@ -125,46 +127,46 @@ typedef enum enum_gameCards {
   CARD512,
   CARD1024,
   CARD2048,
-} enum_gameCards;
+} gameCards_e;
 
-typedef enum enum_screens {
+typedef enum {
   SCREEN_NONE = -1,
   SCREEN_MENU = 0,
   SCREEN_GAME,
   SCREEN_ENDGAME,
   SCREEN_RANKING,
-} enum_screens;
+} screens_e;
 
-typedef enum enum_menuState{
+typedef enum {
   STATE_MENU_FIRST,
   STATE_MENU_CONTINUE,
   STATE_MENU_NEWGAME,
   STATE_MENU_EXIT,
   STATE_MENU_LAST,
   STATE_MENU_CONTINUE_SELECT,
-} enum_menuState;
+} menuState_e;
 
-typedef enum enum_gameState{
+typedef enum {
   STATE_GAME_NORMAL,
   STATE_GAME_ESCAPE,
   STATE_GAME_NEW,
   STATE_GAME_SAVE,
-} enum_gameState;
+} gameState_e;
 
 //Types
-typedef struct type_leaderboard {
+typedef struct {
   int points[11];                         //Salva a pontuação de cada usuario
   char name[11][MAX_LEADERBOARD_LENGHT];  //Salva o nome de cada usuario
-} type_leaderboard;
+} leaderboard_t;
 
-typedef struct type_gameCard {
+typedef struct {
   COLORS color;
-  enum_gameCards exponent;
+  gameCards_e exponent;
   int value;
-} type_gameCard;
+} gameCard_t;
 
-typedef struct type_gameState {
-  enum_gameStatus gameStatus;         //Salva o estado do jogo atual(run, win, lose)
+typedef struct {
+  gameStatus_e gameStatus;         //Salva o estado do jogo atual(run, win, lose)
 
   int auxScore;                       //Salva o valor auxiliar de score
   int lastScore;                      //Salva o valor do ultimo score
@@ -174,40 +176,40 @@ typedef struct type_gameState {
   int lastMoves;                      //Salva o ultimo valor dos movimentos
   int moves;                          //Salva o numero de movimentos atual
 
-  type_gameCard gameCards[11];        //Salva todas as 11 "cartas" do jogo 2 a 2048
-  type_gameCard * auxGameBoard[4][4]; //Salva a carta auxiliar de cada casa do tabuleiro
-  type_gameCard * lastGameBoard[4][4];//Salva a carta de cada casa na ultima jogada
-  type_gameCard * gameBoard[4][4];    //Salva qual carta esta em cada casa atualmente
-} type_gameState;
+  gameCard_t gameCards[11];        //Salva todas as 11 "cartas" do jogo 2 a 2048
+  gameCard_t * auxGameBoard[4][4]; //Salva a carta auxiliar de cada casa do tabuleiro
+  gameCard_t * lastGameBoard[4][4];//Salva a carta de cada casa na ultima jogada
+  gameCard_t * gameBoard[4][4];    //Salva qual carta esta em cada casa atualmente
+} gameState_t;
 
-typedef struct type_gameSave {
-  enum_gameStatus gameStatus;
+typedef struct {
+  gameStatus_e gameStatus;
   
   int lastScore;
   int score;
   int lastMoves;
   int moves;
 
-  enum_gameCards lastGameBoard[4][4];
-  enum_gameCards gameBoard[4][4];
-} type_gameSave;
+  gameCards_e lastGameBoard[4][4];
+  gameCards_e gameBoard[4][4];
+} gameSave_t;
 
-typedef struct type_screenState {
-  enum_screens lastScreen;    //Salva qual a ultima tela mostrada
-  enum_screens currentScreen; //Salva qual tela deve ser mostrada atualmente
-  enum_menuState menuState;   //Salva em qual item deve ser mostrado o seletor do menu
-  enum_gameState gameState;   //Salva qual confirmação deve se mostrada dentro de jogo
+typedef struct {
+  screens_e lastScreen;    //Salva qual a ultima tela mostrada
+  screens_e currentScreen; //Salva qual tela deve ser mostrada atualmente
+  menuState_e menuState;   //Salva em qual item deve ser mostrado o seletor do menu
+  gameState_e gameState;   //Salva qual confirmação deve se mostrada dentro de jogo
 
   bool forceClear;            //Flag que força a tela a ser limpa, caso TRUE
-} type_screenState;
+} screenState_t;
 
-typedef struct type_appState {
-  enum_appStatus appStatus;     //Salva o estado atual da aplicação(run, exitOk, exitError)
-  enum_userAction userAction;   //Salva a ação efetuada pelo usuario
+typedef struct {
+  appStatus_e appStatus;     //Salva o estado atual da aplicação(run, exitOk, exitError)
+  userAction_e userAction;   //Salva a ação efetuada pelo usuario
   char userString[22];          //Salva a string digitada pelo usuario
-  type_leaderboard leaderboard; //Salva os dados do ranking de jogadores
-  type_gameState gameState;     //Salva o estado do jogo atual
-  type_screenState screen;      //Salva o estado atual da tela
-} type_appState;
+  leaderboard_t leaderboard; //Salva os dados do ranking de jogadores
+  gameState_t gameState;     //Salva o estado do jogo atual
+  screenState_t screen;      //Salva o estado atual da tela
+} appState_t;
 
 #endif  /*MAIN_H*/

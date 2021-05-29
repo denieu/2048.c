@@ -8,6 +8,8 @@
 # MIT License - Copyright (c) 2021 Daniel Wojcickoski
 #------------------------------------------------------------------------------#
 
+#Program version
+VERSION=1.2.0
 #Compiler
 COMPILER=gcc
 #Resource compiler
@@ -32,7 +34,7 @@ FLAGS= -g -Wall
 #RC compiler flags
 RC_FLAGS=-O coff -o
 #Project libs
-LIB_FLAGS=-lconio
+LIB_FLAGS=-lconio -lpthread
 #Libs to link with the compiler
 LIBS= -lm -L$(LIB) $(LIB_FLAGS)
 

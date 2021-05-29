@@ -10,13 +10,13 @@
 #include "../includes/leaderboard.h"
 
 /*------------------------------------------------------------------------------
- * Lê e retorna a estrutura salva no arquivo "leaderboard"
+ * Reads and returns the structure saved in the "leaderboard" file
  *----------------------------------------------------------------------------*/
-type_leaderboard readLeaderboardFile(){
-  type_leaderboard leaderboard = { 0 };
+leaderboard_t readLeaderboardFile(){
+  leaderboard_t leaderboard = { 0 };
   char auxName[255] = {0};
 
-  FILE *leaderboardFile = NULL;
+  FILE * leaderboardFile = NULL;
   leaderboardFile = fopen(PATH_LEADERBOARD, "rt");
   if(leaderboardFile == NULL)
     return leaderboard;
@@ -37,9 +37,9 @@ type_leaderboard readLeaderboardFile(){
 }
 
 /*------------------------------------------------------------------------------
- * Escreve a estrutura newLeaderboard no arquivo "leaderboard"
+ * Write the new Leaderboard structure in the "leaderboard" file
  *----------------------------------------------------------------------------*/
-void writeLeaderboardFile(type_leaderboard * leaderboard){
+void writeLeaderboardFile(leaderboard_t * leaderboard){
   FILE *leaderboardFile = NULL;
   leaderboardFile = fopen(PATH_LEADERBOARD, "w+");
 
@@ -51,9 +51,9 @@ void writeLeaderboardFile(type_leaderboard * leaderboard){
 }
 
 /*------------------------------------------------------------------------------
- * reorganiza a estrutura leaderdearboard em ordem decrescente
+ * Rearranges the leaderboard structure in descending order
  *----------------------------------------------------------------------------*/
-void bubbleSortLeaderboard(type_leaderboard * leaderboard){
+void bubbleSortLeaderboard(leaderboard_t * leaderboard){
   int flag = 0, end = 0;
 
   char auxName[MAX_LEADERBOARD_LENGHT + 1] = { 0 };

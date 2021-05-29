@@ -11,20 +11,17 @@
 #include "../includes/gameState.h"
 
 /*------------------------------------------------------------------------------
- * Transfere a estrutura type_gameSAve para dentro do appState
+ * Transfer the gameSave_t structure into the appState
  *----------------------------------------------------------------------------*/
-void saveToAppState(type_appState * appState, type_gameSave * gameSave){
-  //Seta o estado default inicial do jogo
+void saveToAppState(appState_t * appState, gameSave_t * gameSave){
   appState->gameState = getDefaultGameState();
 
-  //Salva as variaveis do save na estrutura gameState
   appState->gameState.gameStatus = gameSave->gameStatus;
   appState->gameState.lastScore = gameSave->lastScore;
   appState->gameState.score = gameSave->score;
   appState->gameState.lastMoves = gameSave->lastMoves;
   appState->gameState.moves = gameSave->moves;
 
-  //Salva os tabuleiros na estrutura gameSave
   for(int line = 0; line < 4; line++){
     for(int collumn = 0; collumn < 4; collumn++){
       if(gameSave->lastGameBoard[line][collumn] == CARDNONE)
@@ -41,17 +38,15 @@ void saveToAppState(type_appState * appState, type_gameSave * gameSave){
 }
 
 /*------------------------------------------------------------------------------
- * Transfere a estrutura type_gameState para dentro do gameSave
+ * Transfer the gameState_t structure into the gameSave
  *----------------------------------------------------------------------------*/
-void gameStateToSave(type_gameSave * gameSave, type_gameState * gameState){
-  //Salva as variaveis de jogo na estrutura gameSave
+void gameStateToSave(gameSave_t * gameSave, gameState_t * gameState){
   gameSave->gameStatus = gameState->gameStatus;
   gameSave->lastScore = gameState->lastScore;
   gameSave->score = gameState->score;
   gameSave->lastMoves = gameState->lastMoves;
   gameSave->moves = gameState->moves;
 
-  //Salva os tabuleiros na estrutura gameSave
   for(int line = 0; line < 4; line++){
     for(int collumn = 0; collumn < 4; collumn++){
       if(gameState->lastGameBoard[line][collumn] != NULL)
@@ -68,19 +63,18 @@ void gameStateToSave(type_gameSave * gameSave, type_gameState * gameState){
 }
 
 /*------------------------------------------------------------------------------
- * Lê e retorna a estrutura salva no arquivo de save especificado em path
+ * Reads and returns the structure saved in the save file specified in path
  *----------------------------------------------------------------------------*/
-bool readSaveFile(type_appState * appState, const char * filename){
-  type_gameSave save = {0};
+bool readSaveFile(appState_t * appState, const char * filename){
+  gameSave_t save = {0};
   
-  //Abre,le a estrutura save e fecha o arquivo binario
   FILE * saveFile = NULL;
   saveFile = fopen(filename, "rb");
 
   if(saveFile == NULL)
     return FALSE;
 
-  fread(&save, sizeof(type_gameSave), 1, saveFile);
+  fread(&save, sizeof(gameSave_t), 1, saveFile);
   
   fclose(saveFile);
 
@@ -90,18 +84,17 @@ bool readSaveFile(type_appState * appState, const char * filename){
 }
 
 /*------------------------------------------------------------------------------
- * Escreve a estrutura type_gameState no arquivo especificado em path
+ * Writes the gameState_t structure to the file specified in path
  *----------------------------------------------------------------------------*/
-void writeSaveFile(type_gameState * gameState, const char * filename){
-  type_gameSave save = {0};
+void writeSaveFile(gameState_t * gameState, const char * filename){
+  gameSave_t save = {0};
 
   gameStateToSave(&save, gameState);
 
-  //Abre, escreve na estrutura save e fecha o arquivo binario
   FILE * saveFile = NULL;
   saveFile = fopen(filename, "w+b");
 
-  fwrite(&save, sizeof(type_gameSave), 1, saveFile);
+  fwrite(&save, sizeof(gameSave_t), 1, saveFile);
 
   fclose(saveFile);
 }

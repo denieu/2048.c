@@ -14,7 +14,7 @@
 #include "../includes/main.h"
 
 //Functions
-type_appState getDefaultAppState();
-void handleUserAction(type_appState * appState);
+appState_t getDefaultAppState();
+void handleUserAction(appState_t * appState);
 
 #endif  /*APP_STATE_H*/

@@ -10,12 +10,18 @@
 #include "../includes/screen.h"
 #include "../includes/screen_components.h"
 #include "../includes/logo.h"
-#include "windows.h"
+#include "../includes/appState.h"
 
 /*------------------------------------------------------------------------------
- * Altera o estado do cursor entre visivel e invisivel
+ * Thread control variables
  *----------------------------------------------------------------------------*/
-void setCursor(enum_cursorState cursorState){
+bool screenIsUpdated = FALSE;
+appState_t screenState = {0};
+
+/*------------------------------------------------------------------------------
+ * Changes the state of the cursor between visible and invisible
+ *----------------------------------------------------------------------------*/
+void setCursor(cursorState_e cursorState){
   CONSOLE_CURSOR_INFO info;
   info.dwSize = 100;
   info.bVisible = cursorState;
@@ -23,7 +29,7 @@ void setCursor(enum_cursorState cursorState){
 }
 
 /*------------------------------------------------------------------------------
- * Ajusta o buffer do terminal para o tamanho sizeX sizeY
+ * Adjust the terminal buffer to sizeX sizeY
  *----------------------------------------------------------------------------*/
 void configScreenSize(int sizeX, int sizeY){
   HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -42,11 +48,11 @@ void configScreenSize(int sizeX, int sizeY){
 }
 
 /*------------------------------------------------------------------------------
- * Printa a tela do menu principal
+ * Print the main menu screen
  *----------------------------------------------------------------------------*/
-void screen_mainMenu(type_appState currentAppState){
+void screen_mainMenu(appState_t currentAppState){
   int menuXStart = 19;
-  enum_menuState menuState = currentAppState.screen.menuState;
+  menuState_e menuState = currentAppState.screen.menuState;
 
   print_logoLetter(LOGO_2, menuXStart, 3, DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
   print_logoLetter(LOGO_0, menuXStart + 8, 3, DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
@@ -65,9 +71,9 @@ void screen_mainMenu(type_appState currentAppState){
 }
 
 /*------------------------------------------------------------------------------
- * Printa a tela dentro de jogo
+ * Paint the screen in game
  *----------------------------------------------------------------------------*/
-void screen_inGame(type_appState * currentAppState){
+void screen_inGame(appState_t * currentAppState){
   print_inGameMenu(3, 2);
   print_gameStatus(currentAppState->gameState, 3, 9);
   print_inGameRanking(&currentAppState->leaderboard, 3, 15);
@@ -95,9 +101,9 @@ void screen_inGame(type_appState * currentAppState){
 }
 
 /*------------------------------------------------------------------------------
- * Printa a tela de fim de partida
+ * Print the end of match screen
  *----------------------------------------------------------------------------*/
-void screen_endGame(type_appState * currentAppState){
+void screen_endGame(appState_t * currentAppState){
   print_endGameStatus(currentAppState->gameState.gameStatus, 27, 7);
 
   print_gameStatus(currentAppState->gameState, 27, 13);
@@ -106,55 +112,62 @@ void screen_endGame(type_appState * currentAppState){
 }
 
 /*------------------------------------------------------------------------------
- * Printa a tela atual com base no "currentAppState"
+ * Updates the variables used in the thread to print the screen
  *----------------------------------------------------------------------------*/
-void printAppState(type_appState * currentAppState){
-  //Seta as cores para as default
-  SET_COLOR(DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
+void updateScreenState(appState_t * newScreenState){
+  screenState = *newScreenState;
+  screenIsUpdated = FALSE;
+}
 
-  //Esconde o cursos da tela
-  setCursor(CURSOR_HIDDEN);
+/*------------------------------------------------------------------------------
+ * Thread responsible for showing the components on the screen
+ *----------------------------------------------------------------------------*/
+void *screenThread(){
+  while(TRUE){
+    if(screenIsUpdated == FALSE){
+      SET_COLOR(DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
+      setCursor(CURSOR_HIDDEN);
+      SetConsoleTitleW(DEFAULT_SCREEN_TITLE);
+      configScreenSize(DEFAULT_SCREEN_X_SIZE, DEFAULT_SCREEN_Y_SIZE);
 
-  //Seta o titulo do terminal
-  SetConsoleTitleW(DEFAULT_SCREEN_TITLE);
+      if(screenState.screen.lastScreen == SCREEN_NONE){
+        screenState.screen.lastScreen = screenState.screen.currentScreen;
+        configScreenSize(DEFAULT_SCREEN_X_SIZE, DEFAULT_SCREEN_Y_SIZE);
+        clrscr();
+      }
 
-  //Isso faz o terminal ficar correta após a inicialização do app
-  if(currentAppState->screen.lastScreen == SCREEN_NONE){
-    configScreenSize(DEFAULT_SCREEN_X_SIZE, DEFAULT_SCREEN_Y_SIZE);
-    clrscr();
-  }
+      if(screenState.screen.lastScreen != screenState.screen.currentScreen || screenState.screen.forceClear == TRUE){
+        screenState.screen.lastScreen = screenState.screen.currentScreen;
+        screenState.screen.forceClear = FALSE;
+        clrscr();
+      }
 
-  //Ajusta o tamanho do buffer do terminal
-  configScreenSize(DEFAULT_SCREEN_X_SIZE, DEFAULT_SCREEN_Y_SIZE);
+      switch (screenState.screen.currentScreen){
+        case SCREEN_MENU: 
+        screen_mainMenu(screenState);
+          break;
 
-  //Limpa a tela se a tela mudou ou caso a flag esteja ativa
-  if(currentAppState->screen.lastScreen != currentAppState->screen.currentScreen ||
-     currentAppState->screen.forceClear == TRUE){
-    clrscr();
-    currentAppState->screen.forceClear = FALSE;
-  }
+        case SCREEN_GAME:
+          screen_inGame(&screenState);
+          break;
 
-  //Mostra a tela correta relativa a currentScreen
-  switch (currentAppState->screen.currentScreen){
-    case SCREEN_MENU:
-      screen_mainMenu(*currentAppState);
-      break;
+        case SCREEN_ENDGAME:
+          screen_endGame(&screenState);
+          setCursor(CURSOR_VISIBLE);
+          break;
 
-    case SCREEN_GAME:
-      screen_inGame(currentAppState);
-      break;
+        case SCREEN_RANKING:
+          print_inGameRanking(&screenState.leaderboard, 27, 8);
+          break;
 
-    case SCREEN_ENDGAME:
-      screen_endGame(currentAppState);
-      setCursor(CURSOR_VISIBLE);
-      break;
+        default:
+          screenState.screen.currentScreen = SCREEN_MENU;
+          break;
+      }
 
-    case SCREEN_RANKING:
-      print_inGameRanking(&currentAppState->leaderboard, 27, 8);
-      break;
+      screenIsUpdated = TRUE;
+    }
 
-    default:
-      currentAppState->screen.currentScreen = SCREEN_MENU;
-      break;
+    Sleep(16);
   }
 }

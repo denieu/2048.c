@@ -14,6 +14,6 @@
 #include "../includes/main.h"
 
 //Functions
-void captureUserAction(type_appState * currentAppState);
+void captureUserAction(appState_t * currentAppState);
 
 #endif  /*CONTROLS_H*/
