@@ -13,44 +13,30 @@
 #include "../includes/save.h"
 
 /*------------------------------------------------------------------------------
- * Atualiza as variaveis relativas a tela
+ * Updates the variables related to the screen
  *----------------------------------------------------------------------------*/
-void changeScreenState(type_appState * appState, int screen, int menuState, int gameState, int forceClear){
-  //Atualiza variaveis de tela
-  if(screen != NO_CHANGE){
+void changeScreenState(appState_t * appState, int auxScreen, int auxMenuState, int auxGameState, int auxForceClear){
+  if(auxScreen != NO_CHANGE){
     appState->screen.lastScreen = appState->screen.currentScreen;
-    appState->screen.currentScreen = screen;
+    appState->screen.currentScreen = auxScreen;
   }
-
-  //Atualiza menuState
-  if(menuState != NO_CHANGE){
-    appState->screen.menuState = menuState;
-  }
-
-  //Atualiza menuState
-  if(gameState != NO_CHANGE){
-    appState->screen.gameState = gameState;
-  }
-
-  //Atualiza menuState
-  if(forceClear != NO_CHANGE){
-    appState->screen.forceClear = forceClear;
-  }
+  if(auxMenuState != NO_CHANGE)
+    appState->screen.menuState = auxMenuState;
+  if(auxGameState != NO_CHANGE)
+    appState->screen.gameState = auxGameState;
+  if(auxForceClear != NO_CHANGE)
+    appState->screen.forceClear = auxForceClear;
 }
 
 /*------------------------------------------------------------------------------
- * Retorna o appState default
+ * Returns the default appState
  *----------------------------------------------------------------------------*/
-type_appState getDefaultAppState(){
-  type_appState defaultAppState = {0};
+appState_t getDefaultAppState(){
+  appState_t defaultAppState = {0};
 
-  //Variaveis de controle do app
   defaultAppState.appStatus = STATUS_RUNNING;
-
-  //Variaveis de controle do jogo
   defaultAppState.gameState = getDefaultGameState();
 
-  //Variaveis de controle da tela
   defaultAppState.screen.lastScreen = SCREEN_NONE;
   defaultAppState.screen.currentScreen = SCREEN_MENU;
   defaultAppState.screen.menuState = STATE_MENU_FIRST + 1;
@@ -59,9 +45,9 @@ type_appState getDefaultAppState(){
 }
 
 /*------------------------------------------------------------------------------
- * Retorna um novo appState com base na ação realizada na tela de menu
+ * Returns a new appState based on the action taken on the menu screen
  *----------------------------------------------------------------------------*/
-void handleMenuAction(type_appState * appState){
+void handleMenuAction(appState_t * appState){
   switch (appState->userAction){
     case ACTION_UP:
       appState->screen.menuState--;
@@ -109,9 +95,9 @@ void handleMenuAction(type_appState * appState){
 }
 
 /*------------------------------------------------------------------------------
- * Retorna um novo appState com base na ação realizada no appState atual
+ * Returns a new appState based on the action taken on the current appState
  *----------------------------------------------------------------------------*/
-void handleUserAction(type_appState * appState){
+void handleUserAction(appState_t * appState){
   if(appState->userAction != ACTION_NONE){
     switch (appState->screen.currentScreen){
       case SCREEN_MENU:
@@ -173,14 +159,10 @@ void handleUserAction(type_appState * appState){
         appState->screen.lastScreen = SCREEN_ENDGAME;
         switch (appState->userAction){
            case ACTION_ENTER:
-            //Adiciona o novo resultado a struct leaderboard na ultima posição, que não aparece na tela
             strcpy(appState->leaderboard.name[10], appState->userString);
             appState->leaderboard.points[10] = appState->gameState.score;
 
-            //Organiza a struct em ordem decrescente
             bubbleSortLeaderboard(&appState->leaderboard);
-
-            //Salva a struct em arquivo
             writeLeaderboardFile(&appState->leaderboard);
 
             changeScreenState(appState, SCREEN_RANKING, NO_CHANGE, NO_CHANGE, NO_CHANGE);

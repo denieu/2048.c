@@ -14,9 +14,9 @@
 #include "../includes/main.h"
 
 //Functions
-type_gameState getDefaultGameState();
-void newGame(type_appState * appState);
-void handleGameAction(type_appState * appState);
-void undoGameAction(type_appState * appState);
+gameState_t getDefaultGameState();
+void newGame(appState_t * appState);
+void handleGameAction(appState_t * appState);
+void undoGameAction(appState_t * appState);
 
 #endif  /*GAME_STATE_H*/

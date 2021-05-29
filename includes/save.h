@@ -14,7 +14,7 @@
 #include "../includes/main.h"
 
 //Functions
-bool readSaveFile(type_appState * appState, const char * filename);
-void writeSaveFile(type_gameState * gameState, const char * filename);
+bool readSaveFile(appState_t * appState, const char * filename);
+void writeSaveFile(gameState_t * gameState, const char * filename);
 
 #endif  /*SAVE_H*/

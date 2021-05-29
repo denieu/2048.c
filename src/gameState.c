@@ -10,10 +10,10 @@
 #include "../includes/gameState.h"
 
 /*------------------------------------------------------------------------------
- * Retorna o gameState default
+ * Returns the default gameState
  *----------------------------------------------------------------------------*/
-type_gameState getDefaultGameState(){
-  type_gameState defaultGameState = {0};
+gameState_t getDefaultGameState(){
+  gameState_t defaultGameState = {0};
 
   COLORS gameCardColors[12] = {
     BLUE, GREEN, CYAN, RED, MAGENTA, BROWN,
@@ -24,14 +24,12 @@ type_gameState getDefaultGameState(){
   defaultGameState.score = 0;
   defaultGameState.moves = 0;
 
-  //Alocando estrutura das cartas
   for(int card = 0; card < 11; card++){
     defaultGameState.gameCards[card].value = pow(2, card + 1);
     defaultGameState.gameCards[card].exponent = card + 1;
     defaultGameState.gameCards[card].color = gameCardColors[card];
   }
 
-  //Zerando tabuleiro de jogo
   for(int line = 0; line < 4; line++){
      for(int collumn = 0; collumn < 4; collumn++){
       defaultGameState.auxGameBoard[line][collumn] = NULL;
@@ -44,88 +42,76 @@ type_gameState getDefaultGameState(){
 }
 
 /*------------------------------------------------------------------------------
- * Verifica se o tabuleiro de jogo atual possui alguma casa livre
+ * Checks if the current game board has any free spaces
  *
- * Retorna TRUE caso tenha pelo menos uma casa livre
- * Retorna FALSE caso não tenha nenhuma casa livre
+ * Returns TRUE if you have at least one free space
+ * Returns FALSE if you don't have any free houses
  *----------------------------------------------------------------------------*/
-bool verifyFreeHouse(type_gameState * gameState){
+bool verifyFreeHouse(gameState_t * gameState){
   for(int line = 0; line < 4; line++){
     for(int collumn = 0; collumn < 4; collumn++){
       if(gameState->gameBoard[line][collumn] == NULL){
-        //O tabuleiro possui pelo menos uma casa livre
         return TRUE;
       }
     }
   }
-
-  //O tabuleiro não possui nenhuma casa livre
   return FALSE;
 }
 
 /*------------------------------------------------------------------------------
- * Adiciona uma peça ao tabuleiro de jogo gameBoard
+ * Adds a piece to the gameBoard game board
  *
  * chanceToDouble:
- *   define a chance(0 - 100%) de dobrar o valor da peça inicial(de 2 para 4)
+ * defines the chance (0 - 100%) of doubling the value of the starting piece (from 2 to 4)
  *
- * Retorna TRUE caso consiga adicionar a peça ao tabuleiro
- * Retorna FALSE caso não consiga
+ * Returns TRUE if you manage to add the piece to the board
+ * Returns FALSE if it fails
  *----------------------------------------------------------------------------*/
-bool addCardInBoard(type_gameState * gameState, int chanceToDouble){
-  //O valor default é o da carta 2
-  enum_gameCards newCardIndex = CARD2 - 1;
+bool addCardInBoard(gameState_t * gameState, int chanceToDouble){
+  gameCards_e newCardIndex = CARD2 - 1;
 
-  //Verifica com base em chanceToDouble se pode dobrar o valor da carta
   srand(time(NULL));
   if((rand() % 100) <= chanceToDouble && chanceToDouble != 0){
     newCardIndex = CARD4 - 1;
   }
 
   while(TRUE){
-    //Coloca em uma casa aleatoria o valor newCardValue
     int house = (rand() % 16);
     int line = house / 4;
     int collumn = house % 4;
 
-    //Verifica se é uma casa livre
     if(gameState->gameBoard[line][collumn] == NULL){
       gameState->gameBoard[line][collumn] = &gameState->gameCards[newCardIndex];
       return TRUE;
     }
 
-    //Verifica se o tabuleiro ainda possui alguma casa livre
     if(verifyFreeHouse(gameState) == FALSE){
       return FALSE;
     }
   }
 
-  //Não havia nenhuma casa livre no tabuleiro
   return FALSE;
 }
 
 /*------------------------------------------------------------------------------
- * Inicia um novo jogo, resetando todas as variaveis para seu estado inicial
+ * Starts a new game, resetting all variables to their initial state
  *----------------------------------------------------------------------------*/
-void newGame(type_appState * appState){
-  //Seta o estado default inicial do jogo
+void newGame(appState_t * appState){
   appState->gameState = getDefaultGameState();
 
-  //Adiciona as duas cartas inicias ao tabuleiro
   addCardInBoard(&appState->gameState, 0);
   addCardInBoard(&appState->gameState, 0);
 
-  //Redireciona para a tela de jogo
   appState->screen.currentScreen = SCREEN_GAME;
 }
 
 /*------------------------------------------------------------------------------
- * Verifica se o jogador ganhou, fez 2048
+ * Checks whether the player won, made 2048
  *
- * Retorna TRUE caso o jogador tenha ganhado
- * Retorna FALSE caso o jogador ainda não tenha ganhado
+ * Returns TRUE if player has won
+ * Returns FALSE if player has not yet won
  *----------------------------------------------------------------------------*/
-bool verifyPlayerWin(type_appState * appState){
+bool verifyPlayerWin(appState_t * appState){
   for(int line = 0; line < 4; line++){
     for(int collumn = 0; collumn < 4; collumn++){
       if(appState->gameState.gameBoard[line][collumn] != NULL){
@@ -140,13 +126,13 @@ bool verifyPlayerWin(type_appState * appState){
 }
 
 /*------------------------------------------------------------------------------
- * Rotaciona o tabuleiro de jogo para o lado "direction"
+ * Rotates the game board to the "direction" side
  *
- * direction: 0 = Tabuleiro será rotacionado para a direita
- *            1 = Tabuleiro será rotacionado para a esquerda
+ * direction: LEFT = Board will be rotated to the right
+ *            RIGHT = Tray will be rotated to the left
  *----------------------------------------------------------------------------*/
-void rotateGameBoard(type_appState * appState, enum_direction direction){
-  type_gameState oldGameState = appState->gameState;
+void rotateGameBoard(appState_t * appState, direction_e direction){
+  gameState_t oldGameState = appState->gameState;
   int position[4] = {3, 2, 1, 0};
 
   if(direction == LEFT){
@@ -171,9 +157,9 @@ void rotateGameBoard(type_appState * appState, enum_direction direction){
 }
 
 /*------------------------------------------------------------------------------
- * Rotaciona o tabuleiro pra cima, dependendo da ação do usuario
+ * Rotates the board upwards, depending on the user's action
  *----------------------------------------------------------------------------*/
-void boardRotateUp(type_appState * appState){
+void boardRotateUp(appState_t * appState){
   switch (appState->userAction){
     case ACTION_UP: break;
     case ACTION_DOWN:
@@ -191,9 +177,9 @@ void boardRotateUp(type_appState * appState){
 }
 
 /*------------------------------------------------------------------------------
- * Rotaciona o tabuleiro pra posição original, dependendo da ação do usuario
+ * Rotates the board to its original position, depending on the user's action
  *----------------------------------------------------------------------------*/
-void boardRotateOg(type_appState * appState){
+void boardRotateOg(appState_t * appState){
   switch (appState->userAction){
     case ACTION_UP: break;
     case ACTION_DOWN:
@@ -211,12 +197,12 @@ void boardRotateOg(type_appState * appState){
 }
 
 /*------------------------------------------------------------------------------
- * Faz o movimento pra cima das peças, unindo as necessarias
+ * Move the pieces up, joining the necessary ones
  *
- * Retorna TRUE caso alguma peça se movimente
- * Retorna FALSE caso nenhuma peça se movimente
+ * Returns TRUE if any part moves
+ * Returns FALSE if no part moves
  *----------------------------------------------------------------------------*/
-bool boardSlideUp(type_appState * appState){
+bool boardSlideUp(appState_t * appState){
   bool ret = FALSE;
   int flag = 0;
 
@@ -240,7 +226,6 @@ bool boardSlideUp(type_appState * appState){
 
               //Incrementa o score do jogador com o valor da nova peça
               appState->gameState.score += appState->gameState.gameBoard[line][collumn]->value;
-
               ret = TRUE;
             }
             break;
@@ -276,32 +261,28 @@ bool boardSlideUp(type_appState * appState){
 }
 
 /*------------------------------------------------------------------------------
- * Verifica se em alguma das posições existe um movimento disponivel
+ * Checks if in any of the positions there is a movement available
  *
- * Retorna TRUE caso exista movimentos disponiveis
- * Retorna FALSE caso não exista movimentos disponiveis
+ * Returns TRUE if there are movements available
+ * Returns FALSE if there are no movements available
  *----------------------------------------------------------------------------*/
-bool verifyPossibleMoves(type_appState * appState){
-  type_appState newAppState = *appState;
+bool verifyPossibleMoves(appState_t * appState){
+  appState_t newAppState = *appState;
 
   for(int count = 0; count < 4; count++){
-    //Verifica se fez algum movimento
     if(boardSlideUp(&newAppState) == TRUE){
-      //Algum movimento ocorreu
       return TRUE;
     }
 
     rotateGameBoard(&newAppState, LEFT);
   }
-
-  //Nenhum movimento ocorreu em nenhum posição
   return FALSE;
 }
 
 /*------------------------------------------------------------------------------
- * Altera o appState com base na ação realizada dentro do jogo
+ * Change the appState based on the action performed within the game
  *----------------------------------------------------------------------------*/
-void handleGameAction(type_appState * appState){
+void handleGameAction(appState_t * appState){
   //Auxiliar para verificar se ocorreu alguma ação/movimento no tabuleiro
   bool isMoved = FALSE;
 
@@ -362,19 +343,15 @@ void handleGameAction(type_appState * appState){
 }
 
 /*------------------------------------------------------------------------------
- * Desfaz a ultima ação feita pelo usuario no jogo
+ * Undo the last action taken by the user in the game
  *----------------------------------------------------------------------------*/
-void undoGameAction(type_appState * appState){
-  //Volta o gameBoard para lastGameBoard
+void undoGameAction(appState_t * appState){
   for(int line = 0; line < 4; line++){
     for(int collumn = 0; collumn < 4; collumn++){
       appState->gameState.gameBoard[line][collumn] = appState->gameState.lastGameBoard[line][collumn];
     }
   }
 
-  //Volta o score para o lastScore
   appState->gameState.score = appState->gameState.lastScore;
-
-  //Volta o moves para o lastMoves
   appState->gameState.moves = appState->gameState.lastMoves;
 }

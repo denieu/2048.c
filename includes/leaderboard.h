@@ -17,8 +17,8 @@
 #define PATH_LEADERBOARD "leaderboard.txt"
 
 //Functions
-type_leaderboard readLeaderboardFile();
-void writeLeaderboardFile(type_leaderboard * newSave);
-void bubbleSortLeaderboard(type_leaderboard * leaderboard);
+leaderboard_t readLeaderboardFile();
+void writeLeaderboardFile(leaderboard_t * newSave);
+void bubbleSortLeaderboard(leaderboard_t * leaderboard);
 
 #endif  /*LEADERBOARD_H*/

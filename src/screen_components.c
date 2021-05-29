@@ -10,7 +10,7 @@
 #include "../includes/screen_components.h"
 
 /*------------------------------------------------------------------------------
- * Retorna a string centralizada, com base no tamanho informado
+ * Returns the centralized string, based on the size entered
  *----------------------------------------------------------------------------*/
 void stringCentrilize(char * string, int maxSize){
   int stringSize = strlen(string);
@@ -36,7 +36,7 @@ void stringCentrilize(char * string, int maxSize){
 }
 
 /*------------------------------------------------------------------------------
- * Printa duas strings centralizadas em duas colunas
+ * Print two strings centered on two columns
  *----------------------------------------------------------------------------*/
 void printTwoCollumns(char * left, char * right, int leftSize, int rightSize){
   char leftString[100] = {'\0'};
@@ -64,7 +64,7 @@ void printTwoCollumns(char * left, char * right, int leftSize, int rightSize){
 }
 
 /*------------------------------------------------------------------------------
- * Printa um botão para menu, selected define se o botão está o não selecionado
+ * Prints a button to menu, selected defines if the button is unselected
  *----------------------------------------------------------------------------*/
 void print_menuButton(char * placeholder, int posX, int posY, bool selected){
   char selection[WIDTH_BUTTON_MENU + 1] = {0};
@@ -90,7 +90,7 @@ void print_menuButton(char * placeholder, int posX, int posY, bool selected){
 }
 
 /*------------------------------------------------------------------------------
- * Printa o menu de dentro do jogo
+ * Print the in-game menu
  *----------------------------------------------------------------------------*/
 void print_inGameMenu(int posX, int posY){
   gotoxy(posX, posY);
@@ -117,9 +117,9 @@ void print_inGameMenu(int posX, int posY){
 }
 
 /*------------------------------------------------------------------------------
- * Printa o status do jogo, score e movimentos
+ * Print game status, score and moves
  *----------------------------------------------------------------------------*/
-void print_gameStatus(type_gameState gameState, int posX, int posY){
+void print_gameStatus(gameState_t gameState, int posX, int posY){
   char number[30] = {'\0'};
 
   gotoxy(posX, posY);
@@ -146,7 +146,7 @@ void print_gameStatus(type_gameState gameState, int posX, int posY){
 /*------------------------------------------------------------------------------
  * Printa o ranking dentro jogo, score e jogadores
  *----------------------------------------------------------------------------*/
-void print_inGameRanking(type_leaderboard * leaderboard, int posX, int posY){
+void print_inGameRanking(leaderboard_t * leaderboard, int posX, int posY){
   char number[15] = {'\0'};
   char name[15] = {'\0'};
 
@@ -174,7 +174,7 @@ void print_inGameRanking(type_leaderboard * leaderboard, int posX, int posY){
 }
 
 /*------------------------------------------------------------------------------
- * Printa a borda do tabuleiro
+ * Print the edge of the board
  *----------------------------------------------------------------------------*/
 void print_gameBoardEdges(int posX, int posY){
   SET_COLOR(LIGHTGRAY, BLACK);
@@ -193,12 +193,11 @@ void print_gameBoardEdges(int posX, int posY){
 }
 
 /*------------------------------------------------------------------------------
- * Printa um casa do tabuleiro
+ * Print a board house
  *----------------------------------------------------------------------------*/
-void print_gameCard(type_gameCard * card, int posX, int posY){
+void print_gameCard(gameCard_t * card, int posX, int posY){
   SET_COLOR(card != NULL ? card->color : DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
 
-  //Printa fundo da casa
   for(int count = 0; count < GAME_CARD_HEIGHT - 2; count++){
     gotoxy(posX + 2, posY + 1 + count);
     for(int count2 = 0; count2 < GAME_CARD_WIDTH - 3; count2++){
@@ -219,9 +218,9 @@ void print_gameCard(type_gameCard * card, int posX, int posY){
 }
 
 /*------------------------------------------------------------------------------
- * Printa o tabuleiro do jogo
+ * Print the game board
  *----------------------------------------------------------------------------*/
-void print_gameBoard(type_gameState * gameState, int posX, int posY){
+void print_gameBoard(gameState_t * gameState, int posX, int posY){
   for(int collumn = 0; collumn < 4; collumn++){
     for(int line = 0; line < 4; line++){
       print_gameCard(gameState->gameBoard[line][collumn], posX + collumn * (GAME_CARD_WIDTH - 1), posY + line * (GAME_CARD_HEIGHT - 1));
@@ -232,13 +231,12 @@ void print_gameBoard(type_gameState * gameState, int posX, int posY){
 }
 
 /*------------------------------------------------------------------------------
- * Printa o componente que informa vitorio ou derrota do jogador
+ * Print the component that informs the player of victory or defeat
  *----------------------------------------------------------------------------*/
-void print_endGameStatus(enum_gameStatus status, int posX, int posY){
+void print_endGameStatus(gameStatus_e status, int posX, int posY){
   char spaces[30] = {'\0'};
   char endString[30] = {'\0'};
 
-  //Printa a borda mais escura
   textbackground(LIGHTGRAY);
   sprintf(spaces, " ");
   stringCentrilize(spaces, 19);
@@ -256,15 +254,12 @@ void print_endGameStatus(enum_gameStatus status, int posX, int posY){
     }
   }
  
-  //Printa os espaços claros
   textbackground(DARKGRAY);
-
   for(int count = 1; count <= 3; count++){
     gotoxy(posX + 2, posY + count);
     printf("%s", spaces);
   }
 
-  //Printa oe stado do game
   if(status == GAME_WIN){
     textcolor(LIGHTGREEN);
     sprintf(endString, "Vitoria");
@@ -283,7 +278,7 @@ void print_endGameStatus(enum_gameStatus status, int posX, int posY){
 }
 
 /*------------------------------------------------------------------------------
- * Printa componente que pede para o usuario digitar algo
+ * Print component that asks the user to type something
  *----------------------------------------------------------------------------*/
 void print_querryUserString(const char * placeholder, int posX, int posY, COLORS color1, COLORS color2){
   char string[30] = {'\0'};

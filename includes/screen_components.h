@@ -16,11 +16,11 @@
 //Functions
 void print_menuButton(char * placeholder, int posX, int posY, bool selected);
 void print_inGameMenu(int posX, int posY);
-void print_gameStatus(type_gameState gameState, int posX, int posY);
-void print_inGameRanking(type_leaderboard * leaderboard, int posX, int posY);
+void print_gameStatus(gameState_t gameState, int posX, int posY);
+void print_inGameRanking(leaderboard_t * leaderboard, int posX, int posY);
 void print_gameBoardEdges(int posX, int posY);
-void print_gameBoard(type_gameState * gameState, int posX, int posY);
-void print_endGameStatus(enum_gameStatus status, int posX, int posY);
+void print_gameBoard(gameState_t * gameState, int posX, int posY);
+void print_endGameStatus(gameStatus_e status, int posX, int posY);
 void print_querryUserString(const char * placeholder, int posX, int posY, COLORS color1, COLORS color2);
 
 #endif  /*SCREEN_COMPONENTS_H*/

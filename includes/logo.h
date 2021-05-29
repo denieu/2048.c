@@ -14,16 +14,16 @@
 #include "../includes/main.h"
 
 //Types
-typedef enum enum_logoLetters{
+typedef enum logoLetters{
   LOGO_2 = 0,
   LOGO_0,
   LOGO_4,
   LOGO_8,
   LOGO_DOT,
   LOGO_C,
-} enum_logoLetters;
+} logoLetters_e;
 
 //Functions
-void print_logoLetter(enum_logoLetters selectedLetter, int posX, int posY, COLORS bgColor, COLORS textColor);
+void print_logoLetter(logoLetters_e selectedLetter, int posX, int posY, COLORS bgColor, COLORS textColor);
 
 #endif  /*LOGO_H*/

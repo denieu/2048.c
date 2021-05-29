@@ -14,27 +14,22 @@
 #include "../includes/screen.h"
 
 /*------------------------------------------------------------------------------
- * Loop principal da aplicação
+ * Main app loop
  *----------------------------------------------------------------------------*/
 int main(){
-  //Definição estrutura principal, gameState
-  type_appState appState = getDefaultAppState();
+  pthread_t tId;
+  appState_t appState = getDefaultAppState();
 
-  //Parse do arquivo de leaderboard
+  pthread_create(&tId, NULL, screenThread, (void *)&tId);
   appState.leaderboard = readLeaderboardFile();
 
-  //Mantem rodando enquanto o appStatus for STATUS_RUNNING
   do{
-    //Printa tela com base no appState
-    printAppState(&appState);
+    updateScreenState(&appState);
 
-    //Captura ação do usuario e salva em gameState.userAction
     captureUserAction(&appState);
 
-    //Retorna um novo appState com base na ação do usuario
     handleUserAction(&appState);
   } while(appState.appStatus == STATUS_RUNNING);
 
-  //Retorna appStatus
   return appState.appStatus;
 }
