@@ -9,7 +9,10 @@
 #------------------------------------------------------------------------------#
 
 #Program version
-VERSION=1.2.0
+V_MAJOR=1
+V_MINOR=3
+V_PATCH=0
+VERSION=-D V_MAJOR=$(V_MAJOR) -D V_MINOR=$(V_MINOR) -D V_PATCH=$(V_PATCH)
 #Compiler
 COMPILER=gcc
 #Resource compiler
@@ -68,7 +71,7 @@ rc_compile: $(RES_FILES)
 
 #Make .o file macro
 $(OBJ)/%.o: $(SRC)/%.c $(INCLUDE)/%.h
-	$(COMPILER) $(FLAGS) -c $< -I $(INCLUDE) -o $@
+	$(COMPILER) $(VERSION) $(FLAGS) -c $< -I $(INCLUDE) -o $@
 
 #Make .res file macro
 $(OBJ)/%.res: $(RC)/%.rc
