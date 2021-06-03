@@ -19,7 +19,7 @@
 #include <ctype.h>
 #include <pthread.h>
 #include <windows.h>
-#include "../includes/conio2.h"
+#include "../includes/colors.h"
 
 //Constants
 #define FALSE 0
@@ -50,8 +50,7 @@ typedef unsigned char bool; //Variavel Booleana, deve receber TRUE ou FALSE
 
 //Macros
 #define SET_COLOR(BG, TEXT) \
-  textbackground(BG); \
-  textcolor(TEXT);
+  cr_setColors(BG, TEXT);
 
 //Enums
 typedef enum {

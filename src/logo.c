@@ -95,7 +95,7 @@ void print_logoLetter(logoLetters_e selectedLetter, int posX, int posY, COLORS b
   SET_COLOR(bgColor, textColor);
 
   for(int count = 0; count < MENU_LOGO_LINES; count++){
-    gotoxy(posX, posY + count);
+    cr_moveCursorXY(posX, posY + count);
     printf("%s", letter[count]);
   }
 

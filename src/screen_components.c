@@ -71,7 +71,7 @@ void print_menuButton(char * placeholder, int posX, int posY, bool selected){
   int placeholderSize = strlen(placeholder);
   int numberOfSpaces = WIDTH_BUTTON_MENU - placeholderSize - WIDTH_MENU_SELECTOR;
 
-  gotoxy(posX, posY);
+  cr_moveCursorXY(posX, posY);
 
   for(int count = 0; count < numberOfSpaces + 3; count++)
     selection[count] = ' ';
@@ -93,24 +93,24 @@ void print_menuButton(char * placeholder, int posX, int posY, bool selected){
  * Print the in-game menu
  *----------------------------------------------------------------------------*/
 void print_inGameMenu(int posX, int posY){
-  gotoxy(posX, posY);
+  cr_moveCursorXY(posX, posY);
   SET_COLOR(LIGHTGRAY, BLACK);
   printTwoCollumns("Tecla", "Acao", 11, 11);
 
   SET_COLOR(DARKGRAY, WHITE);
-  gotoxy(posX, posY + 1);
+  cr_moveCursorXY(posX, posY + 1);
   printTwoCollumns("ESC", "Sair", 11, 11);
 
-  gotoxy(posX, posY + 2);
+  cr_moveCursorXY(posX, posY + 2);
   printTwoCollumns("N", "Novo Jogo", 11, 11);
 
-  gotoxy(posX, posY + 3);
+  cr_moveCursorXY(posX, posY + 3);
   printTwoCollumns("S", "Salvar", 11, 11);
 
-  gotoxy(posX, posY + 4);
+  cr_moveCursorXY(posX, posY + 4);
   printTwoCollumns("U", "Desfazer", 11, 11);
 
-  gotoxy(posX, posY + 5);
+  cr_moveCursorXY(posX, posY + 5);
   printTwoCollumns("Setas", "Jogar", 11, 11);
 
   SET_COLOR(DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
@@ -122,20 +122,20 @@ void print_inGameMenu(int posX, int posY){
 void print_gameStatus(gameState_t gameState, int posX, int posY){
   char number[30] = {'\0'};
 
-  gotoxy(posX, posY);
+  cr_moveCursorXY(posX, posY);
   SET_COLOR(LIGHTGRAY, BLACK);
   printf("         Score         ");
 
-  gotoxy(posX, posY + 3);
+  cr_moveCursorXY(posX, posY + 3);
   printf("       Movimentos      ");
 
-  gotoxy(posX, posY + 1);
+  cr_moveCursorXY(posX, posY + 1);
   SET_COLOR(DARKGRAY, WHITE);
   sprintf(number, "%d", gameState.score);
   stringCentrilize(number, 23);
   printf("%s", number);
 
-  gotoxy(posX, posY + 4);
+  cr_moveCursorXY(posX, posY + 4);
   sprintf(number, "%d", gameState.moves);
   stringCentrilize(number, 23);
   printf("%s", number);
@@ -151,15 +151,15 @@ void print_inGameRanking(leaderboard_t * leaderboard, int posX, int posY){
   char name[15] = {'\0'};
 
   SET_COLOR(LIGHTGRAY, BLACK);
-  gotoxy(posX, posY);
+  cr_moveCursorXY(posX, posY);
   printf("        Ranking        ");
 
-  gotoxy(posX, posY + 11);
+  cr_moveCursorXY(posX, posY + 11);
   printf("                       ");
 
   SET_COLOR(DARKGRAY, WHITE);
   for(int count = 0;count<10; count++){
-    gotoxy(posX, posY+count+1);
+    cr_moveCursorXY(posX, posY+count+1);
 
     if(leaderboard->points[count] != 0)
       sprintf(number, "%d", leaderboard->points[count]);
@@ -181,11 +181,11 @@ void print_gameBoardEdges(int posX, int posY){
 
   for(int line = 0; line < 5; line++){
     for(int count = 0; count < (GAME_CARD_WIDTH * 4) - 2; count++){
-      gotoxy(posX + count, posY + (line * (GAME_CARD_HEIGHT - 1)));
+      cr_moveCursorXY(posX + count, posY + (line * (GAME_CARD_HEIGHT - 1)));
       printf(" ");
     }
     for(int count = 0; count < 25; count++){
-      gotoxy(posX + (line * (GAME_CARD_WIDTH - 1)), posY + count);
+      cr_moveCursorXY(posX + (line * (GAME_CARD_WIDTH - 1)), posY + count);
       printf("  ");
     }
   }
@@ -199,14 +199,14 @@ void print_gameCard(gameCard_t * card, int posX, int posY){
   SET_COLOR(card != NULL ? card->color : DEFAULT_BG_COLOR, DEFAULT_TEXT_COLOR);
 
   for(int count = 0; count < GAME_CARD_HEIGHT - 2; count++){
-    gotoxy(posX + 2, posY + 1 + count);
+    cr_moveCursorXY(posX + 2, posY + 1 + count);
     for(int count2 = 0; count2 < GAME_CARD_WIDTH - 3; count2++){
       printf(" ");
     }
   }
 
   if(card != NULL){
-    gotoxy(posX + 2, posY + GAME_CARD_HEIGHT / 2);
+    cr_moveCursorXY(posX + 2, posY + GAME_CARD_HEIGHT / 2);
     char cardString[GAME_CARD_WIDTH] = {'\0'};
     sprintf(cardString, "%d", card->value);
 
@@ -237,40 +237,40 @@ void print_endGameStatus(gameStatus_e status, int posX, int posY){
   char spaces[30] = {'\0'};
   char endString[30] = {'\0'};
 
-  textbackground(LIGHTGRAY);
+  cr_bgColor(LIGHTGRAY);
   sprintf(spaces, " ");
   stringCentrilize(spaces, 19);
   
   for(int count = 0; count < 5; count++){
-    gotoxy(posX, posY + count);
+    cr_moveCursorXY(posX, posY + count);
     printf("  ");
     
-    gotoxy(posX + 21, posY + count);
+    cr_moveCursorXY(posX + 21, posY + count);
     printf("  ");
 
     if(count % 2 == 0){
-      gotoxy(posX + 2, posY + count);
+      cr_moveCursorXY(posX + 2, posY + count);
       printf("%s", spaces);
     }
   }
  
-  textbackground(DARKGRAY);
+  cr_bgColor(DARKGRAY);
   for(int count = 1; count <= 3; count++){
-    gotoxy(posX + 2, posY + count);
+    cr_moveCursorXY(posX + 2, posY + count);
     printf("%s", spaces);
   }
 
   if(status == GAME_WIN){
-    textcolor(LIGHTGREEN);
+    cr_textColor(LIGHTGREEN);
     sprintf(endString, "Vitoria");
   }
   else if(status == GAME_LOSE){
-    textcolor(RED);
+    cr_textColor(RED);
     sprintf(endString, "Derrota");
   }
   stringCentrilize(endString, 19);
 
-  gotoxy(posX + 2, posY + 2);
+  cr_moveCursorXY(posX + 2, posY + 2);
   printf("%s", endString);
 
   //Volta para as cores default
@@ -283,17 +283,17 @@ void print_endGameStatus(gameStatus_e status, int posX, int posY){
 void print_querryUserString(const char * placeholder, int posX, int posY, COLORS color1, COLORS color2){
   char string[30] = {'\0'};
 
-  gotoxy(posX, posY);
+  cr_moveCursorXY(posX, posY);
   SET_COLOR(color1, BLACK);
   sprintf(string, "%s", placeholder);
   stringCentrilize(string, 23);
   printf("%s", string);
 
-  gotoxy(posX, posY + 1);
+  cr_moveCursorXY(posX, posY + 1);
   SET_COLOR(color2, WHITE);
   sprintf(string, " ");
   stringCentrilize(string, 23);
   printf("%s", string);
 
-  gotoxy(posX + 1, posY + 1);
+  cr_moveCursorXY(posX + 1, posY + 1);
 }
