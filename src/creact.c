@@ -1,5 +1,5 @@
 //Includes
-#include "../includes/colors.h"
+#include "../includes/creact.h"
 
 //Variables
 #ifdef __MINGW32__
@@ -56,10 +56,10 @@ void cr_setColors(COLORS bgColor, COLORS textColor){
 
 void cr_moveCursorXY(int x, int y){
   cr_fixCommands();
-  printf("\e[%d;%dH", x, y);
+  printf("\e[%d;%dH", y, x);
 }
 
 void cr_clearScreen(){
-  cr_fixCommands();
-  printf("\e[2J");
+  system("cls");
+  system("clear");
 }

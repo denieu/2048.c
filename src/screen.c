@@ -131,14 +131,11 @@ void *screenThread(){
       configScreenSize(DEFAULT_SCREEN_X_SIZE, DEFAULT_SCREEN_Y_SIZE);
 
       if(screenState.screen.lastScreen == SCREEN_NONE){
-        screenState.screen.lastScreen = screenState.screen.currentScreen;
         configScreenSize(DEFAULT_SCREEN_X_SIZE, DEFAULT_SCREEN_Y_SIZE);
         cr_clearScreen();
       }
 
       if(screenState.screen.lastScreen != screenState.screen.currentScreen || screenState.screen.forceClear == TRUE){
-        screenState.screen.lastScreen = screenState.screen.currentScreen;
-        screenState.screen.forceClear = FALSE;
         cr_clearScreen();
       }
 

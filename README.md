@@ -6,7 +6,7 @@
     <h4>
        2048.c is a clone of the 2048 puzzle game developed by <a href="https://github.com/denieu">Daniel Wojcickoski</a>.
        <br>
-        The game was developed in C for Windows using the Conio2 library and MinGW.
+       The game was developed in C for Windows using MinGW.
     </h4>
 </div>
 

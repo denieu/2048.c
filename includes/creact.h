@@ -1,5 +1,5 @@
-#ifndef COLORS_H
-#define COLORS_H
+#ifndef CREACT_H
+#define CREACT_H
 
 //Include
 #include <stdio.h>
@@ -36,4 +36,4 @@ void cr_setColors(COLORS bgColor, COLORS textColor);
 void cr_moveCursorXY(int x, int y);
 void cr_clearScreen();
 
-#endif /*COLORS_H*/
+#endif /*CREACT_H*/

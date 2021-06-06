@@ -19,7 +19,7 @@
 #include <ctype.h>
 #include <pthread.h>
 #include <windows.h>
-#include "../includes/colors.h"
+#include "creact.h"
 
 //Constants
 #define FALSE 0
@@ -46,7 +46,7 @@
 
 #define MAX_LEADERBOARD_LENGHT 15
 
-typedef unsigned char bool; //Variavel Booleana, deve receber TRUE ou FALSE
+typedef unsigned char bool;
 
 //Macros
 #define SET_COLOR(BG, TEXT) \
@@ -154,8 +154,8 @@ typedef enum {
 
 //Types
 typedef struct {
-  int points[11];                         //Salva a pontuação de cada usuario
-  char name[11][MAX_LEADERBOARD_LENGHT];  //Salva o nome de cada usuario
+  int points[11];
+  char name[11][MAX_LEADERBOARD_LENGHT];
 } leaderboard_t;
 
 typedef struct {
@@ -165,20 +165,20 @@ typedef struct {
 } gameCard_t;
 
 typedef struct {
-  gameStatus_e gameStatus;         //Salva o estado do jogo atual(run, win, lose)
+  gameStatus_e gameStatus;
 
-  int auxScore;                       //Salva o valor auxiliar de score
-  int lastScore;                      //Salva o valor do ultimo score
-  int score;                          //Salva o valor do score atual
+  int auxScore;
+  int lastScore;
+  int score;
 
-  int auxMoves;                       //Salva o valor auxiliar de movimentos
-  int lastMoves;                      //Salva o ultimo valor dos movimentos
-  int moves;                          //Salva o numero de movimentos atual
+  int auxMoves;
+  int lastMoves;
+  int moves;
 
-  gameCard_t gameCards[11];        //Salva todas as 11 "cartas" do jogo 2 a 2048
-  gameCard_t * auxGameBoard[4][4]; //Salva a carta auxiliar de cada casa do tabuleiro
-  gameCard_t * lastGameBoard[4][4];//Salva a carta de cada casa na ultima jogada
-  gameCard_t * gameBoard[4][4];    //Salva qual carta esta em cada casa atualmente
+  gameCard_t gameCards[11];
+  gameCard_t * auxGameBoard[4][4];
+  gameCard_t * lastGameBoard[4][4];
+  gameCard_t * gameBoard[4][4];
 } gameState_t;
 
 typedef struct {
@@ -194,21 +194,21 @@ typedef struct {
 } gameSave_t;
 
 typedef struct {
-  screens_e lastScreen;    //Salva qual a ultima tela mostrada
-  screens_e currentScreen; //Salva qual tela deve ser mostrada atualmente
-  menuState_e menuState;   //Salva em qual item deve ser mostrado o seletor do menu
-  gameState_e gameState;   //Salva qual confirmação deve se mostrada dentro de jogo
+  screens_e lastScreen;
+  screens_e currentScreen;
+  menuState_e menuState;
+  gameState_e gameState;
 
-  bool forceClear;            //Flag que força a tela a ser limpa, caso TRUE
+  bool forceClear;
 } screenState_t;
 
 typedef struct {
-  appStatus_e appStatus;     //Salva o estado atual da aplicação(run, exitOk, exitError)
-  userAction_e userAction;   //Salva a ação efetuada pelo usuario
-  char userString[22];          //Salva a string digitada pelo usuario
-  leaderboard_t leaderboard; //Salva os dados do ranking de jogadores
-  gameState_t gameState;     //Salva o estado do jogo atual
-  screenState_t screen;      //Salva o estado atual da tela
+  appStatus_e appStatus;
+  userAction_e userAction;
+  char userString[22];
+  leaderboard_t leaderboard;
+  gameState_t gameState;
+  screenState_t screen;
 } appState_t;
 
 #endif  /*MAIN_H*/

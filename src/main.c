@@ -25,6 +25,8 @@ int main(){
 
   do{
     updateScreenState(&appState);
+    appState.screen.lastScreen = appState.screen.currentScreen;
+    appState.screen.forceClear = FALSE;
 
     captureUserAction(&appState);
 
